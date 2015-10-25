@@ -1,5 +1,5 @@
 # Introduction
-**Wurm Unlimited Admin** - is a cloud based admin interface for Wurm Unlimited servers. The design of this interfaced is based on the [AdminLTE](https://github.com/almasaeed2010/AdminLTE) with some modifications.
+**Wurm Unlimited Admin** - is a web-based admin interface for Wurm Unlimited servers. The design of this interfaced is based on the [AdminLTE](https://github.com/almasaeed2010/AdminLTE) with some modifications.
 
 Requirements
 ------------
