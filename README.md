@@ -4,7 +4,7 @@
 Requirements
 ------------
 The following programs and modules are required to run Wurm Unlimited Admin:
-- LAMP/WAMP, Ngnix, or UniServer Zero XI
+- LAMP/WAMP, Nginx, or UniServer Zero XI
 - Wurm Unlimited Server
 
 Installation
