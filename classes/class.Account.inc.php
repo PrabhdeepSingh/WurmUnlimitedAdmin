@@ -37,7 +37,9 @@ class ACCOUNT
 
     	if(!empty($params))
     	{
-    		$sql = $this->_database->QueryWithBinds("SELECT * FROM accounts WHERE USERNAME = ?", array($params["username"]));
+        $username = strtolower($params["username"]);
+
+    		$sql = $this->_database->QueryWithBinds("SELECT * FROM accounts WHERE USERNAME = ?", array($username));
         $getData = $sql->fetch(PDO::FETCH_ASSOC);
 
     		if($getData != false)
@@ -137,7 +139,7 @@ class ACCOUNT
     }
 
     return $result;
-  
+
   }
 
   function __destruct()

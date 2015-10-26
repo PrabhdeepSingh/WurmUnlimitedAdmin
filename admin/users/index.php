@@ -16,7 +16,6 @@ require("../../header.php");
                 <div class="box-body no-padding">
                   <div class="loading" id="loader"></div>
                   <ul class="users-list clearfix" id="userList" style="display: none;">
-                    <li><img src="dist/img/user1-128x128.jpg" alt="User Image"><a class="users-list-name" href="#">Alexander Pierce</a><span class="users-list-date">Today</span></li>
                   </ul>
                   <!-- /.users-list -->
                 </div>

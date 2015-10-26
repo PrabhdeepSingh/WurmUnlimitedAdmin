@@ -16,7 +16,14 @@ if(isLoggedin())
 }
 else
 {
-  header("Location: ./account/login/?ref=".$application["rootPath"]."");
+  header("Location: ".$application["rootPath"]."account/login/?ref=//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."");
+  die();
+}
+
+if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
+  unset($_SESSION['userData']);
+  unset($_SESSION['accountLoggedinTime']);
+  header("Location: ".$application["rootPath"]."account/login/?ref=//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."");
   die();
 }
 ?>
@@ -28,7 +35,7 @@ else
     <title>Wurm Unlimited Admin</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    
+
     <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/css/bootstrap.min.css">
@@ -89,6 +96,10 @@ else
                 <li><a href="<?php echo $application["rootPath"]; ?>account/logout/"><i class="fa fa-sign-out"></i> Logout</a></li>
               </ul>
             </li>
+            <?php
+            if($userData["level"] >= $application["minAdminLevel"])
+            {
+            ?>
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
@@ -98,9 +109,9 @@ else
               <ul class="treeview-menu">
                 <li><a href="<?php echo $application["rootPath"]; ?>admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
                 <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-edit"></i> Users</a></li>
-                <li><a href="#"><i class="fa fa-user-times"></i> Remove user</a></li>
               </ul>
             </li>
+            <?php } ?>
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-files-o"></i>
