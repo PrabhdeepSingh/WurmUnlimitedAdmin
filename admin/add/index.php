@@ -63,7 +63,6 @@ require("../../header.php");
                 $('#loader').show();
               },
               success: function(response) {
-                console.log(response);
                 if(response.success) {
                   $('#response').html('<div class="alert alert-success" role="alert"> User successfully added! </div>');
                   $('#txtUsername').val('');

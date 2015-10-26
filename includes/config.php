@@ -4,7 +4,7 @@ define("PRODUCTION", 1);
 
 $application = array(
 	"mode" => DEVELOPMENT,
-	"rootPath" => "//localhost/wurmunlimitedadmin/",
+	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"version" => "0.0.1"
 );
 
