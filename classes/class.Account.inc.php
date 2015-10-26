@@ -95,7 +95,7 @@ class ACCOUNT
 
         if($getData != false)
         {
-          $hashedPassword = password_verify($params["password"], $getData["PASSWORD"]);
+          $hashedPassword = password_verify($params["currentPassword"], $getData["PASSWORD"]);
 
           if($hashedPassword)
           {
