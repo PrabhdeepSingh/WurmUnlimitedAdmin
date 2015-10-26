@@ -94,7 +94,7 @@ else
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo $application["rootPath"]; ?>admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
-                <li><a href="#"><i class="fa fa-edit"></i> Edit user</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-edit"></i> Users</a></li>
                 <li><a href="#"><i class="fa fa-user-times"></i> Remove user</a></li>
               </ul>
             </li>

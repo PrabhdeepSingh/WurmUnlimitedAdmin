@@ -6,11 +6,11 @@ $response = array();
 // Server side check to make sure nothing is blank / empty
 if(!empty($_POST))
 {
-	require(dirname(__FILE__) . "/../../classes/class.Account.inc.php");
+	require(dirname(__FILE__) . "/../../classes/class.Admin.inc.php");
 
-	$account = new \WurmUnlimitedAdmin\ACCOUNT();
+	$admin = new \WurmUnlimitedAdmin\ADMIN();
 
-	$create = $account->Create($_POST);
+	$create = $admin->Create($_POST);
 
 	$response = $create;
 

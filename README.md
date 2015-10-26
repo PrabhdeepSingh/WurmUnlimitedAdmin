@@ -11,7 +11,7 @@ The following programs and modules are required to run Wurm Unlimited Admin
 
 Installation
 ------------
-####Download:
+####Download
 - Download or clone from GitHub
 
 ####Basic configuration
