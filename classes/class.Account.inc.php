@@ -33,10 +33,9 @@ class ACCOUNT
 
   	if(isset($params["username"]) && isset($params["password"]) && isset($params["level"]))
   	{
-      $sql = $this->_database->QueryWithBinds("SELECT COUNT(USERNAME) as userCount FROM accounts WHERE USERNAME = ?", array($params["username"]));
+      $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE USERNAME = ?", array($params["username"]));
       $check = $sql->fetchAll();
-      $result = $check;
-      if($check[0]["userCount"] > 0)
+      if($check != false)
       {
         $result = array("success" => false, "message" => "inuse");
       }
