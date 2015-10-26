@@ -1157,6 +1157,21 @@ var setParameters = function setParameters(params) {
   }
 
   /*
+   * Custom color on cancel button
+   */
+  if (params.cancelButtonCOlor) {
+    // Set confirm button to selected background color
+    $cancelBtn.style.backgroundColor = params.confirmButtonColor;
+
+    // Set the confirm button color to the loading ring
+    $cancelBtn.style.borderLeftColor = params.cancelLoadingButtonColor;
+    $cancelBtn.style.borderRightColor = params.cancelLoadingButtonColor;
+
+    // Set box-shadow to default focused button
+    _getModal$getInput$setFocusStyle.setFocusStyle($cancelBtn, params.cancelButtonColor);
+  }
+
+  /*
    * Allow outside click
    */
   modal.setAttribute('data-allow-outside-click', params.allowOutsideClick);

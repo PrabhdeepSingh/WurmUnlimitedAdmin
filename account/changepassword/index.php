@@ -60,17 +60,17 @@ require("../../header.php");
               success: function(response) {
                 console.log(response);
                 if(response.success) {
-                  $('#response').html('<div class="alert alert-success" role="alert"> Password changed! </div>');
+                  swal("Changed!", "Your password was successfully changed!", "success");
                   $('#txtCurrentPassowrd').val('');
                   $('#txtPassword').val('');
                 }
                 else {
                   switch(response.message) {
                     case 'Incorrect':
-                      $('#response').html('<div class="alert alert-danger" role="alert"> The password is incorrect </div>');
+                      swal("Wrong password", "The password you have given doesn't match with our records! Please try again.", "error");
                       break;
                     default:
-                      $('#response').html('<div class="alert alert-danger" role="alert"> Something went wrong </div>');
+                      swal("Failed", "Uh-oh, this is unhanlded error :(", "error");
                       break;
                   }
                 }
@@ -81,7 +81,7 @@ require("../../header.php");
               },
               error: function(error) {
                 console.log(error);
-                $('#response').html('<div class="alert alert-danger" role="alert"> Something went wrong </div>');
+                swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
                 $('#formChangePassword').show();
                 $('#loader').hide();
               }

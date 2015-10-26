@@ -28,6 +28,7 @@ else
     <title>Wurm Unlimited Admin</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    
     <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/css/bootstrap.min.css">
@@ -36,6 +37,8 @@ else
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/style.min.css">
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/skinstyle.min.css">
+
+    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

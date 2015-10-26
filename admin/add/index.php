@@ -64,7 +64,7 @@ require("../../header.php");
               },
               success: function(response) {
                 if(response.success) {
-                  $('#response').html('<div class="alert alert-success" role="alert"> User successfully added! </div>');
+                  swal("Added", "You have successfully added [ " + username + " ]", "success");
                   $('#txtUsername').val('');
                   $('#txtPassword').val('');
                   $('#txtLevel').val('');
@@ -72,10 +72,10 @@ require("../../header.php");
                 else {
                   switch(response.message) {
                     case 'inuse':
-                      $('#response').html('<div class="alert alert-danger" role="alert"> The username is already in-use. </div>');
+                      swal("In-use", "It looks like the username [ " + username + " ] is already in use. Please try another", "error");
                       break;
                     default:
-                      $('#response').html('<div class="alert alert-danger" role="alert"> Something went wrong </div>');
+                      swal("Failed", "Uh-oh, this is unhanlded error :(", "error");
                       break;
                   }
                 }
@@ -86,7 +86,7 @@ require("../../header.php");
               },
               error: function(error) {
                 console.log(error);
-                $('#response').html('<div class="alert alert-danger" role="alert"> Something went wrong </div>');
+                swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
                 $('#formAddUser').show();
                 $('#loader').hide();
               }
