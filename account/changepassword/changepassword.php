@@ -9,20 +9,17 @@ if(!empty($_POST))
 	require(dirname(__FILE__) . "/../../classes/class.Account.inc.php");
 
 	$account = new \WurmUnlimitedAdmin\ACCOUNT();
+	$params = $_POST;
+	$params["accountID"] = $_SESSION["userData"]["ID"];
+	$passChange = $account->ChangePassword($params);
 
-	$loginCheck = $account->Login($_POST);
-
-	if($loginCheck["success"])
+	if($passChange["success"])
 	{
 		$response["success"] = true;
-
-    $_SESSION["userData"] = array("username" => $_POST["username"], "ID" => $loginCheck["ID"], "level" => $loginCheck["level"]);
-    $_SESSION['accountLoggedinTime'] = time();
-
 	}
 	else
 	{
-		$response = array("success" => false, "message" => $loginCheck["message"]);
+		$response = array("success" => false, "message" => $passChange["message"]);
 	}
 
 }

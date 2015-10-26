@@ -28,6 +28,7 @@ else
     <title>Wurm Unlimited Admin</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -68,7 +69,7 @@ else
               Admin level: <?php echo $userData["level"]; ?>
             </div>
           </div>
-          
+
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
             <!--
@@ -81,8 +82,8 @@ else
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-lock"></i> Change password</a></li>
-                <li><a href="#"><i class="fa fa-sign-out"></i> Logout</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>account/changepassword/"><i class="fa fa-lock"></i> Change password</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>account/logout/"><i class="fa fa-sign-out"></i> Logout</a></li>
               </ul>
             </li>
             <li class="treeview">
@@ -92,9 +93,9 @@ else
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-table"></i> Add user</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
                 <li><a href="#"><i class="fa fa-edit"></i> Edit user</a></li>
-                <li><a href="#"><i class="fa fa-edit"></i> Remove user</a></li>
+                <li><a href="#"><i class="fa fa-user-times"></i> Remove user</a></li>
               </ul>
             </li>
             <li class="treeview">

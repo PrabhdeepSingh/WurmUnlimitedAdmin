@@ -33,17 +33,27 @@ class ACCOUNT
 
   	if(isset($params["username"]) && isset($params["password"]) && isset($params["level"]))
   	{
-  		$options = ['cost' => 12];
-      $hashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
-  		$sql = $this->_database->QueryWithBinds("INSERT INTO accounts (USERNAME, PASSWORD, LEVEL) VALUES (?, ?, ?);", array($params["username"], $hashedPassword, $params["level"]));
-  		if($sql->rowCount() > 0)
-  		{
-  			$result = array("success" => true);
-  		}
-  		else
-  		{
-  			$result = array("success" => false);
-  		}
+      $sql = $this->_database->QueryWithBinds("SELECT COUNT(*) FROM accounts WHERE USERNAME = ?", array($params["username"]));
+      $check = $sql->fetchAll();
+      if($check[0] > 0)
+      {
+        $result = array("success" => false, "message" => "inuse");
+      }
+      else
+      {
+        $options = ['cost' => 12];
+        $hashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
+        $sql = $this->_database->QueryWithBinds("INSERT INTO accounts (USERNAME, PASSWORD, LEVEL) VALUES (?, ?, ?);", array($params["username"], $hashedPassword, $params["level"]));
+        if($sql->rowCount() > 0)
+        {
+         $result = array("success" => true);
+        }
+        else
+        {
+         $result = array("success" => false);
+        }
+
+      }
 
   	}
   	else
@@ -109,7 +119,7 @@ class ACCOUNT
 
     			if($hashedPassword)
     			{
-    				$result = array("success" => true, "level" => $getData["LEVEL"]);
+    				$result = array("success" => true, "ID" => $getData["ID"], "level" => $getData["LEVEL"]);
     			}
     			else
     			{
@@ -135,6 +145,65 @@ class ACCOUNT
       throw new PDOExecption(json_encode($ex));
     }
 
+  }
+
+  function ChangePassword($params = array())
+  {
+    $result = array();
+
+    try
+    {
+      $result = array();
+
+      if(!empty($params))
+      {
+        $sql = $this->_database->QueryWithBinds("SELECT PASSWORD FROM accounts WHERE ID = ?", array($params["accountID"]));
+        $getData = $sql->fetch(PDO::FETCH_ASSOC);
+
+        if($getData != false)
+        {
+          $hashedPassword = password_verify($params["password"], $getData["PASSWORD"]);
+
+          if($hashedPassword)
+          {
+            $options = ['cost' => 12];
+            $newHashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
+            $sql = $this->_database->QueryWithBinds("UPDATE accounts SET PASSWORD = ? WHERE ID = ?", array($newHashedPassword, $params["accountID"]));
+            if($sql->rowCount() > 0)
+            {
+              $result = array("success" => true);
+            }
+            else
+            {
+              $result = array("success" => false);
+            }
+
+          }
+          else
+          {
+            $result = array("success" => false, "message" => "Incorrect");
+          }
+
+        }
+        else
+        {
+          $result = array("success" => false, "message" => "Invalid");
+        }
+
+      }
+      else
+      {
+        $result = array("success" => false, "message" => "Empty");
+      }
+
+      return $result;
+    }
+    catch(PDOExecption $ex)
+    {
+      throw new PDOExecption(json_encode($ex));
+    }
+
+    return $result;
   }
 
   function __destruct()
