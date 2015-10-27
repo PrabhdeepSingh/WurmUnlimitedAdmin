@@ -1,5 +1,4 @@
 # CHANGELOG
-----
 
 ## 0.0.3-Alpha
 ---
@@ -10,7 +9,6 @@
 - Core/Core: Fixed `Error handling` to be more user friendly.
 
 ## 0.0.2-Alpha
-----
 - Core/Account: Added `Change Password` function.
 - Core/Account: Added `Logout` function.
 - Core/Account: Fixed `Login` function, `ID` should now be sent back when signing in.
@@ -20,7 +18,6 @@
 - Core/Config: Added variables for wurm databases
 
 ## 0.0.1-Alpha
-----
 - First initial code release.
 - Core/Core: Implemented `Account` class.
 - Core/Core: Implemented `Admin` class.

@@ -1,5 +1,4 @@
 # Contributors
-----
 
 This project is created by [Prabhdeep Singh](https://github.com/PrabhdeepSingh/) and it's using [AdminLTE](https://github.com/almasaeed2010/AdminLTE) for the interface but with some modifications.
 
