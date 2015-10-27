@@ -1,7 +1,6 @@
 # CHANGELOG
 
 ## 0.0.3-Alpha
----
 - Core/Core: Implemented `Player` class.
 - Core/Player: Added `GetPlayers` function to get all players : single player from the wurm PLAYERS table.
 - Core/Core: Added `wurmSecondsToTime` function to convert PLAYTIME to friendly version.

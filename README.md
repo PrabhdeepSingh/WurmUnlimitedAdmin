@@ -1,5 +1,5 @@
 # Introduction
-** Wurm Unlimited Admin** - is a web-based admin interface for Wurm Unlimited servers.
+**Wurm Unlimited Admin** - is a web-based admin interface for Wurm Unlimited servers.
 
 # Demo
 To see this software in action visit our [Demo](http://wuademo.xplosivegames.com/)
