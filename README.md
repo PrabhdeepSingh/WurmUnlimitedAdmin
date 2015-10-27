@@ -15,7 +15,13 @@ The following programs and modules are required to run Wurm Unlimited Admin
 ####Download
 - Download or clone from GitHub
 
-####Basic configuration
+####PHP configuration
+For this software to work you need to enable the php_pdo_sqlite extension as it will be needed to talk to Wurm Unlimited server database files. To enable the extension do the following
+- Navigate to your `php.ini` file
+- Do a search for `php_pdo_sqlite` and remove `;` from infront of `extension`
+
+####Application configuration
+This is a basic configuration / setup guide on getting this software up and running on your host.
 - Place files from this repo into your `www` folder
 - Navigate to the `includes` folder and open `config.php`
 - Change the `rootPath` to your website address

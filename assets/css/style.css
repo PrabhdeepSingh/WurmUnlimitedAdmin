@@ -2905,7 +2905,7 @@ table.text-center th {
 .users-list > li img {
   border-radius: 50%;
   max-width: 100%;
-  height: auto;
+  height: 69px;
 }
 .users-list > li > a:hover,
 .users-list > li > a:hover .users-list-name {
@@ -2926,6 +2926,34 @@ table.text-center th {
   color: #999;
   font-size: 12px;
 }
+@media (min-width:320px) {
+  .users-list > li {
+    width: 50%;
+  }
+
+}
+
+@media (min-width:481px) {
+  .users-list > li {
+    width: 25%;
+  }
+
+}
+
+@media (min-width:1025px) {
+  .users-list > li {
+    width: 14%;
+  }
+
+}
+
+@media (min-width:1281px) {
+  .users-list > li {
+    width: 11%;
+  }
+
+}
+
 /*
  * Component: Carousel
  * -------------------
@@ -4605,6 +4633,9 @@ table.text-center th {
 }
 .text-sm {
   font-size: 12px;
+}
+.text-lg {
+  font-size: 20px;
 }
 .jqstooltip {
   padding: 5px !important;

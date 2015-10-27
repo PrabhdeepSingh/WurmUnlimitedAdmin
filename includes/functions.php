@@ -109,4 +109,151 @@ if (!function_exists("return_bytes"))
 
 }
 
+if (!function_exists("wurmSecondsToTime"))
+{
+  function wurmSecondsToTime($seconds)
+  {
+    $times = "";
+
+    if ($seconds < 60000)
+    {
+      $secs = $seconds / 1000;
+      $times = $times . $secs . " seconds";
+    }
+    else
+    {
+      $daysLeft = round($seconds / 86400000);
+      $hoursLeft = round(($seconds - $daysLeft * 86400000) / 3600000);
+      $minutesLeft = round(($seconds - $daysLeft * 86400000 - $hoursLeft * 3600000) / 60000);
+
+      if ($daysLeft > 0)
+      {
+        $times = $times . $daysLeft . " days";
+      }
+
+      if ($hoursLeft > 0)
+      {
+        $aft = "";
+        if ($daysLeft > 0 && $minutesLeft > 0)
+        {
+          $times = $times . ", ";
+          $aft = $aft . " and ";
+        }
+        else if ($daysLeft > 0)
+        {
+          $times = $times . " and ";
+        }
+        else if ($minutesLeft > 0)
+        {
+          $aft = $aft . " and ";
+        }
+
+        $times = $times . $hoursLeft . " hrs" . $aft;
+
+      }
+
+      if ($minutesLeft > 0)
+      {
+        $aft = "";
+        if ($daysLeft > 0 && $hoursLeft == 0)
+        {
+          $aft = " and ";
+        }
+
+        $times = $times . $aft . $minutesLeft . " mins";
+
+      }
+
+    }
+
+    if (count($times) == 0)
+    {
+      $times = "nothing";
+    }
+
+    return $times;
+
+  }
+
+}
+
+if (!function_exists("wurmConvertMoney"))
+{
+  function wurmConvertMoney($ironValue)
+  {
+    $goldCoins = (int) round($ironValue / 1000000, 1);
+    $reset = $ironValue % 1000000;
+    $silverCoins = (int) round($reset / 10000, 1);
+    $reset = $ironValue % 10000;
+    $copperCoins = (int) round($reset / 100, 1);
+    $reset = $ironValue % 100;
+    $ironCoins = $reset;
+
+    $toSend = "";
+
+    if ($goldCoins > 0)
+    {
+      $toSend = $toSend . $goldCoins . " gold";
+    }
+
+    if ($silverCoins > 0)
+    {
+      if ($goldCoins > 0)
+      {
+        if ($copperCoins > 0 || $ironCoins > 0)
+        {
+          $toSend = $toSend . ", ";
+        }
+        else
+        {
+          $toSend = $toSend . " and ";
+        }
+
+      }
+
+      $toSend = $toSend . $silverCoins . " silver";
+
+    }
+
+    if ($copperCoins > 0)
+    {
+      if ($silverCoins > 0 || $goldCoins > 0)
+      {
+        if ($ironCoins > 0)
+        {
+          $toSend = $toSend . ", ";
+        }
+        else
+        {
+          $toSend = $toSend . " and ";
+        }
+
+      }
+
+      $toSend = $toSend . $copperCoins . " copper";
+
+    }
+
+    if ($ironCoins > 0)
+    {
+      if ($silverCoins > 0 || $goldCoins > 0 || $copperCoins > 0)
+      {
+        $toSend = $toSend . " and ";
+      }
+
+      $toSend = $toSend . $ironCoins . " iron";
+
+    }
+
+    if (empty($toSend))
+    {
+      return "0 irons";
+    }
+
+    return $toSend;
+
+  }
+
+}
+
 ?>

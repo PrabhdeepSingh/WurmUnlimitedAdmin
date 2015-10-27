@@ -120,7 +120,7 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
               </a>
               <ul class="treeview-menu">
                 <li><a href="#"><i class="fa fa-table"></i> Players online</a></li>
-                <li><a href="#"><i class="fa fa-edit"></i> All players</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>players/"><i class="fa fa-edit"></i> All players</a></li>
               </ul>
             </li>
             <li class="treeview">
