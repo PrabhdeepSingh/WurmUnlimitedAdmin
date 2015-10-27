@@ -1,6 +1,8 @@
 <?php
 namespace WurmUnlimitedAdmin;
 use PDO;
+use PDOException;
+use Exception;
 
 class ADMIN
 {
@@ -17,10 +19,24 @@ class ADMIN
 
 	  	$this->_database = new \WurmUnlimitedAdmin\DATABASE($dbConfig["appDB"]);
 	  }
-	  catch(EXCEPTION $ex)
-	  {
-	  	throw new EXCEPTION("Failed");
-	  }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -30,41 +46,63 @@ class ADMIN
    */
   function Create($params = array())
   {
-  	$result = array();
+    try
+    {
+    	$result = array();
 
-  	if(isset($params["username"]) && isset($params["password"]) && isset($params["level"]))
-  	{
-      $username = strtolower($params["username"]);
+    	if(isset($params["username"]) && isset($params["password"]) && isset($params["level"]))
+    	{
+        $username = strtolower($params["username"]);
 
-      $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE USERNAME = ?", array($username));
-      $check = $sql->fetchAll();
-      if($check != false)
-      {
-        $result = array("success" => false, "message" => "inuse");
-      }
-      else
-      {
-        $options = ['cost' => 12];
-        $hashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
-        $sql = $this->_database->QueryWithBinds("INSERT INTO accounts (USERNAME, PASSWORD, LEVEL) VALUES (?, ?, ?);", array($username, $hashedPassword, $params["level"]));
-        if($sql->rowCount() > 0)
+        $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE USERNAME = ?", array($username));
+        $check = $sql->fetchAll();
+        if($check != false)
         {
-         $result = array("success" => true);
+          $result = array("success" => false, "message" => "inuse");
         }
         else
         {
-         $result = array("success" => false);
+          $options = ['cost' => 12];
+          $hashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
+          $sql = $this->_database->QueryWithBinds("INSERT INTO accounts (USERNAME, PASSWORD, LEVEL) VALUES (?, ?, ?);", array($username, $hashedPassword, $params["level"]));
+          if($sql->rowCount() > 0)
+          {
+           $result = array("success" => true);
+          }
+          else
+          {
+           $result = array("success" => false);
+          }
+
         }
 
-      }
+    	}
+    	else
+    	{
+    		$result = array("success" => false, "message" => "Empty params");
+    	}
 
-  	}
-  	else
-  	{
-  		$result = array("success" => false, "message" => "Empty params");
-  	}
+    	return $result;
 
-  	return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -74,28 +112,50 @@ class ADMIN
    */
   function Delete($accountID = "")
   {
-    $result = array();
-
-    if(!empty($accountID))
+    try
     {
-      $sql = $this->_database->QueryWithBinds("DELETE FROM accounts WHERE ID = ?", array($accountID));
+      $result = array();
 
-      if($sql->rowCount() > 0)
+      if(!empty($accountID))
       {
-        $result = array("success" => true);
+        $sql = $this->_database->QueryWithBinds("DELETE FROM accounts WHERE ID = ?", array($accountID));
+
+        if($sql->rowCount() > 0)
+        {
+          $result = array("success" => true);
+        }
+        else
+        {
+          $result = array("success" => false);
+        }
+
       }
       else
       {
-        $result = array("success" => false);
+        $result = array("success" => false, "message" => "No ID supplied");
       }
 
-    }
-    else
-    {
-      $result = array("success" => false, "message" => "No ID supplied");
-    }
+      return $result;
 
-    return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -106,27 +166,49 @@ class ADMIN
    */
   function GetUsers($accountID = "")
   {
-  	$result = array();
-    if(!empty($accountID))
+    try
     {
-      $sql = $this->_database->QueryWithBinds("SELECT USERNAME, LEVEL FROM accounts WHERE ID = ?", array($accountID));
-      $user = $sql->fetch(PDO::FETCH_ASSOC);
-      $user["userPicutre"] = "../../../assets/images/avatars/avatar_".strtolower($user['USERNAME'][0])."_120.png";
-      $user["success"] = true;
+    	$result = array();
+      if(!empty($accountID))
+      {
+        $sql = $this->_database->QueryWithBinds("SELECT USERNAME, LEVEL FROM accounts WHERE ID = ?", array($accountID));
+        $user = $sql->fetch(PDO::FETCH_ASSOC);
+        $user["userPicutre"] = "../../../assets/images/avatars/avatar_".strtolower($user['USERNAME'][0])."_120.png";
+        $user["success"] = true;
 
-      $result = $user;
+        $result = $user;
+      }
+      else
+      {
+      	$sql = $this->_database->QueryWithOutBinds("SELECT ID, USERNAME, LEVEL FROM accounts");
+      	while($users = $sql->fetch(PDO::FETCH_ASSOC))
+      	{
+      		$users["image"] = "../../assets/images/avatars/avatar_".strtolower($users['USERNAME'][0])."_120.png";
+      		array_push($result, $users);
+      	}
+      }
+
+    	return $result;
+
     }
-    else
+    catch(PDOException $ex)
     {
-    	$sql = $this->_database->QueryWithOutBinds("SELECT ID, USERNAME, LEVEL FROM accounts");
-    	while($users = $sql->fetch(PDO::FETCH_ASSOC))
-    	{
-    		$users["image"] = "../../assets/images/avatars/avatar_".strtolower($users['USERNAME'][0])."_120.png";
-    		array_push($result, $users);
-    	}
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
     }
-
-  	return $result;
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -136,82 +218,125 @@ class ADMIN
    */
   function ResetPassword($accountID = "")
   {
-    $result = array();
-
-    if(!empty($accountID))
+    try
     {
-
-      $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE ID = ?", array($accountID));
-      $check = $sql->fetchAll();
-      if($check != false)
+      $result = array();
+      if(!empty($accountID))
       {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < 10; $i++) {
-          $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
 
-        $options = ['cost' => 12];
-        $hashedPassword = password_hash($randomString, PASSWORD_BCRYPT, $options);
-        $sql = $this->_database->QueryWithBinds("UPDATE accounts SET PASSWORD = ? WHERE ID = ?;", array($hashedPassword, $accountID));
-        if($sql->rowCount() > 0)
+        $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE ID = ?", array($accountID));
+        $check = $sql->fetchAll();
+        if($check != false)
         {
-         $result = array("success" => true, "password" => $randomString);
+          $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          $charactersLength = strlen($characters);
+          $randomString = '';
+          for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+          }
+
+          $options = ['cost' => 12];
+          $hashedPassword = password_hash($randomString, PASSWORD_BCRYPT, $options);
+          $sql = $this->_database->QueryWithBinds("UPDATE accounts SET PASSWORD = ? WHERE ID = ?;", array($hashedPassword, $accountID));
+          if($sql->rowCount() > 0)
+          {
+           $result = array("success" => true, "password" => $randomString);
+          }
+          else
+          {
+           $result = array("success" => false);
+          }
         }
         else
         {
-         $result = array("success" => false);
+          $result = array("success" => false, "message" => "Invalid");
         }
+
       }
       else
       {
-        $result = array("success" => false, "message" => "Invalid");
+        $result = array("success" => false, "message" => "Empty params");
       }
 
-    }
-    else
-    {
-      $result = array("success" => false, "message" => "Empty params");
-    }
+      return $result;
 
-    return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
   function ChangeLevel($params = array())
   {
-    $result = array();
-
-    if(!empty($params["accountID"]) && !empty($params["level"]))
+    try
     {
+      $result = array();
 
-      $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE ID = ?", array($params["accountID"]));
-      $check = $sql->fetchAll();
-      if($check != false)
+      if(!empty($params["accountID"]) && !empty($params["level"]))
       {
-        $sql = $this->_database->QueryWithBinds("UPDATE accounts SET LEVEL = ? WHERE ID = ?;", array($params["level"], $params["accountID"]));
-        if($sql->rowCount() > 0)
+
+        $sql = $this->_database->QueryWithBinds("SELECT USERNAME FROM accounts WHERE ID = ?", array($params["accountID"]));
+        $check = $sql->fetchAll();
+        if($check != false)
         {
-         $result = array("success" => true);
+          $sql = $this->_database->QueryWithBinds("UPDATE accounts SET LEVEL = ? WHERE ID = ?;", array($params["level"], $params["accountID"]));
+          if($sql->rowCount() > 0)
+          {
+           $result = array("success" => true);
+          }
+          else
+          {
+           $result = array("success" => false);
+          }
         }
         else
         {
-         $result = array("success" => false);
+          $result = array("success" => false, "message" => "Invalid");
         }
+
       }
       else
       {
-        $result = array("success" => false, "message" => "Invalid");
+        $result = array("success" => false, "message" => "Empty params");
       }
 
-    }
-    else
-    {
-      $result = array("success" => false, "message" => "Empty params");
-    }
+      return $result;
 
-    return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 

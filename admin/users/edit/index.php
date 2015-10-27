@@ -79,7 +79,17 @@ require("../../../header.php");
           data: {doing: "loadUser", accountID: $('#accountID').val()},
           dataType: 'json',
           success: function(response) {
-            if(response.success) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else if(response.success) {
               $('#userPicture').prop('src', response.userPicutre);
               $('#username').html(response.USERNAME);
               $('#userLevel').html('Level: ' + response.LEVEL);

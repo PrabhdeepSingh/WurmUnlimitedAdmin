@@ -1,6 +1,8 @@
 <?php
 namespace WurmUnlimitedAdmin;
 use PDO;
+use PDOException;
+use Exception;
 
 class ACCOUNT
 {
@@ -16,10 +18,24 @@ class ACCOUNT
 
 	  	$this->_database = new \WurmUnlimitedAdmin\DATABASE($dbConfig["appDB"]);
 	  }
-	  catch(EXCEPTION $ex)
-	  {
-	  	throw new EXCEPTION("Failed");
-	  }
+	  catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -68,10 +84,25 @@ class ACCOUNT
     	}
 
     	return $result;
+
     }
-    catch(PDOExecption $ex)
+    catch(PDOException $ex)
     {
-      throw new PDOExecption(json_encode($ex));
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
     }
 
   }
@@ -84,8 +115,6 @@ class ACCOUNT
    */
   function ChangePassword($params = array())
   {
-    $result = array();
-
     try
     {
       $result = array();
@@ -132,13 +161,26 @@ class ACCOUNT
       }
 
       return $result;
-    }
-    catch(PDOExecption $ex)
-    {
-      throw new PDOExecption(json_encode($ex));
-    }
 
-    return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 

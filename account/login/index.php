@@ -78,8 +78,17 @@ if(isLoggedin())
               data: {username: username, password: password},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
-                if(response.success) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
                   if($('#serverRef').val() != "") {
                     window.location.href = $('#serverRef').val();
                   }

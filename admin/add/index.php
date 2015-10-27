@@ -63,7 +63,17 @@ require("../../header.php");
                 $('#loader').show();
               },
               success: function(response) {
-                if(response.success) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
                   swal("Added", "You have successfully added [ " + username + " ]", "success");
                   $('#txtUsername').val('');
                   $('#txtPassword').val('');

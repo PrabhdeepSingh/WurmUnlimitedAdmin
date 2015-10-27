@@ -1,6 +1,8 @@
 <?php
 namespace WurmUnlimitedAdmin;
 use PDO;
+use PDOException;
+use Exception;
 
 class DATABASE
 {
@@ -12,11 +14,25 @@ class DATABASE
   	try
     {
       $this->_database = new PDO("sqlite:" . $dbName);
-      $this->_database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+      $this->_database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
     }
     catch(Exception $ex)
     {
-      throw new Exception("Could not open application database");
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
     }
 
   }
@@ -40,11 +56,26 @@ class DATABASE
   		{
   			return $query;
   		}
+
   	}
-  	catch(Exception $ex)
-  	{
-  		throw new Exception("Error proccessing query", 1);
-  	}
+  	catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -66,10 +97,24 @@ class DATABASE
       }
 
   	}
-  	catch(Exception $ex)
-  	{
-  		throw new Exception("Error proccessing query", 1);
-  	}
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 

@@ -1,6 +1,6 @@
 <?php
 namespace WurmUnlimitedAdmin;
-use PDO;
+use PDOException;
 
 require(dirname(__FILE__) . "/../includes/functions.php");
 
@@ -17,13 +17,25 @@ class PLAYER
 	  	require(dirname(__FILE__) . "/../includes/config.php");
 	  	require(dirname(__FILE__) . "/class.Database.inc.php");
 
-	  	$this->_playerDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmPlayersDB"]);
-      $this->_itemDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmItemsDB"]);
+      if(!empty($dbConfig["wurmPlayersDB"]) && !empty($dbConfig["wurmItemsDB"]))
+      {
+  	  	$this->_playerDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmPlayersDB"]);
+        $this->_itemDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmItemsDB"]);
+      }
+      else
+      {
+        throw new PDOException("Missing database");
+      }
 	  }
-	  catch(EXCEPTION $ex)
-	  {
-	  	throw new EXCEPTION("Failed");
-	  }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 

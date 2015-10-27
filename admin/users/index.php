@@ -34,20 +34,33 @@ require("../../header.php");
           data: {},
           dataType: 'json',
           success: function(response) {
-            if(response.length > 0) {
-              var html = '';
-              for(var i = 0; i < response.length; i++) {
-                html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./edit/?id=' + response[i].ID + '">' + response[i].USERNAME + '</a><span class="users-list-date">Level: ' + response[i].LEVEL + '</span></li>';
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
               }
-
-              $('#userList').html(html);
             }
             else {
+              if(response.length > 0) {
+                var html = '';
+                for(var i = 0; i < response.length; i++) {
+                  html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./edit/?id=' + response[i].ID + '">' + response[i].USERNAME + '</a><span class="users-list-date">Level: ' + response[i].LEVEL + '</span></li>';
+                }
+
+                $('#userList').html(html);
+              }
+              else {
+
+              }
+
+              $('#userList').show();
+              $('#loader').hide();
 
             }
-
-            $('#userList').show();
-            $('#loader').hide();
 
           },
           error: function(error) {

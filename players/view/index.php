@@ -39,7 +39,7 @@ require("../../header.php");
               <button class="btn btn-block" id="btnBanUnBan" data-do=""></button>
             </div>
             <div class="loading" id="loader-0"></div>
- 
+
           </div>
 
         </div>
@@ -108,9 +108,17 @@ require("../../header.php");
         data: {wurmID: $('#txtWurmID').val()},
         dataType: 'json',
         success: function(response) {
-          console.log(response);
-
-          if(response.success) {
+          if(response.error) {
+            switch(response.error.message) {
+              case 'Missing database':
+                swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                break;
+              default:
+                swal("Error", response.error.message, "error");
+                break;
+            }
+          }
+          else if(response.success) {
             /**
              * Left col
              */
@@ -132,7 +140,7 @@ require("../../header.php");
               $('#btnBanUnBan').addClass('btn-success');
               $('#btnBanUnBan').html('Unban');
               $('#btnBanUnBan').attr('data-do', "0");
-            }          
+            }
 
             /**
              * Right col
