@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.4-Alpha
+- Core/Player: Fixed `Exception error` that was being caused when loading player page.
+- Core/Player: Fixed `First seen` and `Last seen` to print correct date.
+- Core/Player: Added `Ban / Unban` function.
+- Core/Player: Added `Mute / Unmute` function.
+
 ## 0.0.3-Alpha
 - Core/Core: Implemented `Player` class.
 - Core/Player: Added `GetPlayers` function to get all players : single player from the wurm PLAYERS table.

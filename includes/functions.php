@@ -1,7 +1,7 @@
 <?php
 
 // Check if logged in
-if (!function_exists("isLoggedin"))
+if(!function_exists("isLoggedin"))
 {
   function isLoggedin()
   {
@@ -19,7 +19,7 @@ if (!function_exists("isLoggedin"))
 }
 
 
-if (!function_exists("Guid"))
+if(!function_exists("Guid"))
 {
   function Guid()
   {
@@ -47,7 +47,7 @@ if (!function_exists("Guid"))
 
 }
 
-if (!function_exists("time_elapsed_string"))
+if(!function_exists("time_elapsed_string"))
 {
   function time_elapsed_string($datetime, $full = false)
   {
@@ -87,7 +87,7 @@ if (!function_exists("time_elapsed_string"))
 
 }
 
-if (!function_exists("return_bytes"))
+if(!function_exists("return_bytes"))
 {
   function return_bytes($val)
   {
@@ -109,7 +109,7 @@ if (!function_exists("return_bytes"))
 
 }
 
-if (!function_exists("wurmSecondsToTime"))
+if(!function_exists("wurmSecondsToTime"))
 {
   function wurmSecondsToTime($seconds)
   {
@@ -126,7 +126,11 @@ if (!function_exists("wurmSecondsToTime"))
       $hoursLeft = round(($seconds - $daysLeft * 86400000) / 3600000);
       $minutesLeft = round(($seconds - $daysLeft * 86400000 - $hoursLeft * 3600000) / 60000);
 
-      if ($daysLeft > 0)
+      if ($daysLeft == 1)
+      {
+        $times = $times . $daysLeft . " day";
+      }
+      else
       {
         $times = $times . $daysLeft . " days";
       }
@@ -177,7 +181,7 @@ if (!function_exists("wurmSecondsToTime"))
 
 }
 
-if (!function_exists("wurmConvertMoney"))
+if(!function_exists("wurmConvertMoney"))
 {
   function wurmConvertMoney($ironValue)
   {
