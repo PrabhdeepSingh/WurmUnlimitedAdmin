@@ -69,7 +69,7 @@ if(!function_exists("time_elapsed_string"))
     );
     foreach ($string as $k => &$v)
     {
-      if ($diff->$k)
+      if($diff->$k)
       {
         $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
       }
@@ -80,7 +80,7 @@ if(!function_exists("time_elapsed_string"))
 
     }
 
-    if (!$full) $string = array_slice($string, 0, 1);
+    if(!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 
   }
@@ -115,7 +115,7 @@ if(!function_exists("wurmSecondsToTime"))
   {
     $times = "";
 
-    if ($seconds < 60000)
+    if($seconds < 60000)
     {
       $secs = $seconds / 1000;
       $times = $times . $secs . " seconds";
@@ -126,28 +126,28 @@ if(!function_exists("wurmSecondsToTime"))
       $hoursLeft = round(($seconds - $daysLeft * 86400000) / 3600000);
       $minutesLeft = round(($seconds - $daysLeft * 86400000 - $hoursLeft * 3600000) / 60000);
 
-      if ($daysLeft == 1)
+      if($daysLeft == 1)
       {
         $times = $times . $daysLeft . " day";
       }
-      else
+      else if($daysLeft > 0)
       {
         $times = $times . $daysLeft . " days";
       }
 
-      if ($hoursLeft > 0)
+      if($hoursLeft > 0)
       {
         $aft = "";
-        if ($daysLeft > 0 && $minutesLeft > 0)
+        if($daysLeft > 0 && $minutesLeft > 0)
         {
           $times = $times . ", ";
           $aft = $aft . " and ";
         }
-        else if ($daysLeft > 0)
+        else if($daysLeft > 0)
         {
           $times = $times . " and ";
         }
-        else if ($minutesLeft > 0)
+        else if($minutesLeft > 0)
         {
           $aft = $aft . " and ";
         }
@@ -156,10 +156,10 @@ if(!function_exists("wurmSecondsToTime"))
 
       }
 
-      if ($minutesLeft > 0)
+      if($minutesLeft > 0)
       {
         $aft = "";
-        if ($daysLeft > 0 && $hoursLeft == 0)
+        if($daysLeft > 0 && $hoursLeft == 0)
         {
           $aft = " and ";
         }
@@ -170,7 +170,7 @@ if(!function_exists("wurmSecondsToTime"))
 
     }
 
-    if (count($times) == 0)
+    if(count($times) == 0)
     {
       $times = "nothing";
     }
@@ -195,16 +195,16 @@ if(!function_exists("wurmConvertMoney"))
 
     $toSend = "";
 
-    if ($goldCoins > 0)
+    if($goldCoins > 0)
     {
       $toSend = $toSend . $goldCoins . " gold";
     }
 
-    if ($silverCoins > 0)
+    if($silverCoins > 0)
     {
-      if ($goldCoins > 0)
+      if($goldCoins > 0)
       {
-        if ($copperCoins > 0 || $ironCoins > 0)
+        if($copperCoins > 0 || $ironCoins > 0)
         {
           $toSend = $toSend . ", ";
         }
@@ -219,11 +219,11 @@ if(!function_exists("wurmConvertMoney"))
 
     }
 
-    if ($copperCoins > 0)
+    if($copperCoins > 0)
     {
-      if ($silverCoins > 0 || $goldCoins > 0)
+      if($silverCoins > 0 || $goldCoins > 0)
       {
-        if ($ironCoins > 0)
+        if($ironCoins > 0)
         {
           $toSend = $toSend . ", ";
         }
@@ -238,9 +238,9 @@ if(!function_exists("wurmConvertMoney"))
 
     }
 
-    if ($ironCoins > 0)
+    if($ironCoins > 0)
     {
-      if ($silverCoins > 0 || $goldCoins > 0 || $copperCoins > 0)
+      if($silverCoins > 0 || $goldCoins > 0 || $copperCoins > 0)
       {
         $toSend = $toSend . " and ";
       }
@@ -249,7 +249,7 @@ if(!function_exists("wurmConvertMoney"))
 
     }
 
-    if (empty($toSend))
+    if(empty($toSend))
     {
       return "0 irons";
     }
