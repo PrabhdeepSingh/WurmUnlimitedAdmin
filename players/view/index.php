@@ -128,7 +128,33 @@ require("../../header.php");
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane" id="inventory">
+                <div class="box">
+                  <div class="box-header">
+                    <h3 class="box-title">Player Inventory</h3>
 
+                    <div class="box-tools">
+                      <a href="#" class="btn btn-primary" id="btnRefreshInventory">Refresh inventory</a>
+                    </div>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body table-responsive no-padding">
+                    <div class="row" id="invFirstLoad">
+                      <div class="col-md-12"><div class="text-center"><h3>Please click on 'Refresh invenory' button on the top right</h3></div></div>
+                    </div>
+                    <table class="table table-hover" id="tableInventory" style="display: none;">
+                      <thead>
+                        <th></th>
+                        <th>Item</th>
+                        <th>Rarity</th>
+                        <th>Orginal Quality</th>
+                        <th>Quality</th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
               </div>
               <!-- /.tab-pane -->
 
@@ -139,7 +165,6 @@ require("../../header.php");
       </div>
     </section>
   </div>
-  <input type="hidden" id="txtWurmID" value="<?php echo $_GET['id']; ?>" />
 
   <div class="modal" id="modalBan" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -198,15 +223,18 @@ require("../../header.php");
     </div>
   </div>
 
+  <input type="hidden" id="txtWurmID" value="<?php echo $_GET['id']; ?>" />
+
   <script>
     $(document).ready(function() {
+      var wurmID = $('#txtWurmID').val();
       populate();
 
       function populate() {
         $.ajax({
           type: 'POST',
           url: 'view.php',
-          data: {wurmID: $('#txtWurmID').val()},
+          data: {wurmID: wurmID},
           dataType: 'json',
           success: function(response) {
             if(response.error) {
@@ -343,7 +371,7 @@ require("../../header.php");
 
       $('#btnBanUnBan').on('click', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         var action = $('#btnBanUnBan').data('do');
 
         if(action == 1) {
@@ -360,7 +388,7 @@ require("../../header.php");
               $('#btnBanUnBan').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
             },
             success: function(response) {
-              
+
               if(response.error) {
                 switch(response.error.message) {
                   case 'Missing database':
@@ -398,7 +426,7 @@ require("../../header.php");
       });
       $('#formBanPlayer').on('submit', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         var banDays = $('#txtBanDays').val();
         var banReason = $('#txtBanReason').val();
 
@@ -412,7 +440,7 @@ require("../../header.php");
             $('#formBanPlayer').hide();
           },
           success: function(response) {
-            
+
             if(response.error) {
               switch(response.error.message) {
                 case 'Missing database':
@@ -450,12 +478,12 @@ require("../../header.php");
             swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
           }
         });
-      
+
       });
 
       $('#btnMuteUnmute').on('click', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         var action = $('#btnMuteUnmute').data('do');
 
         if(action == 1) {
@@ -472,7 +500,7 @@ require("../../header.php");
               $('#btnMuteUnmute').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
             },
             success: function(response) {
-              
+
               if(response.error) {
                 switch(response.error.message) {
                   case 'Missing database':
@@ -510,7 +538,7 @@ require("../../header.php");
       });
       $('#formMutePlayer').on('submit', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         var muteHours = $('#txtMuteHours').val();
         var muteReason = $('#txtMuteReason').val();
 
@@ -524,7 +552,7 @@ require("../../header.php");
             $('#formMutePlayer').hide();
           },
           success: function(response) {
-            
+
             if(response.error) {
               switch(response.error.message) {
                 case 'Missing database':
@@ -562,7 +590,7 @@ require("../../header.php");
             swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
           }
         });
-      
+
       });
 
       $('#btnChangePower').on('click', function(e) {
@@ -580,7 +608,7 @@ require("../../header.php");
         function(isConfirm) {
           if(isConfirm) {
             var tempPower = $('#txtPower').val();
-            var wurmID = $('#txtWurmID').val();
+
             $.ajax({
               type: 'POST',
               url: 'process.php',
@@ -637,12 +665,12 @@ require("../../header.php");
             });
           }
         });
-      
+
       });
 
       $('#btnAddMoney').on('click', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         swal({
           title: 'Add money',
           text: 'Enter the amount of money to add to players bank in IRON coins ( 10000 = 1 silver, 1000000 = 1 gold):',
@@ -687,12 +715,12 @@ require("../../header.php");
               }
             });
         });
-      
+
       });
 
       $('#btnChangeEmail').on('click', function(e) {
         e.preventDefault();
-        var wurmID = $('#txtWurmID').val();
+
         swal({
           title: 'Add email',
           text: 'Enter a new email address for this user:',
@@ -737,7 +765,7 @@ require("../../header.php");
               }
             });
         });
-      
+
       });
 
       $('#btnChangeKingdom').on('click', function(e) {
@@ -755,7 +783,7 @@ require("../../header.php");
         function(isConfirm) {
           if(isConfirm) {
             var tempKingdom = $('#txtKingdom').val();
-            var wurmID = $('#txtWurmID').val();
+
             $.ajax({
               type: 'POST',
               url: 'process.php',
@@ -806,9 +834,76 @@ require("../../header.php");
             });
           }
         });
-      
+
       });
-      
+
+      $('#btnRefreshInventory').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: 'process.php',
+          data: {doing: "getInventory", playerID: wurmID},
+          dataType: 'json',
+          beforeSend: function() {
+            $('#btnRefreshInventory').prop('disabled', true);
+            $('#btnRefreshInventory').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
+          },
+          success: function(response) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else {
+              console.log(response);
+              var html = '';
+              for(var i = 0; i < response.length; i++)
+              {
+                var rarity = '';
+                switch(response[i].RARITY) {
+                  case '0':
+                    rarity = 'Normal';
+                    break;
+                  case '1':
+                    rarity = '<font color="#3D79AB">Rare</font>';
+                    break;
+                  case '2':
+                    rarity = '<font color="#00FFFF">Supreme</font>';
+                    break;
+                  case '3':
+                    rarity = '<font color="#F809FC">Fantastic</font>';
+                    break;
+                  default:
+                    rarity = 'Unknown';
+                    break;
+                }
+                html += '<tr><td><input type="checkbox" /></td><td>' + response[i].NAME + '</td><td>' + rarity + '</td><td>' + response[i].ORIGINALQUALITYLEVEL + '</td><td>' + response[i].QUALITYLEVEL + '</td></tr>';
+              }
+              $('#tableInventory tbody').html(html);
+
+              $('#invFirstLoad').hide();
+              $('#tableInventory').show();
+            }
+
+            $('#btnRefreshInventory').prop('disabled', false);
+            $('#btnRefreshInventory').html('Refresh inventory');
+
+
+          },
+          error: function(error) {
+            console.log(error);
+            swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+            $('#btnRefreshInventory').prop('disabled', false);
+            $('#btnRefreshInventory').html('Refresh inventory');
+          }
+        });
+      })
+
     });
   </script>
 

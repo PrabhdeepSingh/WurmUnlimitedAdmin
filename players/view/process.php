@@ -29,6 +29,9 @@ if(!empty($_POST))
 		case "changeKingdom":
 			$response = $player->ChangeKingdom($_POST);
 			break;
+		case "getInventory":
+			$response = $player->GetInventory($_POST["playerID"]);
+			break;
 		default:
 			$response = array("success" => false);
 			break;

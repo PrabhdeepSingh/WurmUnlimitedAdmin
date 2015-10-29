@@ -111,11 +111,11 @@ class PLAYER
         if($user != false)
         {
           $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET BANNED = ?, BANEXPIRY = ?, BANREASON = ? WHERE WURMID = ?;", array(0, 0, "", $params["wurmID"]));
-          
+
           if($sql)
           {
             $sql = $this->_playerDB->QueryWithBinds("DELETE FROM BANNEDIPS WHERE IPADDRESS = ?;", array($user["IPADDRESS"]));
-          
+
             if($sql)
             {
               $result = array("success" => true);
@@ -146,11 +146,11 @@ class PLAYER
         {
           $banExpiryToMili = round(microtime(true) * 1000) + (int) $params["banDays"] * 86400000;
           $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET BANNED = ?, BANEXPIRY = ?, BANREASON = ? WHERE WURMID = ?;", array(1, $banExpiryToMili, $params["banReason"], $params["wurmID"]));
-          
+
           if($sql)
           {
             $sql = $this->_playerDB->QueryWithBinds("INSERT INTO BANNEDIPS (IPADDRESS, BANREASON, BANEXPIRY) VALUES(?,?,?);", array($user["IPADDRESS"], $params["banReason"], $banExpiryToMili));
-            
+
             if($sql)
             {
               $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
@@ -193,7 +193,7 @@ class PLAYER
   function MuteUnmute($params = array())
   {
     $result = array();
-    
+
     if(!empty($params))
     {
       /**
@@ -202,7 +202,7 @@ class PLAYER
       if($params["action"] == 0)
       {
         $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MUTED = ?, MUTEEXPIRY = ?, MUTEREASON = ? WHERE WURMID = ?;", array(0, 0, "", $params["wurmID"]));
-        
+
         if($sql)
         {
           $result = array("success" => true);
@@ -217,7 +217,7 @@ class PLAYER
       {
         $muteExpiryToMili = round(microtime(true) * 1000) + (int) $params["muteHours"] * 3600000;
         $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MUTETIMES = MUTETIMES + 1, MUTED = ?, MUTEEXPIRY = ?, MUTEREASON = ? WHERE WURMID = ?;", array(1, $muteExpiryToMili, $params["muteReason"], $params["wurmID"]));
-        
+
         if($sql)
         {
           $result = array("success" => true, "MUTEEXPIRY" => date("m/d/Y H:i:s", $muteExpiryToMili / 1000));
@@ -248,11 +248,11 @@ class PLAYER
   function ChangePower($params = array())
   {
     $result = array();
-    
+
     if(!empty($params))
     {
       $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET POWER = ? WHERE WURMID = ?;", array($params["power"], $params["wurmID"]));
-          
+
       if($sql)
       {
         $result = array("success" => true);
@@ -277,11 +277,11 @@ class PLAYER
   function AddMoney($params = array())
   {
     $result = array();
-    
+
     if(!empty($params))
     {
       $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MONEY = MONEY + ? WHERE WURMID = ?;", array($params["money"], $params["wurmID"]));
-          
+
       if($sql)
       {
         $sql = $this->_playerDB->QueryWithBinds("SELECT MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
@@ -316,11 +316,11 @@ class PLAYER
   function ChangeEmail($params = array())
   {
     $result = array();
-    
+
     if(!empty($params))
     {
       $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET EMAIL = ? WHERE WURMID = ?;", array($params["email"], $params["wurmID"]));
-          
+
       if($sql)
       {
         $sql = $this->_playerDB->QueryWithBinds("INSERT INTO PLAYEREHISTORYEMAIL (PLAYERID,EMAIL_ADDRESS,DATED) VALUES(?,?,?);", array($params["wurmID"], $params["email"], round(microtime(true) * 1000)));
@@ -354,11 +354,11 @@ class PLAYER
   function ChangeKingdom($params = array())
   {
     $result = array();
-    
+
     if(!empty($params))
     {
       $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET KINGDOM = ? WHERE WURMID = ?;", array($params["kingdom"], $params["wurmID"]));
-          
+
       if($sql)
       {
         $result = array("success" => true);
@@ -366,6 +366,28 @@ class PLAYER
       else
       {
         $result = array("success" => false);
+      }
+
+    }
+
+    return $result;
+
+  }
+
+  /**
+   * Gets all the items in the players inventory
+   * @param string $playerID The players wurm ID
+   */
+  function GetInventory($playerID = "")
+  {
+    $result = array();
+
+    if(!empty($playerID))
+    {
+      $sql = $this->_itemDB->QueryWithBinds("SELECT CREATIONDATE, CREATOR, DAMAGE, NAME, ORIGINALQUALITYLEVEL, QUALITYLEVEL, RARITY, WEIGHT FROM ITEMS WHERE OWNERID = ? AND NAME != ?", array($playerID, "inventory"));
+      while($items = $sql->fetch(PDO::FETCH_ASSOC))
+      {
+        array_push($result, $items);
       }
 
     }

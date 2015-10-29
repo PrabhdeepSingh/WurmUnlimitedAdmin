@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.6-Alpha
+- Core/Core: Fixed `Dashboard` to be more relevant.
+- Core/Player: Added `Inventory`, this is just a basic inventory view for now. More coming soon.
+
 ## 0.0.5-Alpha
 - Core/Player: Added `Change power` function to change a players in-game power.
 - Core/Player: Added `Add money` function to add money to a player.
@@ -7,7 +11,7 @@
 - Core/Player: Added `Change kingdom` function to change a players kingdom.
 - Core/Core: Added a `Donate via PayPal` link on the footer.
 - Core/Core: Changed `Main Navigation Icons` to proper ones.
-- Core/Core: Fixed 'Main Navigation Menu', it should now stay open.
+- Core/Core: Fixed `Main Navigation Menu`, it should now stay open.
 
 ## 0.0.4-Alpha
 - Core/Player: Fixed `Exception error` that was being caused when loading player page.
