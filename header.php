@@ -85,9 +85,9 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
             <!--
               - This nav will be generated through sql database
               -->
-            <li class="treeview">
+            <li class="treeview <?php echo $page == 'account' ? 'active' : ''; ?>">
               <a href="#">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-desktop"></i>
                 <span> Account</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
@@ -100,47 +100,47 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
             if($userData["level"] >= $application["minAdminLevel"])
             {
             ?>
-            <li class="treeview">
+            <li class="treeview <?php echo $page == 'admind' ? 'active' : ''; ?>">
               <a href="#">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-bank"></i>
                 <span> Admin</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo $application["rootPath"]; ?>admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
-                <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-edit"></i> Users</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-users"></i> Users</a></li>
               </ul>
             </li>
-            <li class="treeview">
+            <li class="treeview <?php echo $page == 'server' ? 'active' : ''; ?>">
               <a href="#">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-server"></i>
                 <span> Server</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-table"></i> Server Settings</a></li>
+                <li><a href="#"><i class="fa fa-cogs"></i> Server Settings</a></li>
               </ul>
             </li>
             <?php } ?>
-            <li class="treeview">
+            <li class="treeview <?php echo $page == 'player' ? 'active' : ''; ?>">
               <a href="#">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-user"></i>
                 <span> Player</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-table"></i> Players online</a></li>
-                <li><a href="<?php echo $application["rootPath"]; ?>players/"><i class="fa fa-edit"></i> All players</a></li>
+                <li><a href="#"><i class="fa fa-power-off"></i> Players online</a></li>
+                <li><a href="<?php echo $application["rootPath"]; ?>players/"><i class="fa fa-users"></i> All players</a></li>
               </ul>
             </li>
-            <li class="treeview">
+            <li class="treeview <?php echo $page == 'village' ? 'active' : ''; ?>">
               <a href="#">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-home"></i>
                 <span> Village</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-table"></i> View all villages</a></li>
+                <li><a href="#"><i class="fa fa-list"></i> View all villages</a></li>
               </ul>
             </li>
           </ul>

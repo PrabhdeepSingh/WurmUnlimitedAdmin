@@ -1,4 +1,5 @@
 <?php
+$page = "player";
 require("../header.php");
 ?>
       <div class="content-wrapper">

@@ -1,4 +1,5 @@
 <?php
+$page = "admin";
 require("../../header.php");
 ?>
       <div class="content-wrapper">

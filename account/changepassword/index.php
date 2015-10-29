@@ -1,4 +1,5 @@
 <?php
+$page = "account";
 require("../../header.php");
 ?>
       <div class="content-wrapper">

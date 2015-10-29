@@ -17,6 +17,18 @@ if(!empty($_POST))
 		case "muteFunction":
 			$response = $player->MuteUnmute($_POST);
 			break;
+		case "changePower":
+			$response = $player->ChangePower($_POST);
+			break;
+		case "addMoney":
+			$response = $player->AddMoney($_POST);
+			break;
+		case "changeEmail":
+			$response = $player->ChangeEmail($_POST);
+			break;
+		case "changeKingdom":
+			$response = $player->ChangeKingdom($_POST);
+			break;
 		default:
 			$response = array("success" => false);
 			break;

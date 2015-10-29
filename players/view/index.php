@@ -1,4 +1,5 @@
 <?php
+$page = "player";
 require("../../header.php");
 ?>
   <div class="content-wrapper">
@@ -168,7 +169,6 @@ require("../../header.php");
       </div>
     </div>
   </div>
-
   <div class="modal" id="modalMute" tabindex="-1" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -342,6 +342,7 @@ require("../../header.php");
       }
 
       $('#btnBanUnBan').on('click', function(e) {
+        e.preventDefault();
         var wurmID = $('#txtWurmID').val();
         var action = $('#btnBanUnBan').data('do');
 
@@ -453,6 +454,7 @@ require("../../header.php");
       });
 
       $('#btnMuteUnmute').on('click', function(e) {
+        e.preventDefault();
         var wurmID = $('#txtWurmID').val();
         var action = $('#btnMuteUnmute').data('do');
 
@@ -486,7 +488,7 @@ require("../../header.php");
                 $('#playerMuted').html('False');
                 $('#btnMuteUnmute').addClass('btn-danger');
                 $('#btnMuteUnmute').html('Mute');
-                $('#btnMuteUnmute').attr('data-do', "1");
+                $('#btnMuteUnmute').attr('data-do', '1');
                 $('#liPlayerMuteTime').hide();
                 $('#liPlayerMuteReason').hide();
               }
@@ -558,6 +560,250 @@ require("../../header.php");
             console.log(error);
             $('#modalMute').modal('hide');
             swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+          }
+        });
+      
+      });
+
+      $('#btnChangePower').on('click', function(e) {
+        swal({
+          title: 'Change player power',
+          text: '<select id="txtPower" class="form-control"><option value="0">Player</option><option value="1">HERO</option><option value="2">GM</option><option value="3">High God</option><option value="4">Arch GM</option><option value="5">Implementor</option></select>',
+          html: true,
+          showCancelButton: true,
+          showConfirmButton: true,
+          confirmButtonText: 'Change',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          closeOnConfirm: false
+        },
+        function(isConfirm) {
+          if(isConfirm) {
+            var tempPower = $('#txtPower').val();
+            var wurmID = $('#txtWurmID').val();
+            $.ajax({
+              type: 'POST',
+              url: 'process.php',
+              data: {doing: "changePower", power: tempPower, wurmID: wurmID},
+              dataType: 'json',
+              success: function(response) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
+                  var textPower = "";
+                  switch(tempPower) {
+                    case '0':
+                      textPower = 'Player';
+                      break;
+                    case '1':
+                      textPower = 'HERO';
+                      break;
+                    case '2':
+                      textPower = 'GM';
+                      break;
+                    case '3':
+                      textPower = 'High God';
+                      break;
+                    case '4':
+                      textPower = 'Arch GM';
+                      break;
+                    case '5':
+                      textPower = 'Implementor';
+                      break;
+                    default:
+                      textPower = 'Unknown kingdom';
+                      break;
+                  }
+                  swal('Power changed!', 'The powers for this player has been changed to [ ' + textPower + ' ]!', 'success');
+                  $('#playerPower').html('Power: ' + textPower);
+                }
+                else {
+                  swal('Failed to change!', 'We could not proccess this request at this time.', 'error');
+                }
+
+              },
+              error: function(error) {
+                console.log(error);
+                swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+              }
+            });
+          }
+        });
+      
+      });
+
+      $('#btnAddMoney').on('click', function(e) {
+        e.preventDefault();
+        var wurmID = $('#txtWurmID').val();
+        swal({
+          title: 'Add money',
+          text: 'Enter the amount of money to add to players bank in IRON coins ( 10000 = 1 silver, 1000000 = 1 gold):',
+          type: 'input',
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true,
+          inputPlaceholder: 'Enter money in IRON coins'
+        }, function(money) {
+          if (money === false || money === '') {
+            swal.showInputError('You need to write something!');
+            return false
+          }
+            $.ajax({
+              type: 'POST',
+              url: 'process.php',
+              data: {doing: "addMoney", money: money, wurmID: wurmID},
+              dataType: 'json',
+              success: function(response) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
+                  swal('Money added!', 'The player now has [ ' + response.money + ' ] in their bank!', 'success');
+                  $('#playerMoney').html(response.money);
+                }
+                else {
+                  swal('Failed to add!', 'We could not proccess this request at this time.', 'error');
+                }
+
+              },
+              error: function(error) {
+                console.log(error);
+                swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+              }
+            });
+        });
+      
+      });
+
+      $('#btnChangeEmail').on('click', function(e) {
+        e.preventDefault();
+        var wurmID = $('#txtWurmID').val();
+        swal({
+          title: 'Add email',
+          text: 'Enter a new email address for this user:',
+          type: 'input',
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true,
+          inputPlaceholder: 'Email address'
+        }, function(email) {
+          if (email === false || email === '') {
+            swal.showInputError('You need to write something!');
+            return false
+          }
+            $.ajax({
+              type: 'POST',
+              url: 'process.php',
+              data: {doing: "changeEmail", email: email, wurmID: wurmID},
+              dataType: 'json',
+              success: function(response) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
+                  swal('Changed!', 'The players new email is [ ' + email + ' ]!', 'success');
+                  $('#playerEmail').html(email);
+                }
+                else {
+                  swal('Failed to change!', 'We could not proccess this request at this time.', 'error');
+                }
+
+              },
+              error: function(error) {
+                console.log(error);
+                swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+              }
+            });
+        });
+      
+      });
+
+      $('#btnChangeKingdom').on('click', function(e) {
+        swal({
+          title: 'Change player kingdom',
+          text: '<select id="txtKingdom" class="form-control"><option value="0">Freedom</option><option value="1">Jenn-Kellon</option><option value="2">Mol-Rehan</option><option value="3">Horde of the Summoned</option></select>',
+          html: true,
+          showCancelButton: true,
+          showConfirmButton: true,
+          confirmButtonText: 'Change',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          closeOnConfirm: false
+        },
+        function(isConfirm) {
+          if(isConfirm) {
+            var tempKingdom = $('#txtKingdom').val();
+            var wurmID = $('#txtWurmID').val();
+            $.ajax({
+              type: 'POST',
+              url: 'process.php',
+              data: {doing: "changeKingdom", kingdom: tempKingdom, wurmID: wurmID},
+              dataType: 'json',
+              success: function(response) {
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
+                  var textKingdom = "";
+                  switch(tempKingdom) {
+                    case '0':
+                      textKingdom = 'Freedom';
+                      break;
+                    case '1':
+                      textKingdom = 'Jenn-Kellon';
+                      break;
+                    case '2':
+                      textKingdom = 'Mol-Rehan';
+                      break;
+                    case '3':
+                      textKingdom = 'Horde of the Summoned';
+                      break;
+                    default:
+                      textKingdom = 'Unknown kingdom';
+                      break;
+                  }
+                  swal('Kingdom changed!', 'The players kingdom has been changed to [ ' + textKingdom + ' ]!', 'success');
+                  $('#playerKingdom').html(textKingdom);
+                }
+                else {
+                  swal('Failed to change!', 'We could not proccess this request at this time.', 'error');
+                }
+
+              },
+              error: function(error) {
+                console.log(error);
+                swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+              }
+            });
           }
         });
       

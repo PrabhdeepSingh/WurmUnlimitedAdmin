@@ -239,6 +239,141 @@ class PLAYER
 
   }
 
+  /**
+   * Changes the players in-game powers
+   * @param array $params Contains players wurmID and what power to change to
+   *
+   * @return array $result Contains true or false
+   */
+  function ChangePower($params = array())
+  {
+    $result = array();
+    
+    if(!empty($params))
+    {
+      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET POWER = ? WHERE WURMID = ?;", array($params["power"], $params["wurmID"]));
+          
+      if($sql)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+    }
+
+    return $result;
+
+  }
+
+  /**
+   * Adds money to a player's bank account
+   * @param array $params Contains players wurmID and money to add
+   *
+   * @return array $result Contains true or false
+   */
+  function AddMoney($params = array())
+  {
+    $result = array();
+    
+    if(!empty($params))
+    {
+      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MONEY = MONEY + ? WHERE WURMID = ?;", array($params["money"], $params["wurmID"]));
+          
+      if($sql)
+      {
+        $sql = $this->_playerDB->QueryWithBinds("SELECT MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+        $user = $sql->fetch(PDO::FETCH_ASSOC);
+        if($user != false)
+        {
+          $result = array("success" => true, "money" => wurmConvertMoney($user["MONEY"]));
+        }
+        else
+        {
+          $result = array("success" => false);
+        }
+
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+    }
+
+    return $result;
+
+  }
+
+  /**
+   * Changes the players email address
+   * @param array $params Contains players wurmID and new email address
+   *
+   * @return array $result Contains true or false
+   */
+  function ChangeEmail($params = array())
+  {
+    $result = array();
+    
+    if(!empty($params))
+    {
+      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET EMAIL = ? WHERE WURMID = ?;", array($params["email"], $params["wurmID"]));
+          
+      if($sql)
+      {
+        $sql = $this->_playerDB->QueryWithBinds("INSERT INTO PLAYEREHISTORYEMAIL (PLAYERID,EMAIL_ADDRESS,DATED) VALUES(?,?,?);", array($params["wurmID"], $params["email"], round(microtime(true) * 1000)));
+        if($sql)
+        {
+          $result = array("success" => true);
+        }
+        else
+        {
+          $result = array("success" => false);
+        }
+
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+    }
+
+    return $result;
+
+  }
+
+  /**
+   * Changes the players kingdom
+   * @param array $params Contains players wurmID and new kingdom
+   *
+   * @return array $result Contains true or false
+   */
+  function ChangeKingdom($params = array())
+  {
+    $result = array();
+    
+    if(!empty($params))
+    {
+      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET KINGDOM = ? WHERE WURMID = ?;", array($params["kingdom"], $params["wurmID"]));
+          
+      if($sql)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+    }
+
+    return $result;
+
+  }
+
   function __destruct()
   {
   	$this->_playerDB = null;
