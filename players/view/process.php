@@ -32,6 +32,9 @@ if(!empty($_POST))
 		case "getInventory":
 			$response = $player->GetInventory($_POST["playerID"]);
 			break;
+		case "getSkills":
+			$response = $player->GetSkills($_POST["playerID"]);
+			break;
 		default:
 			$response = array("success" => false);
 			break;

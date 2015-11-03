@@ -13,8 +13,13 @@ $application = array(
 	"mode" => DEVELOPMENT,
 	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
-	"version" => "0.0.6-Alpha"
+	"version" => "0.0.7-Alpha"
 );
+
+/**
+ * Location of where your world directory for the wurm server is located
+ */
+$serverRoot	= "/path/to/wurm-server/world-dir/sqlite";
 
 /**
  * This array is used for connecting to different databases
@@ -31,13 +36,13 @@ $application = array(
  */
 $dbConfig = array(
 	"appDB" => dirname(__FILE__) . "/sqlite/app.db",
-	"wurmCreaturesDB" => "",
-	"wurmDeitiesDB" => "",
-	"wurmEconomyDB" => "",
-	"wurmItemsDB" => "",
-	"wurmLoginDB" => "",
-	"wurmLogsDB" => "",
-	"wurmPlayersDB" => "",
-	"wurmTemplatesDB" => "",
-	"wurmZonesDB" => ""
+	"wurmCreaturesDB"	=> "{$serverRoot}/wurmcreatures.db",
+	"wurmDeitiesDB"		=> "{$serverRoot}/wurmdeities.db",
+	"wurmEconomyDB"		=> "{$serverRoot}/wurmeconomy.db",
+	"wurmItemsDB"		  => "{$serverRoot}/wurmitems.db",
+	"wurmLoginDB"		  => "{$serverRoot}/wurmlogin.db",
+	"wurmLogsDB"		  => "{$serverRoot}/wurmlogs.db",
+	"wurmPlayersDB"		=> "{$serverRoot}/wurmplayers.db",
+	"wurmTemplatesDB"	=> "{$serverRoot}/wurmtemplates.db",
+	"wurmZonesDB"		  => "{$serverRoot}/wurmzones.db"
 );

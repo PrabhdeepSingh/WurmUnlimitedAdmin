@@ -65,8 +65,8 @@ require("../../header.php");
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
               <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-              <li><a href="#inventory" data-toggle="tab">Inventory</a></li>
-              <li><a href="#settings" data-toggle="tab">Settings</a></li>
+              <li><a href="#inventory" data-toggle="tab" onclick="$('#btnRefreshInventory').trigger('click');">Inventory</a></li>
+              <li><a href="#skills" data-toggle="tab" onclick="$('#btnRefreshSkills').trigger('click');">Skills</a></li>
             </ul>
             <div class="tab-content" id="2ndDiv" style="display: none;">
               <div class="active tab-pane" id="info">
@@ -126,7 +126,6 @@ require("../../header.php");
                   </div>
                 </div>
               </div>
-              <!-- /.tab-pane -->
               <div class="tab-pane" id="inventory">
                 <div class="box">
                   <div class="box-header">
@@ -156,8 +155,33 @@ require("../../header.php");
                   <!-- /.box-body -->
                 </div>
               </div>
-              <!-- /.tab-pane -->
+              <div class="tab-pane" id="skills">
+                <div class="box">
+                  <div class="box-header">
+                    <h3 class="box-title">Player Skills</h3>
 
+                    <div class="box-tools">
+                      <a href="#" class="btn btn-primary" id="btnRefreshSkills">Refresh skills</a>
+                    </div>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body table-responsive no-padding">
+                    <div class="row" id="skillsFirstLoad">
+                      <div class="col-md-12"><div class="text-center"><h3>Please click on 'Refresh skills' button on the top right</h3></div></div>
+                    </div>
+                    <table class="table table-hover" id="tableSkills" style="display: none;">
+                      <thead>
+                        <th>Skill</th>
+                        <th>Min Value</th>
+                        <th>Current Value</th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+              </div>
             </div>
             <div class="loading" id="loader-1"></div>
           </div>
@@ -902,6 +926,57 @@ require("../../header.php");
             $('#btnRefreshInventory').html('Refresh inventory');
           }
         });
+
+      })
+
+      $('#btnRefreshSkills').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: 'process.php',
+          data: {doing: "getSkills", playerID: wurmID},
+          dataType: 'json',
+          beforeSend: function() {
+            $('#btnRefreshSkills').prop('disabled', true);
+            $('#btnRefreshSkills').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
+          },
+          success: function(response) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else {
+              console.log(response);
+              var html = '';
+              for(var i = 0; i < response.length; i++)
+              {
+                html += '<tr><td>' + response[i].NAME + '</td><td>' + response[i].MINVALUE + '</td><td>' + response[i].VALUE + '</td></tr>';
+              }
+              $('#tableSkills tbody').html(html);
+
+              $('#skillsFirstLoad').hide();
+              $('#tableSkills').show();
+            }
+
+            $('#btnRefreshSkills').prop('disabled', false);
+            $('#btnRefreshSkills').html('Refresh skills');
+
+
+          },
+          error: function(error) {
+            console.log(error);
+            swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+            $('#btnRefreshSkills').prop('disabled', false);
+            $('#btnRefreshSkills').html('Refresh skills');
+          }
+        });
+
       })
 
     });

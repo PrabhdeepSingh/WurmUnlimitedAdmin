@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.7-Alpha
+- Core/Core: Changed `$dbConfig` in config.php file to use $serverRoot.
+- Core/Core: Updated `Player view` file to update the inventory view when the user clicks the tab.
+- Core/Core: Added `GetSkills` function to the get player skills.
+
 ## 0.0.6-Alpha
 - Core/Core: Fixed `Dashboard` to be more relevant.
 - Core/Player: Added `Inventory`, this is just a basic inventory view for now. More coming soon.
