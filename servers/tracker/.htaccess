@@ -1,0 +1,4 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteRule ^vertical\.png vertical.php
+RewriteRule ^horizontal\.png horizontal.php

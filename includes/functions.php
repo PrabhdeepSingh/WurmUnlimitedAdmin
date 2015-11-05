@@ -87,24 +87,18 @@ if(!function_exists("time_elapsed_string"))
 
 }
 
-if(!function_exists("return_bytes"))
+if(!function_exists("get_real_ip"))
 {
-  function return_bytes($val)
+  /**
+   * Gets the real IP of the user
+   * @return string IP address
+   */
+  function get_real_ip()
   {
-    $val = trim($val);
-    $last = strtolower($val[strlen($val)-1]);
-    switch($last)
-    {
-      // The 'G' modifier is available since PHP 5.1.0
-      case 'g':
-        $val *= 1024;
-      case 'm':
-        $val *= 1024;
-      case 'k':
-        $val *= 1024;
-    }
+    $ip = file_get_contents('http://phihag.de/ip/');
 
-    return $val;
+    return $ip;
+
   }
 
 }

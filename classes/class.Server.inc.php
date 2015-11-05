@@ -81,16 +81,44 @@ class SERVER
 
   function GetPlayerCount()
   {
+    require(dirname(__FILE__) . "/../includes/config.php");
     $result = 0;
     try
     {
       exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"playerCount\" \"\" 2>&1", $output);
-      $result = $output;
+      if(is_numeric($output[0]))
+      {
+        $result = $output[0];
+      }
+      else
+      {
+        $result = json_encode($output);
+      }
+
     }
     catch(Exception $ex)
     {
       $result = 0;
     }
+
+    return $result;
+
+  }
+
+  function GetTracker($serverID = "")
+  {
+    $result = array();
+
+    if(!empty($serverID))
+    {
+      $sql = $this->_serverDB->QueryWithBinds("SELECT NAME, EXTERNALPORT, SKILLGAINRATE, ACTIONTIMER, MAXPLAYERS, MAXCREATURES, PERCENT_AGG_CREATURES, PVP, EPIC, MAPNAME FROM SERVERS WHERE SERVER = ?", array($serverID));
+      $server = $sql->fetch(PDO::FETCH_ASSOC);
+      $server["COUNT"] = $this->GetPlayerCount();
+      $server["EXTERNALIP"] = get_real_ip();
+      $result = $server;
+    }
+
+    return $result;
 
   }
 

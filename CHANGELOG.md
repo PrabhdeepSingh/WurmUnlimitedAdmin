@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.9-Alpha
+- Core/Server: Added `GetTracker` function which generators data for server tracker.
+- Core/Core: Implemented `Tracker` which generatos a image of your server data / settings.
+
 ## 0.0.8-Alpha
 - Core/Player: Added a bridge connection to the wurm server.
 - Core/Core: Implemented `Server` class.
