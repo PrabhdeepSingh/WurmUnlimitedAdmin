@@ -1,10 +1,9 @@
 <?php
 namespace WurmUnlimitedAdmin;
+
 use PDO;
 use PDOException;
 use Exception;
-
-require(dirname(__FILE__) . "/../includes/functions.php");
 
 class PLAYER
 {
@@ -16,8 +15,11 @@ class PLAYER
   {
   	try
   	{
-	  	require(dirname(__FILE__) . "/../includes/config.php");
-	  	require(dirname(__FILE__) . "/class.Database.inc.php");
+      global $dbConfig;
+      global $rmiConfig;
+      require(dirname(__FILE__) . "/../includes/config.php");
+      require(dirname(__FILE__) . "/../includes/functions.php");
+      require(dirname(__FILE__) . "/class.Database.inc.php");
 
       if(!empty($dbConfig["wurmPlayersDB"]) && !empty($dbConfig["wurmItemsDB"]))
       {
@@ -28,6 +30,7 @@ class PLAYER
       {
         throw new PDOException("Missing database");
       }
+
 	  }
     catch(PDOException $ex)
     {
@@ -97,6 +100,7 @@ class PLAYER
    */
   function BanUnban($params = array())
   {
+    require(dirname(__FILE__) . "/../includes/config.php");
     $result = array();
     if(!empty($params))
     {
@@ -105,27 +109,17 @@ class PLAYER
        */
       if($params["action"] == 0)
       {
-        $sql = $this->_playerDB->QueryWithBinds("SELECT IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+        $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
         $user = $sql->fetch(PDO::FETCH_ASSOC);
 
         if($user != false)
         {
-          $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET BANNED = ?, BANEXPIRY = ?, BANREASON = ? WHERE WURMID = ?;", array(0, 0, "", $params["wurmID"]));
-
-          if($sql)
+          try
           {
-            $sql = $this->_playerDB->QueryWithBinds("DELETE FROM BANNEDIPS WHERE IPADDRESS = ?;", array($user["IPADDRESS"]));
-
-            if($sql)
-            {
-              $result = array("success" => true);
-            }
-            else
-            {
-              $result = array("success" => false);
-            }
+            exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"pardon\" \"" . $user["NAME"] . "," . $user["IPADDRESS"] . "\" 2>&1", $output);
+            $result = array("success" => true);
           }
-          else
+          catch(Exception $ex)
           {
             $result = array("success" => false);
           }
@@ -139,29 +133,20 @@ class PLAYER
       }
       else if($params["action"] == 1)
       {
-        $sql = $this->_playerDB->QueryWithBinds("SELECT IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+        $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
         $user = $sql->fetch(PDO::FETCH_ASSOC);
 
         if($user != false)
         {
-          $banExpiryToMili = round(microtime(true) * 1000) + (int) $params["banDays"] * 86400000;
-          $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET BANNED = ?, BANEXPIRY = ?, BANREASON = ? WHERE WURMID = ?;", array(1, $banExpiryToMili, $params["banReason"], $params["wurmID"]));
-
-          if($sql)
+          try
           {
-            $sql = $this->_playerDB->QueryWithBinds("INSERT INTO BANNEDIPS (IPADDRESS, BANREASON, BANEXPIRY) VALUES(?,?,?);", array($user["IPADDRESS"], $params["banReason"], $banExpiryToMili));
-
-            if($sql)
-            {
-              $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
-            }
-            else
-            {
-              $result = array("success" => false);
-            }
-
+            $banExpiryToMili = round(microtime(true) * 1000) + (int) $params["banDays"] * 86400000;
+            
+            exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"ban\" \"" . $user["NAME"] . "," . $user["IPADDRESS"] . "," . $params["banDays"] . "\" 2>&1", $output);
+            
+            $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
           }
-          else
+          catch(Exception $ex)
           {
             $result = array("success" => false);
           }
@@ -185,7 +170,7 @@ class PLAYER
   }
 
   /**
-   * Mute or unmute a player
+   * Mute or unmute a player (This does not working yet)
    * @param array $params Contains data related to muting or unmuting
    *
    * @return array $result Contains true or false
@@ -280,17 +265,28 @@ class PLAYER
 
     if(!empty($params))
     {
-      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MONEY = MONEY + ? WHERE WURMID = ?;", array($params["money"], $params["wurmID"]));
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-      if($sql)
+      if($user != false)
       {
-        $sql = $this->_playerDB->QueryWithBinds("SELECT MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
-        $user = $sql->fetch(PDO::FETCH_ASSOC);
-        if($user != false)
+        try
         {
-          $result = array("success" => true, "money" => wurmConvertMoney($user["MONEY"]));
+          exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"addMoney\" \"" . $user["NAME"] . "," . $params["money"] . "\" 2>&1", $output);
+          
+          $sql = $this->_playerDB->QueryWithBinds("SELECT MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+          $user = $sql->fetch(PDO::FETCH_ASSOC);
+          if($user != false)
+          {
+            $result = array("success" => true, "money" => wurmConvertMoney($user["MONEY"]));
+          }
+          else
+          {
+            $result = array("success" => false);
+          }
+
         }
-        else
+        catch(Exception $ex)
         {
           $result = array("success" => false);
         }
@@ -298,7 +294,7 @@ class PLAYER
       }
       else
       {
-        $result = array("success" => false);
+        $result = array("success" => false, "message" => "Not a player");
       }
 
     }

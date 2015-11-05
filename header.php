@@ -111,15 +111,11 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
                 <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-users"></i> Users</a></li>
               </ul>
             </li>
-            <li class="treeview <?php echo $page == 'server' ? 'active' : ''; ?>">
-              <a href="#">
+            <li class="<?php echo $page == 'server' ? 'active' : ''; ?>">
+              <a href="<?php echo $application["rootPath"]; ?>servers/">
                 <i class="fa fa-server"></i>
-                <span> Server</span>
-                <i class="fa fa-angle-left pull-right"></i>
+                <span> Servers</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-cogs"></i> Server Settings</a></li>
-              </ul>
             </li>
             <?php } ?>
             <li class="treeview <?php echo $page == 'player' ? 'active' : ''; ?>">

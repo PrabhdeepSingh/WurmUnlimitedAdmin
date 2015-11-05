@@ -13,7 +13,7 @@ $application = array(
 	"mode" => DEVELOPMENT,
 	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
-	"version" => "0.0.7-Alpha"
+	"version" => "0.0.8-Alpha"
 );
 
 /**
@@ -45,4 +45,11 @@ $dbConfig = array(
 	"wurmPlayersDB"		=> "{$serverRoot}/wurmplayers.db",
 	"wurmTemplatesDB"	=> "{$serverRoot}/wurmtemplates.db",
 	"wurmZonesDB"		  => "{$serverRoot}/wurmzones.db"
+);
+
+$rmiConfig = array(
+	"wuaClientLocation" => dirname(__FILE__) . "/WUAHelper.jar",
+	"ip" => "server-ip",
+	"port" => 7220,
+	"password" => "RMI-password"
 );

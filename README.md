@@ -10,6 +10,7 @@ The following programs and modules are required to run Wurm Unlimited Admin
 - LAMP/WAMP, Nginx, or UniServer Zero XI running PHP 5.5.0 or higher
 - Ability to change php.ini to allow the extension: php_pdo_sqlite.dll
 - Wurm Unlimited Server
+- [WUAHelper](https://github.com/PrabhdeepSingh/WUAHelper) - Used for RMI
 
 # Installation
 #### Download
@@ -25,6 +26,15 @@ This is a basic configuration / setup guide on getting this software up and runn
 - Place files from this repo into your `www` folder
 - Navigate to the `includes` folder and open `config.php`
 - Change the `rootPath` to your website address
+
+#### Wurm Unlimited configuration
+To interact with your WU server you need to enable RMI on it, and two ways you can do it. 1 copy the provided class files into the server.jar file or 2 edit the `Constants.java` file yourself.
+* Easy way - Copy and paste
+..- Go into `includes/WUAHelperRequirements` and drag the two files into your `server.jar` in `com/wurmonline/server/` folder
+* Hard way - Do it yourself
+..- In your IDE navigate to `Constants.java`
+..- In that file search for `Constants.useIncomingRMI = false;` Change `false` to `true`
+..- Do another serach for `Constants.useIncomingRMI = getBoolean("USE_INCOMING_RMI", false);` Change `false` to `true`
 
 # Usage
 

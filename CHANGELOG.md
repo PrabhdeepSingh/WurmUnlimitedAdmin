@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.0.8-Alpha
+- Core/Player: Added a bridge connection to the wurm server.
+- Core/Core: Implemented `Server` class.
+- Core/Server: Added `GetServers` function to get all servers in the login db.
+- Core/Server: Added `GetPlayerCount` function to get player count.
+- Core/Core: Implemented `WUAHelper` to communicate with wurm server.
+
 ## 0.0.7-Alpha
 - Core/Core: Changed `$dbConfig` in config.php file to use $serverRoot.
 - Core/Core: Updated `Player view` file to update the inventory view when the user clicks the tab.
