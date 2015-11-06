@@ -13,12 +13,12 @@ imagestring($img, 4, 160, 24, $serverInfo["NAME"], $color);
 
 imagestring($img, 4, 160, 54, $serverInfo["COUNT"] . "/" . $serverInfo["MAXPLAYERS"], $color);
 
-imagestring($img, 4, 160, 84, "Game style: " . $gameStyle, $color);
-imagestring($img, 4, 160, 114, "Cluster: " . $cluster, $color);
-imagestring($img, 4, 160, 128, "Max creatures: " . $serverInfo["MAXCREATURES"], $color);
-imagestring($img, 4, 160, 142, "Aggressive creatures: " . round($serverInfo["MAXCREATURES"] * ($serverInfo["PERCENT_AGG_CREATURES"] / 100)) . "(" . $serverInfo["PERCENT_AGG_CREATURES"] ."%)", $color);
-imagestring($img, 4, 160, 156, "Skill gain rate: " . $serverInfo["SKILLGAINRATE"], $color);
-imagestring($img, 4, 160, 170, "Action timer: " . $serverInfo["ACTIONTIMER"], $color);
+imagestring($img, 4, 160, 84, "Game mode: " . $gameStyle, $color);
+imagestring($img, 4, 160, 100, "Cluster: " . $cluster, $color);
+imagestring($img, 4, 160, 116, "Max creatures: " . $serverInfo["MAXCREATURES"], $color);
+imagestring($img, 4, 160, 132, "Aggressive creatures: " . round($serverInfo["MAXCREATURES"] * ($serverInfo["PERCENT_AGG_CREATURES"] / 100)) . "(" . $serverInfo["PERCENT_AGG_CREATURES"] ."%)", $color);
+imagestring($img, 4, 160, 148, "Skill gain rate: " . $serverInfo["SKILLGAINRATE"], $color);
+imagestring($img, 4, 160, 162, "Action timer: " . $serverInfo["ACTIONTIMER"], $color);
 
 header('Content-Type: image/png');
 imagepng($img);
