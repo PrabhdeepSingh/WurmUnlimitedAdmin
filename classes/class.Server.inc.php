@@ -111,7 +111,7 @@ class SERVER
 
     if(!empty($serverID))
     {
-      $sql = $this->_serverDB->QueryWithBinds("SELECT NAME, EXTERNALPORT, SKILLGAINRATE, ACTIONTIMER, MAXPLAYERS, MAXCREATURES, PERCENT_AGG_CREATURES, PVP, EPIC, MAPNAME FROM SERVERS WHERE SERVER = ?", array($serverID));
+      $sql = $this->_serverDB->QueryWithBinds("SELECT NAME, SKILLGAINRATE, ACTIONTIMER, MAXPLAYERS, MAXCREATURES, PERCENT_AGG_CREATURES, PVP, EPIC, MAPNAME FROM SERVERS WHERE SERVER = ?", array($serverID));
       $server = $sql->fetch(PDO::FETCH_ASSOC);
       $server["COUNT"] = $this->GetPlayerCount();
       $server["EXTERNALIP"] = get_real_ip();
