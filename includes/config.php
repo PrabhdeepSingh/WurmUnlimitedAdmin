@@ -13,7 +13,7 @@ $application = array(
 	"mode" => DEVELOPMENT,
 	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
-	"version" => "0.0.10-Alpha"
+	"version" => "0.0.11-Alpha"
 );
 
 /**

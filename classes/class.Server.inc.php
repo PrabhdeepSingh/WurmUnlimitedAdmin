@@ -62,6 +62,7 @@ class SERVER
       
       $server["COUNT"] = $this->GetPlayerCount();
       $server["UPTIME"] = $this->GetUpTime();
+      $server["WURMTIME"] = $this->GetWurmTime();
 
       $server["success"] = true;
 
@@ -104,7 +105,7 @@ class SERVER
       }
       else
       {
-        $return = array("success" => false, "message" => "Incorrect config");
+        $result = array("success" => false, "message" => "Incorrect config");
       }
 
     }
@@ -148,7 +149,7 @@ class SERVER
       }
       else
       {
-        $return = array("success" => false, "message" => "Incorrect config");
+        $result = array("success" => false, "message" => "Incorrect config");
       }
 
     }
@@ -159,6 +160,61 @@ class SERVER
 
     return $result;
 
+  }
+
+  function GetWurmTime() 
+  {
+    require(dirname(__FILE__) . "/../includes/config.php");
+    $result = array();
+    try
+    {
+      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
+      {
+        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"wurmTime\" \"\" 2>&1", $output);
+        
+        $result = $output[0];
+      }
+      else
+      {
+        $result = array("success" => false, "message" => "Incorrect config");
+      }
+
+    }
+    catch(Exception $ex)
+    {
+      $result = array("success" => false, "message" => json_encode($ex));
+    }
+
+    return $result;
+  
+  }
+
+  function SendBroadcastMessage($message = "")
+  {
+    require(dirname(__FILE__) . "/../includes/config.php");
+    $result = array();
+    try
+    {
+      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
+      {
+        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"broadcast\" \"" . $message . "\"");
+        
+        $result = array("success" => true);
+
+      }
+      else
+      {
+        $result = array("success" => false, "message" => "Incorrect config");
+      }
+
+    }
+    catch(Exception $ex)
+    {
+      $result = array("success" => false, "message" => json_encode($ex));
+    }
+
+    return $result;
+  
   }
 
   function __destruct()

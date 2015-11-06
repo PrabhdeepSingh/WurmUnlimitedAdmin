@@ -11,6 +11,9 @@ if(!empty($_POST))
 	$server = new \WurmUnlimitedAdmin\SERVER();
 	switch($_POST["doing"])
 	{
+		case "broadcast":
+			$response = $server->SendBroadcastMessage($_POST["message"]);
+			break;
 		default:
 			$response = array("success" => false);
 			break;

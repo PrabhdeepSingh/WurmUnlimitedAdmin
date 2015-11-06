@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.11-Alpha
+- Core/Server: Added `GetWurmTime` function to get current wurm time / calender.
+- Core/Server: Added `SendBroadcastMessage` function to send a server wide message.
+- Core/Server: Fixed typo of variable name.
+
+
 ## 0.0.10-Alpha
 - Core/Server: Added `GetUpTime` function to get server uptime.
 - Core/Server: Updated `GetServers` function to call `getPlayerCount` and `getUpTime`.

@@ -61,6 +61,34 @@ require("../../header.php");
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-sm-9 border-right">
+                  <div class="description-block">
+                    <h5 class="description-header">Wurm time</h5>
+                    <span class="description-text" id="serverWurmTime"></span>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="description-block">
+                    <a id="btnChangeWurmTime" class="btn btn-primary form-control">Change wurm time</a>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-sm-9 border-right">
+                  <div class="description-block">
+                    <h5 class="description-header">Broadcast Message</h5>
+                    <input type="text" class="form-control" id="txtBroadcastMessage" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="description-block">
+                    <a id="btnBroadcastMessage" class="btn btn-primary form-control">Send broadcast</a>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="box-body" id="loader-1">
               <div class="loading"></div>
@@ -179,6 +207,8 @@ require("../../header.php");
                 $('#serverCluster').html('FREEDOM');
               }
 
+              $('#serverWurmTime').html(response.WURMTIME);
+
             }
             else {
               swal("Error!", "Could not load this server", "error");
@@ -197,7 +227,52 @@ require("../../header.php");
             $('#loader').hide();
           }
         });
+      
       }
+
+      $('#btnBroadcastMessage').on('click', function(e) {
+        e.preventDefault();
+        var message = $('#txtBroadcastMessage').val();
+
+        $.ajax({
+          type: 'POST',
+          url: 'process.php',
+          data: {doing: "broadcast", message: message},
+          dataType: 'json',
+          beforeSend: function() {
+            $('#btnBroadcastMessage').prop('disabled', true);
+            $('#btnBroadcastMessage').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
+          },
+          success: function(response) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else if(response.success) {
+              swal('Sent!', 'The broadcast message was successfully sent!', 'success');
+            }
+            else {
+              swal('Failed to send!', 'We could not proccess this request at this time.', 'error');
+            }
+
+            $('#btnBroadcastMessage').prop('disabled', false);
+            $('#btnBroadcastMessage').html('Send broadcast');
+
+          },
+          error: function(error) {
+            console.log(error);
+            swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+            $('#btnBroadcastMessage').prop('disabled', false);
+            $('#btnBroadcastMessage').html('Send broadcast');
+          }
+        });
+      });
 
     });
   </script>

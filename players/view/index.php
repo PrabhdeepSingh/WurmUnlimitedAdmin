@@ -952,7 +952,6 @@ require("../../header.php");
               }
             }
             else {
-              console.log(response);
               var html = '';
               for(var i = 0; i < response.length; i++)
               {
