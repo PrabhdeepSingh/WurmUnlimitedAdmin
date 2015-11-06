@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.10-Alpha
+- Core/Server: Added `GetUpTime` function to get server uptime.
+- Core/Server: Updated `GetServers` function to call `getPlayerCount` and `getUpTime`.
+- Core/Core: Removed `WUAHelperRequirements` because they're no longer needed.
+- WUAHelper/Core: Updated
+
 ## 0.0.9-Alpha
 - Core/Server: Added `GetTracker` function which generators data for server tracker.
 - Core/Core: Implemented `Tracker` which generatos a image of your server data / settings.

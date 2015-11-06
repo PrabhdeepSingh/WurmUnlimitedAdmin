@@ -1,13 +1,13 @@
 <?php
 $response = array();
 
-require(dirname(__FILE__) . "/../../classes/class.Player.inc.php");
+require(dirname(__FILE__) . "/../../classes/class.Server.inc.php");
 
-$player = new \WurmUnlimitedAdmin\PLAYER();
+$server = new \WurmUnlimitedAdmin\SERVER();
 
-$playerList = $player->GetPlayers($_POST["wurmID"]);
+$serverList = $server->GetServers($_POST["serverID"]);
 
-$response = $playerList;
+$response = $serverList;
 
 
 echo json_encode($response);

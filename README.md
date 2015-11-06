@@ -28,13 +28,11 @@ This is a basic configuration / setup guide on getting this software up and runn
 - Change the `rootPath` to your website address
 
 #### Wurm Unlimited configuration
-To interact with your WU server you need to enable RMI on it, and two ways you can do it. 1 copy the provided class files into the server.jar file or 2 edit the `Constants.java` file yourself.
-- Easy way - Copy and paste
-  - Go into `includes/WUAHelperRequirements` and drag the two files into your `server.jar` in `com/wurmonline/server/` folder
-- Hard way - Do it yourself
-  - In your IDE navigate to `Constants.java`
-  - In that file search for `Constants.useIncomingRMI = false;` Change `false` to `true`
-  - Do another serach for `Constants.useIncomingRMI = getBoolean("USE_INCOMING_RMI", false);` Change `false` to `true`
+To interact with your WU server you need to enable RMI on it, and to do that you need to edit `wurm.ini` file
+- Go to your `wurm.ini` file
+  - Add the following line at the end of the file: `USE_INCOMING_RMI=true`
+  - Save the file and start the server
+If everything goes smoothly you should see `RMI Registry listening on ........`
 
 # Usage
 

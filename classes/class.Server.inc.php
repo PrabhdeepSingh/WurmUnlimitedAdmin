@@ -59,6 +59,10 @@ class SERVER
     {
       $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM SERVERS WHERE SERVER = ?", array($serverID));
       $server = $sql->fetch(PDO::FETCH_ASSOC);
+      
+      $server["COUNT"] = $this->GetPlayerCount();
+      $server["UPTIME"] = $this->GetUpTime();
+
       $server["success"] = true;
 
       $result = $server;
@@ -85,14 +89,22 @@ class SERVER
     $result = 0;
     try
     {
-      exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"playerCount\" \"\" 2>&1", $output);
-      if(is_numeric($output[0]))
+      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
       {
-        $result = $output[0];
+        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"playerCount\" \"\" 2>&1", $output);
+        if(is_numeric($output[0]))
+        {
+          $result = $output[0];
+        }
+        else
+        {
+          $result = json_encode($output);
+        }
+
       }
       else
       {
-        $result = json_encode($output);
+        $return = array("success" => false, "message" => "Incorrect config");
       }
 
     }
@@ -116,6 +128,33 @@ class SERVER
       $server["COUNT"] = $this->GetPlayerCount();
       $server["EXTERNALIP"] = get_real_ip();
       $result = $server;
+    }
+
+    return $result;
+
+  }
+
+  function GetUpTime()
+  {
+    require(dirname(__FILE__) . "/../includes/config.php");
+    $result = array();
+    try
+    {
+      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
+      {
+        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"uptime\" \"\" 2>&1", $output);
+        
+        $result = $output[0];
+      }
+      else
+      {
+        $return = array("success" => false, "message" => "Incorrect config");
+      }
+
+    }
+    catch(Exception $ex)
+    {
+      $result = array("success" => false, "message" => json_encode($ex));
     }
 
     return $result;
