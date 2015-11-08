@@ -29,8 +29,18 @@ require("../../header.php");
                       <input type="password" class="form-control" id="txtPassword" placeholder="Password" />
                     </div>
                     <div class="form-group">
+                      <label>Confirm password</label>
+                      <input type="password" class="form-control" id="txtConfirmPassword" placeholder="Confirm password" />
+                    </div>
+                    <div class="form-group">
                       <label>Level</label>
-                      <input type="number" class="form-control" id="txtLevel" placeholder="User level" />
+                      <select id="txtLevel" class="form-control">
+                        <option value="1">HERO</option>
+                        <option value="2">GM</option>
+                        <option value="3">High God</option>
+                        <option value="4">Arch GM</option>
+                        <option value="5">Implementor</option>
+                      </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Add user</button>
                   </form>
@@ -49,59 +59,65 @@ require("../../header.php");
 
           var username = $('#txtUsername').val();
           var password = $('#txtPassword').val();
+          var confirmPassword = $('#txtConfirmPassword').val();
           var level = $('#txtLevel').val();
 
           $('#response').html('');
 
-          if(username != '' && password != '' && level != '') {
-            $.ajax({
-              type: 'POST',
-              url: 'add.php',
-              data: {username: username, password: password, level: level},
-              dataType: 'json',
-              beforeSend: function() {
-                $('#formAddUser').hide();
-                $('#loader').show();
-              },
-              success: function(response) {
-                if(response.error) {
-                  switch(response.error.message) {
-                    case 'Missing database':
-                      swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
-                      break;
-                    default:
-                      swal("Error", response.error.message, "error");
-                      break;
+          if(username != '' && password != '' && confirmPassword != '' && level != '') {
+            if(password == confirmPassword) {
+              $.ajax({
+                type: 'POST',
+                url: 'add.php',
+                data: {username: username, password: password, level: level},
+                dataType: 'json',
+                beforeSend: function() {
+                  $('#formAddUser').hide();
+                  $('#loader').show();
+                },
+                success: function(response) {
+                  if(response.error) {
+                    switch(response.error.message) {
+                      case 'Missing database':
+                        swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                        break;
+                      default:
+                        swal("Error", response.error.message, "error");
+                        break;
+                    }
                   }
-                }
-                else if(response.success) {
-                  swal("Added", "You have successfully added [ " + username + " ]", "success");
-                  $('#txtUsername').val('');
-                  $('#txtPassword').val('');
-                  $('#txtLevel').val('');
-                }
-                else {
-                  switch(response.message) {
-                    case 'inuse':
-                      swal("In-use", "It looks like the username [ " + username + " ] is already in use. Please try another", "error");
-                      break;
-                    default:
-                      swal("Failed", "Uh-oh, this is unhanlded error :(", "error");
-                      break;
+                  else if(response.success) {
+                    swal("Added", "You have successfully added [ " + username + " ]", "success");
+                    $('#txtUsername').val('');
+                    $('#txtPassword').val('');
+                    $('#txtLevel').val('');
                   }
+                  else {
+                    switch(response.message) {
+                      case 'inuse':
+                        swal("In-use", "It looks like the username [ " + username + " ] is already in use. Please try another", "error");
+                        break;
+                      default:
+                        swal("Failed", "Uh-oh, this is unhanlded error :(", "error");
+                        break;
+                    }
+                  }
+
+                  $('#formAddUser').show();
+                  $('#loader').hide();
+
+                },
+                error: function(error) {
+                  console.log(error);
+                  swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+                  $('#formAddUser').show();
+                  $('#loader').hide();
                 }
-
-                $('#formAddUser').show();
-                $('#loader').hide();
-
-              },
-              error: function(error) {
-                console.log(error);
-                swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
-                $('#formAddUser').show();
-                $('#loader').hide();
-              }
-            });
+              });
+            }
+            else {
+              $('#response').html('<div class="alert alert-danger" role="alert"> The two passwords do not match! </div>');
+            }
           }
           else {
             $('#response').html('<div class="alert alert-danger" role="alert"> You left something blank! </div>');

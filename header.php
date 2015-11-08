@@ -100,7 +100,7 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
             if($userData["level"] >= $application["minAdminLevel"])
             {
             ?>
-            <li class="treeview <?php echo $page == 'admind' ? 'active' : ''; ?>">
+            <li class="treeview <?php echo $page == 'admin' ? 'active' : ''; ?>">
               <a href="#">
                 <i class="fa fa-bank"></i>
                 <span> Admin</span>

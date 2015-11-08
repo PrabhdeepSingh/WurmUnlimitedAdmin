@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.0.12-Alpha
+- Core/Core: Implemented `RMI` class to do RMI related tasks.
+- Core/RMI: Added `CheckConnection` function to check if RMI server is on.
+- Core/RMI: Added `Execute` function to execute a RMI call.
+- Core/Server: Removed hard coded RMI calls and edited some text on the server view.
+- Core/Server: Added `ShutDown` function to shutdown a wurm server.
+- Core/Player: Removed global variables.
+- Core/Player: Updated functions to use the new RMI class.
+- Core/Admin: Added `Confirm Password` and `Level Select Box` when adding a new admin to the application.
+- Core/Core: Fixed typo in the `header.php` file.
+
 ## 0.0.11-Alpha
 - Core/Server: Added `GetWurmTime` function to get current wurm time / calender.
 - Core/Server: Added `SendBroadcastMessage` function to send a server wide message.

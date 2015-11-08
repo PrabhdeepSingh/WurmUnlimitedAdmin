@@ -1,5 +1,6 @@
 <?php
 namespace WurmUnlimitedAdmin;
+
 use PDO;
 use PDOException;
 use Exception;
@@ -11,7 +12,6 @@ class ADMIN
 
   function __construct()
   {
-
   	try
   	{
   		require(dirname(__FILE__) . "/../includes/config.php");

@@ -100,29 +100,29 @@ require("../../header.php");
     </section>
   </div>
 
-  <div class="modal" id="modalBan" tabindex="-1" role="dialog">
+  <div class="modal" id="modalShutdown" tabindex="-1" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Ban player</h4>
+          <h4 class="modal-title">Shutdown Server</h4>
         </div>
-        <div class="modal-body" id="modalBanLoader" style="display:none;"><div class="loading"></div></div>
-        <form role="form" id="formBanPlayer">
+        <div class="modal-body" id="modalShutdownLoader" style="display:none;"><div class="loading"></div></div>
+        <form role="form" id="formShutdown">
           <div class="modal-body">
             <div class="form-group">
-              <label>How many days?</label>
-              <input type="number" class="form-control" id="txtBanDays" placeholder="Enter how many days to ban player" />
+              <label>How many seconds until shutdown?</label>
+              <input type="number" class="form-control" id="txtShutdownSeconds" placeholder="Enter how many seconds until server shuts down" />
             </div>
             <div class="form-group">
               <label>Reason</label>
-              <input type="text" class="form-control" id="txtBanReason" placeholder="Reason for ban" />
+              <input type="text" class="form-control" id="txtShutdownReason" placeholder="Reason for shutdown" />
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger">Ban!</button>
+            <button type="submit" class="btn btn-danger">Shutdown!</button>
           </div>
         </form>
       </div>
@@ -174,7 +174,7 @@ require("../../header.php");
             if(response.error) {
               switch(response.error.message) {
                 case 'Missing database':
-                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  swal("Missing Databases", "Couldn't find the server database. Please double check your config file.", "error");
                   break;
                 default:
                   swal("Error", response.error.message, "error");
@@ -182,13 +182,17 @@ require("../../header.php");
               }
             }
             else if(response.success) {
+              console.log(response);
               /**
                * Left col
                */
               $('#serverName').html(response.NAME);
-              $('#playerCount').html(response.COUNT + '/' + response.MAXPLAYERS);
+              $('#playerCount').html((response.COUNT.success == false) ? 'Offline' : response.COUNT + '/' + response.MAXPLAYERS);
+              $('#serverUptime').html((response.UPTIME.success == false) ? 'Offline' : response.UPTIME);
 
-              $('#serverUptime').html(response.UPTIME);
+              if(response.COUNT.success == false) {
+                $('#btnShutDown').prop('disabled', true);
+              }
 
               /**
                * Right col
@@ -207,7 +211,7 @@ require("../../header.php");
                 $('#serverCluster').html('FREEDOM');
               }
 
-              $('#serverWurmTime').html(response.WURMTIME);
+              $('#serverWurmTime').html((response.WURMTIME.success == false) ? 'Offline' : response.WURMTIME);
 
             }
             else {
@@ -230,6 +234,61 @@ require("../../header.php");
       
       }
 
+      $('#btnShutDown').on('click', function(e) {
+        e.preventDefault();
+        $('#modalShutdown').modal('show');
+      
+      });
+
+      $('#formShutdown').on('submit', function(e) {
+        e.preventDefault();
+
+        var seconds = $('#txtShutdownSeconds').val();
+        var reason = $('#txtShutdownReason').val();
+
+        $.ajax({
+          type: 'POST',
+          url: 'process.php',
+          data: {doing: "shutdown", seconds: seconds, reason: reason},
+          dataType: 'json',
+          beforeSend: function() {
+            $('#formShutdown').hide();
+            $('#modalShutdownLoader').show();
+          },
+          success: function(response) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the server database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else if(response.success) {
+              swal('Sent!', 'Shutdown request has been sent!', 'success');
+              $('#txtBroadcastMessage').val('');
+              $('#modalShutdown').modal('hide');
+            }
+            else {
+              swal('Failed to send!', 'We could not proccess this request at this time.', 'error');
+            }
+
+            $('#formShutdown').show();
+            $('#modalShutdownLoader').hide();
+
+          },
+          error: function(error) {
+            console.log(error);
+            swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+            $('#formShutdown').show();
+            $('#modalShutdownLoader').hide();
+          }
+        });
+
+      });
+
       $('#btnBroadcastMessage').on('click', function(e) {
         e.preventDefault();
         var message = $('#txtBroadcastMessage').val();
@@ -247,7 +306,7 @@ require("../../header.php");
             if(response.error) {
               switch(response.error.message) {
                 case 'Missing database':
-                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  swal("Missing Databases", "Couldn't find the server database. Please double check your config file.", "error");
                   break;
                 default:
                   swal("Error", response.error.message, "error");
@@ -256,6 +315,7 @@ require("../../header.php");
             }
             else if(response.success) {
               swal('Sent!', 'The broadcast message was successfully sent!', 'success');
+              $('#txtBroadcastMessage').val('');
             }
             else {
               swal('Failed to send!', 'We could not proccess this request at this time.', 'error');
@@ -272,6 +332,7 @@ require("../../header.php");
             $('#btnBroadcastMessage').html('Send broadcast');
           }
         });
+      
       });
 
     });

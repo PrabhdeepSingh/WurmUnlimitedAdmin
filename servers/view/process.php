@@ -11,6 +11,10 @@ if(!empty($_POST))
 	$server = new \WurmUnlimitedAdmin\SERVER();
 	switch($_POST["doing"])
 	{
+		case "shutdown":
+			$params = array("user" => $_SESSION["userData"]["username"], "seconds" => $_POST["seconds"], "reason" => $_POST["reason"]);
+			$response = $server->Shutdown($params);
+			break;
 		case "broadcast":
 			$response = $server->SendBroadcastMessage($_POST["message"]);
 			break;

@@ -9,20 +9,21 @@ class SERVER
 {
 
 	private $_serverDB;
+  private $_serverRMI;
 
   function __construct()
   {
   	try
   	{
-      global $dbConfig;
-      global $rmiConfig;
       require(dirname(__FILE__) . "/../includes/config.php");
       require(dirname(__FILE__) . "/../includes/functions.php");
       require(dirname(__FILE__) . "/class.Database.inc.php");
+      require(dirname(__FILE__) . "/class.RMI.inc.php");
 
       if(!empty($dbConfig["wurmLoginDB"]))
       {
   	  	$this->_serverDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmLoginDB"]);
+        $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
       }
       else
       {
@@ -86,32 +87,16 @@ class SERVER
 
   function GetPlayerCount()
   {
-    require(dirname(__FILE__) . "/../includes/config.php");
     $result = 0;
-    try
+    $output = $this->_serverRMI->Execute("playerCount");
+
+    if(is_numeric($output[0]))
     {
-      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
-      {
-        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"playerCount\" \"\" 2>&1", $output);
-        if(is_numeric($output[0]))
-        {
-          $result = $output[0];
-        }
-        else
-        {
-          $result = json_encode($output);
-        }
-
-      }
-      else
-      {
-        $result = array("success" => false, "message" => "Incorrect config");
-      }
-
+      $result = $output[0];
     }
-    catch(Exception $ex)
+    else
     {
-      $result = 0;
+      $result = $output;
     }
 
     return $result;
@@ -137,25 +122,16 @@ class SERVER
 
   function GetUpTime()
   {
-    require(dirname(__FILE__) . "/../includes/config.php");
     $result = array();
-    try
-    {
-      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
-      {
-        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"uptime\" \"\" 2>&1", $output);
-        
-        $result = $output[0];
-      }
-      else
-      {
-        $result = array("success" => false, "message" => "Incorrect config");
-      }
+    $output = $this->_serverRMI->Execute("uptime");
 
-    }
-    catch(Exception $ex)
+    if($output["success"] == false)
     {
-      $result = array("success" => false, "message" => json_encode($ex));
+      $result = $output;
+    }
+    else
+    {
+      $result = $output[0];
     }
 
     return $result;
@@ -164,25 +140,16 @@ class SERVER
 
   function GetWurmTime() 
   {
-    require(dirname(__FILE__) . "/../includes/config.php");
     $result = array();
-    try
+    $output = $this->_serverRMI->Execute("wurmTime");
+    
+    if($output["success"] == false)
     {
-      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
-      {
-        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"wurmTime\" \"\" 2>&1", $output);
-        
-        $result = $output[0];
-      }
-      else
-      {
-        $result = array("success" => false, "message" => "Incorrect config");
-      }
-
+      $result = $output;
     }
-    catch(Exception $ex)
+    else
     {
-      $result = array("success" => false, "message" => json_encode($ex));
+      $result = $output[0];
     }
 
     return $result;
@@ -191,30 +158,38 @@ class SERVER
 
   function SendBroadcastMessage($message = "")
   {
-    require(dirname(__FILE__) . "/../includes/config.php");
     $result = array();
-    try
+    $output = $this->_serverRMI->Execute("broadcast", array($message));
+
+    if($output[0])
     {
-      if($rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["ip"]))
-      {
-        exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"broadcast\" \"" . $message . "\"");
-        
-        $result = array("success" => true);
-
-      }
-      else
-      {
-        $result = array("success" => false, "message" => "Incorrect config");
-      }
-
+      $result = array("success" => true);
     }
-    catch(Exception $ex)
+    else
     {
-      $result = array("success" => false, "message" => json_encode($ex));
+      $result = array("success" => false);
     }
 
     return $result;
   
+  }
+
+  function Shutdown($params = array())
+  {
+    $result = array();
+    $output = $this->_serverRMI->Execute("shutDown", array($params["user"], $params["seconds"], $params["reason"]));
+
+    if($output[0])
+    {
+      $result = array("success" => true);
+    }
+    else
+    {
+      $result = array("success" => false);
+    }
+
+    return $result;
+
   }
 
   function __destruct()

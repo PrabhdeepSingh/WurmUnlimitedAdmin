@@ -412,7 +412,6 @@ require("../../header.php");
               $('#btnBanUnBan').html('<div class="la-ball-fall" style="width:inherit;"><div></div><div></div><div></div></div>');
             },
             success: function(response) {
-
               if(response.error) {
                 switch(response.error.message) {
                   case 'Missing database':
@@ -464,7 +463,6 @@ require("../../header.php");
             $('#formBanPlayer').hide();
           },
           success: function(response) {
-
             if(response.error) {
               switch(response.error.message) {
                 case 'Missing database':
@@ -725,8 +723,8 @@ require("../../header.php");
                   }
                 }
                 else if(response.success) {
-                  swal('Money added!', 'The player now has [ ' + response.money + ' ] in their bank!', 'success');
-                  $('#playerMoney').html(response.money);
+                  swal('Money added!', '[ ' + response.money + ' ] was added to the players bank!', 'success');
+                  $('#playerMoney').html(response.totalMoney);
                 }
                 else {
                   swal('Failed to add!', 'We could not proccess this request at this time.', 'error');

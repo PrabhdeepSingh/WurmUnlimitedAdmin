@@ -10,21 +10,22 @@ class PLAYER
 
 	private $_playerDB;
   private $_itemDB;
+  private $_serverRMI;
 
   function __construct()
   {
   	try
   	{
-      global $dbConfig;
-      global $rmiConfig;
       require(dirname(__FILE__) . "/../includes/config.php");
       require(dirname(__FILE__) . "/../includes/functions.php");
       require(dirname(__FILE__) . "/class.Database.inc.php");
+      require(dirname(__FILE__) . "/class.RMI.inc.php");
 
       if(!empty($dbConfig["wurmPlayersDB"]) && !empty($dbConfig["wurmItemsDB"]))
       {
   	  	$this->_playerDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmPlayersDB"]);
         $this->_itemDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmItemsDB"]);
+        $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
       }
       else
       {
@@ -100,7 +101,6 @@ class PLAYER
    */
   function BanUnban($params = array())
   {
-    require(dirname(__FILE__) . "/../includes/config.php");
     $result = array();
     if(!empty($params))
     {
@@ -116,8 +116,17 @@ class PLAYER
         {
           try
           {
-            exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"pardon\" \"" . $user["NAME"] . "," . $user["IPADDRESS"] . "\" 2>&1", $output);
-            $result = array("success" => true);
+            $output = $this->_serverRMI->Execute("pardon", array($user["NAME"], $user["IPADDRESS"]));
+
+            if($output[0] == true)
+            {
+              $result = array("success" => true);
+            }
+            else
+            {
+              $result = array("success" => false, "message" => "Unable to unban");
+            }
+
           }
           catch(Exception $ex)
           {
@@ -141,10 +150,17 @@ class PLAYER
           try
           {
             $banExpiryToMili = round(microtime(true) * 1000) + (int) $params["banDays"] * 86400000;
-            
-            exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"ban\" \"" . $user["NAME"] . "," . $user["IPADDRESS"] . "," . $params["banDays"] . "\" 2>&1", $output);
-            
-            $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
+            $output = $this->_serverRMI->Execute("ban", array($user["NAME"], $user["IPADDRESS"], $params["banReason"], $params["banDays"]));
+
+            if($output[0] == true)
+            {
+              $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
+            }
+            else
+            {
+              $result = array("success" => false, "message" => "Unable to ban");
+            }
+
           }
           catch(Exception $ex)
           {
@@ -265,24 +281,22 @@ class PLAYER
 
     if(!empty($params))
     {
-      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
       $user = $sql->fetch(PDO::FETCH_ASSOC);
 
       if($user != false)
       {
         try
         {
-          exec("java -jar " . $rmiConfig["wuaClientLocation"] ." \"" . $rmiConfig["ip"] . "\" \"" . $rmiConfig["port"] . "\" \"" . $rmiConfig["password"] . "\" \"addMoney\" \"" . $user["NAME"] . "," . $params["money"] . "\" 2>&1", $output);
-          
-          $sql = $this->_playerDB->QueryWithBinds("SELECT MONEY FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
-          $user = $sql->fetch(PDO::FETCH_ASSOC);
-          if($user != false)
+          $output = $this->_serverRMI->Execute("addMoney", array($user["NAME"], $params["money"]));
+
+          if($output[0] == true)
           {
-            $result = array("success" => true, "money" => wurmConvertMoney($user["MONEY"]));
+            $result = array("success" => true, "money" => wurmConvertMoney($params["money"]), "totalMoney" => wurmConvertMoney($user["MONEY"] + $params["money"]));
           }
           else
           {
-            $result = array("success" => false);
+            $result = array("success" => false, "message" => "Unable to money");
           }
 
         }

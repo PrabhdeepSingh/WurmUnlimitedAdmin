@@ -1,5 +1,6 @@
 <?php
 namespace WurmUnlimitedAdmin;
+
 use PDO;
 use PDOException;
 use Exception;
