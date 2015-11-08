@@ -39,7 +39,7 @@ require("../header.php");
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    var isOnline = (response[i].UPTIME.success == false) ? 'Offline' : response[i].COUNT + ' / ' + response[i].MAXPLAYERS;
+                    var isOnline = (response[i].COUNT.success == false) ? 'Offline' : response[i].COUNT + ' / ' + response[i].MAXPLAYERS;
                     html += '<a href="./view/?id=' + response[i].SERVER + '"><div class="col-md-3 col-sm-6 col-xs-12"><div class="info-box"><span class="info-box-icon bg-aqua"><i class="fa fa-server"></i></span><div class="info-box-content"><span class="info-box-text">' + response[i].NAME + '</span><span class="info-box-number">' + isOnline + '</span></div></div></div></a>';
                   }
 
