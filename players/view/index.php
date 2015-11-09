@@ -127,11 +127,12 @@ require("../../header.php");
                 </div>
               </div>
               <div class="tab-pane" id="inventory">
-                <div class="box">
+                <div class="box no-border">
                   <div class="box-header">
                     <h3 class="box-title">Player Inventory</h3>
 
                     <div class="box-tools">
+                      <a href="#" class="btn btn-success" onclick="$('#modalAddItem').modal('show');">Add item</a>
                       <a href="#" class="btn btn-primary" id="btnRefreshInventory">Refresh inventory</a>
                     </div>
                   </div>
@@ -156,7 +157,7 @@ require("../../header.php");
                 </div>
               </div>
               <div class="tab-pane" id="skills">
-                <div class="box">
+                <div class="box no-border">
                   <div class="box-header">
                     <h3 class="box-title">Player Skills</h3>
 
@@ -241,6 +242,51 @@ require("../../header.php");
           <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-danger">Mute!</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modalAddItem" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Add item</h4>
+        </div>
+        <div class="modal-body" id="modalAddItemLoader" style="display:none;"><div class="loading"></div></div>
+        <form role="form" id="formAddItem">
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Item to give</label>
+              <input type="number" class="form-control" id="txtItemID" placeholder="Enter how many hours to mute player" />
+            </div>
+            <div class="form-group">
+              <label>Quality</label>
+              <input type="text" class="form-control" id="txtItemQuality" placeholder="Item quality" />
+            </div>
+            <div class="form-group">
+              <label>Rarity</label>
+              <select class="form-control" id="txtItemRarity">
+                <option value="0">Common</option>
+                <option value="1">Rare</option>
+                <option value="2">Supreme</option>
+                <option value="3">Fantastic</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" class="form-control" id="txtItemAmount" value="1" placeholder="How many to give" />
+            </div>
+            <div class="form-group">
+              <label>Creator</label>
+              <input type="text" class="form-control" id="txtItemCreator" value="<?php echo $userData['username']; ?>" placeholder="Creator of the item" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Add!</button>
           </div>
         </form>
       </div>
@@ -669,7 +715,7 @@ require("../../header.php");
                       textPower = 'Implementor';
                       break;
                     default:
-                      textPower = 'Unknown kingdom';
+                      textPower = 'Unknown power';
                       break;
                   }
                   swal('Power changed!', 'The powers for this player has been changed to [ ' + textPower + ' ]!', 'success');
@@ -925,7 +971,60 @@ require("../../header.php");
           }
         });
 
-      })
+      });
+
+      $('#formAddItem').on('submit', function(e) {
+        e.preventDefault();
+
+        var itemID = $('#txtItemID').val();
+        var itemQuality = $('#txtItemQuality').val();
+        var itemRarity = $('#txtItemRarity').val();
+        var itemAmount = $('#txtItemAmount').val();
+        var itemCreator = $('#txtItemCreator').val();
+        
+        $.ajax({
+          type: 'POST',
+          url: 'process.php',
+          data: {doing: "addItem", wurmID: wurmID, itemTemplateID: itemID, itemQuality: itemQuality, itemRarity: itemRarity, creator: itemCreator, itemAmount: itemAmount},
+          dataType: 'json',
+          beforeSend: function() {
+            $('#modalAddItemLoader').show();
+            $('#formAddItem').hide();
+          },
+          success: function(response) {
+            if(response.error) {
+              switch(response.error.message) {
+                case 'Missing database':
+                  swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
+                  break;
+                default:
+                  swal("Error", response.error.message, "error");
+                  break;
+              }
+            }
+            else if(response.success) {
+              if($('#modalAddItem').modal('hide')) {
+                swal("Added!", "The item has been added to the players inventory!", "success");
+              }
+
+            }
+            else {
+              swal("Failed to add!", "We could not proccess this request at this time.", "error");
+            }
+
+            $('#modalAddItemLoader').hide();
+            $('#formAddItem').show();
+
+          },
+          error: function(error) {
+            console.log(error);
+            $('#modalAddItem').modal('hide');
+            swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+            $('#modalAddItemLoader').hide();
+            $('#formAddItem').show();
+          }
+        });
+      });
 
       $('#btnRefreshSkills').on('click', function(e) {
         e.preventDefault();
@@ -974,7 +1073,7 @@ require("../../header.php");
           }
         });
 
-      })
+      });
 
     });
   </script>

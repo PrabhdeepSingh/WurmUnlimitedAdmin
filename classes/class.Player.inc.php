@@ -202,30 +202,68 @@ class PLAYER
        */
       if($params["action"] == 0)
       {
-        $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MUTED = ?, MUTEEXPIRY = ?, MUTEREASON = ? WHERE WURMID = ?;", array(0, 0, "", $params["wurmID"]));
+        $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+        $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-        if($sql)
+        if($user != false)
         {
-          $result = array("success" => true);
+          try
+          {
+            $output = $this->_serverRMI->Execute("unMutePlayer", array($user["NAME"]));
+
+            if($output[0] == true)
+            {
+              $result = array("success" => true);
+            }
+            else
+            {
+              $result = array("success" => false, "message" => "Unable to unmute");
+            }
+
+          }
+          catch(Exception $ex)
+          {
+            $result = array("success" => false);
+          }
+
         }
         else
         {
-          $result = array("success" => false);
+          $result = array("success" => false, "message" => "Not a player");
         }
 
       }
       else if($params["action"] == 1)
       {
-        $muteExpiryToMili = round(microtime(true) * 1000) + (int) $params["muteHours"] * 3600000;
-        $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET MUTETIMES = MUTETIMES + 1, MUTED = ?, MUTEEXPIRY = ?, MUTEREASON = ? WHERE WURMID = ?;", array(1, $muteExpiryToMili, $params["muteReason"], $params["wurmID"]));
+        $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+        $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-        if($sql)
+        if($user != false)
         {
-          $result = array("success" => true, "MUTEEXPIRY" => date("m/d/Y H:i:s", $muteExpiryToMili / 1000));
+          try
+          {
+            $muteExpiryToMili = round(microtime(true) * 1000) + (int) $params["muteHours"] * 3600000;
+            $output = $this->_serverRMI->Execute("mutePlayer", array($user["NAME"], $params["muteReason"], $params["muteHours"]));
+
+            if($output[0] == true)
+            {
+              $result = array("success" => true, "MUTEEXPIRY" => date("m/d/Y H:i:s", $muteExpiryToMili / 1000));
+            }
+            else
+            {
+              $result = array("success" => false, "message" => "Unable to mute");
+            }
+
+          }
+          catch(Exception $ex)
+          {
+            $result = array("success" => false);
+          }
+
         }
         else
         {
-          $result = array("success" => false);
+          $result = array("success" => false, "message" => "Not a player");
         }
 
       }
@@ -252,15 +290,34 @@ class PLAYER
 
     if(!empty($params))
     {
-      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET POWER = ? WHERE WURMID = ?;", array($params["power"], $params["wurmID"]));
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-      if($sql)
+      if($user != false)
       {
-        $result = array("success" => true);
+        try
+        {
+          $output = $this->_serverRMI->Execute("changePower", array($user["NAME"], $params["power"]));
+
+          if($output[0] == true)
+          {
+            $result = array("success" => true);
+          }
+          else
+          {
+            $result = array("success" => false, "message" => "Unable to change power");
+          }
+
+        }
+        catch(Exception $ex)
+        {
+          $result = array("success" => false);
+        }
+
       }
       else
       {
-        $result = array("success" => false);
+        $result = array("success" => false, "message" => "Not a player");
       }
 
     }
@@ -860,6 +917,48 @@ class PLAYER
 
     return $result;
 
+  }
+
+  function AddItem($params = array())
+  {
+    $result = array();
+
+    if(!empty($params))
+    {
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $user = $sql->fetch(PDO::FETCH_ASSOC);
+
+      if($user != false)
+      {
+        try
+        {
+          $output = $this->_serverRMI->Execute("addItem", array($user["NAME"], $params["itemTemplateID"], $params["itemQuality"], $params["itemRarity"], $params["creator"], $params["itemAmount"]));
+
+          if($output[0] == true)
+          {
+            $result = array("success" => true);
+          }
+          else
+          {
+            $result = array("success" => false, "message" => "Unable to add item");
+          }
+
+        }
+        catch(Exception $ex)
+        {
+          $result = array("success" => false);
+        }
+
+      }
+      else
+      {
+        $result = array("success" => false, "message" => "Not a player");
+      }
+
+    }
+
+    return $result;
+  
   }
 
   function __destruct()
