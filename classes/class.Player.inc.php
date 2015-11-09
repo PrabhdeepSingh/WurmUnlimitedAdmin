@@ -386,16 +386,26 @@ class PLAYER
 
     if(!empty($params))
     {
-      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET EMAIL = ? WHERE WURMID = ?;", array($params["email"], $params["wurmID"]));
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, EMAIL FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-      if($sql)
+      if($user != false)
       {
-        $sql = $this->_playerDB->QueryWithBinds("INSERT INTO PLAYEREHISTORYEMAIL (PLAYERID,EMAIL_ADDRESS,DATED) VALUES(?,?,?);", array($params["wurmID"], $params["email"], round(microtime(true) * 1000)));
-        if($sql)
+        try
         {
-          $result = array("success" => true);
+          $output = $this->_serverRMI->Execute("changeEmail", array($user["NAME"], $user["EMAIL"], $params["email"]));
+
+          if($output[0] == true)
+          {
+            $result = array("success" => true);
+          }
+          else
+          {
+            $result = array("success" => false, "message" => "Unable to change email");
+          }
+
         }
-        else
+        catch(Exception $ex)
         {
           $result = array("success" => false);
         }
@@ -403,7 +413,7 @@ class PLAYER
       }
       else
       {
-        $result = array("success" => false);
+        $result = array("success" => false, "message" => "Not a player");
       }
 
     }
@@ -424,15 +434,34 @@ class PLAYER
 
     if(!empty($params))
     {
-      $sql = $this->_playerDB->QueryWithBinds("UPDATE PLAYERS SET KINGDOM = ? WHERE WURMID = ?;", array($params["kingdom"], $params["wurmID"]));
+      $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
+      $user = $sql->fetch(PDO::FETCH_ASSOC);
 
-      if($sql)
+      if($user != false)
       {
-        $result = array("success" => true);
+        try
+        {
+          $output = $this->_serverRMI->Execute("changeKingdom", array($user["NAME"], $params["kingdom"]));
+
+          if($output[0] == true)
+          {
+            $result = array("success" => true);
+          }
+          else
+          {
+            $result = array("success" => false, "message" => "Unable to change kingdom");
+          }
+
+        }
+        catch(Exception $ex)
+        {
+          $result = array("success" => false);
+        }
+
       }
       else
       {
-        $result = array("success" => false);
+        $result = array("success" => false, "message" => "Not a player");
       }
 
     }
@@ -919,6 +948,10 @@ class PLAYER
 
   }
 
+  /**
+   * Adds an item to the players inventory
+   * @param array $params Contains users wurmID and item template ID
+   */
   function AddItem($params = array())
   {
     $result = array();
@@ -958,7 +991,7 @@ class PLAYER
     }
 
     return $result;
-  
+
   }
 
   function __destruct()

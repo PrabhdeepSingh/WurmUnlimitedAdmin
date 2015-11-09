@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.0.13-Alpha
+- Core/Player: Fixed `Ban / Unban` function to work with RMI.
+- Core/Player: Fixed `Mute / Unmute` function to work with RMI.
+- Core/Player: Fixed `Change power` function to work with RMI.
+- Core/Player: Fixed `Change kingdom` function to work with RMI.
+- Core/Player: Fixed `Change email` function to work with RMI.
+- Core/Player: Added `Add item` function to add items to players inventory.
+
 ## 0.0.12-Alpha
 - Core/Core: Implemented `RMI` class to do RMI related tasks.
 - Core/RMI: Added `CheckConnection` function to check if RMI server is on.

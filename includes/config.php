@@ -13,7 +13,7 @@ $application = array(
 	"mode" => DEVELOPMENT,
 	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
-	"version" => "0.0.12-Alpha"
+	"version" => "0.0.13-Alpha"
 );
 
 /**
@@ -52,7 +52,7 @@ $dbConfig = array(
  * @var wuaClientLocation Location of WUAHelper.jar
  * @var ip:               IP of your RMI Registery
  * @var port              Port of your RMI
- * @var password          Your RMI password 
+ * @var password          Your RMI password
  */
 $rmiConfig = array(
 	"wuaClientLocation" => dirname(__FILE__) . "/WUAHelper.jar",
