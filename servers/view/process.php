@@ -11,6 +11,24 @@ if(!empty($_POST))
 	$server = new \WurmUnlimitedAdmin\SERVER();
 	switch($_POST["doing"])
 	{
+		case "changeGameMode":
+			$response = $server->ChangeGameMode($_POST);
+			break;
+		case "changeGameCluster":
+			$response = $server->ChangeGameCluster($_POST);
+			break;
+		case "changeHomeServer":
+			$response = $server->ChangeHomeServer($_POST);
+			break;
+		case "changeHomeServerKingdom":
+			$response = $server->ChangeHomeServerKingdom($_POST);
+			break;
+		case "changeWurmTime":
+			$response = $server->ChangeWurmTime($_POST);
+			break;
+		case "changePlayerLimit":
+			$response = $server->ChangePlayerLimit($_POST);
+			break;
 		case "shutdown":
 			$params = array("user" => $_SESSION["userData"]["username"], "seconds" => $_POST["seconds"], "reason" => $_POST["reason"]);
 			$response = $server->Shutdown($params);

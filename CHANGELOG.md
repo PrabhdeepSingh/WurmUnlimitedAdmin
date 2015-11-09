@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.0.14-Alpha
+- Core/Readme: Updated.
+- Core/Server: Added `Change Game Mode` function to change server to PVE or PVP.
+- Core/Server: Added `Change Game Cluster` function to change between EPIC and Freedom.
+- Core/Server: Added `Change Wurm Time` function to change world time.
+- Core/server: Added `Change Player Limit` function to change max players.
+- Core/Server: Design change.
+
 ## 0.0.13-Alpha
 - Core/Player: Fixed `Ban / Unban` function to work with RMI.
 - Core/Player: Fixed `Mute / Unmute` function to work with RMI.

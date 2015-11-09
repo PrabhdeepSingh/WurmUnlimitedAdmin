@@ -11,6 +11,7 @@ The following programs and modules are required to run Wurm Unlimited Admin
 - Ability to change php.ini to allow the extension: php_pdo_sqlite.dll
 - Wurm Unlimited Server
 - [WUAHelper](https://github.com/PrabhdeepSingh/WUAHelper) - Used for RMI
+- WinRAR or 7zip to place files into the `server.jar`
 
 # Installation
 #### Download
@@ -33,6 +34,10 @@ To interact with your WU server you need to enable RMI on it, and to do that you
   - Add the following line at the end of the file: `USE_INCOMING_RMI=true`
   - Save the file and start the server
 If everything goes smoothly you should see `RMI Registry listening on ........`
+
+- Go to your WUA folder
+  - Then `/includes/WUARequirements/server.jar/com/wurmonline/server/webinterface`
+  - Drag the `3` files into your into your `server.jar` in `com/wurmonline/server/webinterface/` folder
 
 # Usage
 

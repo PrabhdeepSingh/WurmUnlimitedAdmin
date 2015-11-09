@@ -56,32 +56,54 @@ class SERVER
   {
     $result = array();
 
-    if(!empty($serverID))
+    try
     {
-      $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM SERVERS WHERE SERVER = ?", array($serverID));
-      $server = $sql->fetch(PDO::FETCH_ASSOC);
-      
-      $server["COUNT"] = $this->GetPlayerCount();
-      $server["UPTIME"] = $this->GetUpTime();
-      $server["WURMTIME"] = $this->GetWurmTime();
-
-      $server["success"] = true;
-
-      $result = $server;
-
-    }
-    else
-    {
-      $sql = $this->_serverDB->QueryWithOutBinds("SELECT SERVER, NAME, MAXPLAYERS FROM SERVERS");
-      while($servers = $sql->fetch(PDO::FETCH_ASSOC))
+      if(!empty($serverID))
       {
-        $servers["COUNT"] = $this->GetPlayerCount();
-        array_push($result, $servers);
+        $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM SERVERS WHERE SERVER = ?", array($serverID));
+        $server = $sql->fetch(PDO::FETCH_ASSOC);
+
+        $server["COUNT"] = $this->GetPlayerCount();
+        $server["UPTIME"] = $this->GetUpTime();
+        $server["WURMTIME"] = $this->GetWurmTime();
+
+        $server["success"] = true;
+
+        $result = $server;
+
+      }
+      else
+      {
+        $sql = $this->_serverDB->QueryWithOutBinds("SELECT SERVER, NAME, MAXPLAYERS FROM SERVERS");
+        while($servers = $sql->fetch(PDO::FETCH_ASSOC))
+        {
+          $servers["COUNT"] = $this->GetPlayerCount();
+          array_push($result, $servers);
+        }
+
       }
 
-    }
+      return $result;
 
-    return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
 
   }
 
@@ -138,11 +160,11 @@ class SERVER
 
   }
 
-  function GetWurmTime() 
+  function GetWurmTime()
   {
     $result = array();
     $output = $this->_serverRMI->Execute("wurmTime");
-    
+
     if($output["success"] == false)
     {
       $result = $output;
@@ -153,7 +175,253 @@ class SERVER
     }
 
     return $result;
-  
+
+  }
+
+  function ChangeGameMode($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET PVP = ? WHERE SERVER = ?", array($params["newGameMode"], $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
+  }
+
+  function ChangeGameCluster($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET EPIC = ? WHERE SERVER = ?", array($newGameCluster, $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
+  }
+
+  function ChangeHomeServer($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET HOMESERVER = ? WHERE SERVER = ?", array($params["homeServer"], $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
+  }
+
+  function ChangeHomeServerKingdom($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET KINGDOM = ? WHERE SERVER = ?", array($params["homeServerKingdom"], $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
+  }
+
+  function ChangeWurmTime($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET WORLDTIME = ? WHERE SERVER = ?", array($params["newWurmTime"], $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
+  }
+
+  function ChangePlayerLimit($params = array())
+  {
+    try
+    {
+      $result = array();
+
+      $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET MAXPLAYERS = ? WHERE SERVER = ?", array($params["newPlayerLimit"], $params["serverID"]));
+
+      if($sql->rowCount() > 0)
+      {
+        $result = array("success" => true);
+      }
+      else
+      {
+        $result = array("success" => false);
+      }
+
+      return $result;
+
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      exit();
+    }
+
   }
 
   function SendBroadcastMessage($message = "")
@@ -171,7 +439,7 @@ class SERVER
     }
 
     return $result;
-  
+
   }
 
   function Shutdown($params = array())
