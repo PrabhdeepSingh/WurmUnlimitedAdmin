@@ -414,6 +414,9 @@ require("../../header.php");
                 case '3':
                   $('#playerKingdom').html('Horde of the Summoned');
                   break;
+                case '4':
+                  $('#playerKingdom').html('Freedom Isles');
+                  break;
                 default:
                   $('#playerKingdom').html('Unknown kingdom');
                   break;
