@@ -11,6 +11,7 @@ class PLAYER
 	private $_playerDB;
   private $_itemDB;
   private $_serverRMI;
+  private $_Logger;
 
   function __construct()
   {
@@ -20,16 +21,27 @@ class PLAYER
       require(dirname(__FILE__) . "/../includes/functions.php");
       require(dirname(__FILE__) . "/class.Database.inc.php");
       require(dirname(__FILE__) . "/class.RMI.inc.php");
+      require(dirname(__FILE__) . "/class.Logger.inc.php");
+
+      $this->_Logger = new \WurmUnlimitedAdmin\LOGGER();
 
       if(!empty($dbConfig["wurmPlayersDB"]) && !empty($dbConfig["wurmItemsDB"]))
       {
   	  	$this->_playerDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmPlayersDB"]);
         $this->_itemDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmItemsDB"]);
+      }
+      else
+      {
+        throw new PDOException("Missing database configuration");
+      }
+
+      if(!empty($rmiConfig["ip"]) && $rmiConfig["ip"] != "server-ip" && !empty($rmiConfig["port"]) && !empty($rmiConfig["password"]) && $rmiConfig["password"] !=  "RMI-password")
+      {
         $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
       }
       else
       {
-        throw new PDOException("Missing database");
+        throw new Exception("Missing RMI configuration");
       }
 
 	  }
@@ -40,6 +52,7 @@ class PLAYER
           "message" => $ex->getMessage()
         )
       ));
+      $this->_Logger->Log("Error", $ex->getMessage());
       exit();
     }
     catch(Exception $ex)
@@ -49,6 +62,7 @@ class PLAYER
           "message" => $ex->getMessage()
         )
       ));
+      $this->_Logger->Log("Error", $ex->getMessage());
       exit();
     }
 
@@ -120,6 +134,8 @@ class PLAYER
 
             if($output[0] == true)
             {
+              $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " unbanned " . $user["NAME"] . " and ip address " . $user["IPADDRESS"]);
+              $this->_Logger->Log(strtoupper($params["gmUserName"]), "unbanned " . $user["NAME"] . " and ip address " . $user["IPADDRESS"]);
               $result = array("success" => true);
             }
             else
@@ -130,6 +146,7 @@ class PLAYER
           }
           catch(Exception $ex)
           {
+            $this->_Logger->Log("Error", $ex->getMessage());
             $result = array("success" => false);
           }
 
@@ -154,6 +171,8 @@ class PLAYER
 
             if($output[0] == true)
             {
+              $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " banned " . $user["NAME"] . " and ip address " . $user["IPADDRESS"] . " until " . date("m/d/Y H:i:s", $banExpiryToMili / 1000) . " because " . $params["banReason"]);
+              $this->_Logger->Log(strtoupper($params["gmUserName"]), "banned " . $user["NAME"] . " and ip address " . $user["IPADDRESS"] . " until " . date("m/d/Y H:i:s", $banExpiryToMili / 1000) . " because " . $params["banReason"]);
               $result = array("success" => true, "BANEXPIRY" => date("m/d/Y H:i:s", $banExpiryToMili / 1000));
             }
             else
@@ -213,6 +232,8 @@ class PLAYER
 
             if($output[0] == true)
             {
+              $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " unmuted " . $user["NAME"]);
+              $this->_Logger->Log(strtoupper($params["gmUserName"]), "unmuted " . $user["NAME"]);
               $result = array("success" => true);
             }
             else
@@ -247,6 +268,8 @@ class PLAYER
 
             if($output[0] == true)
             {
+              $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " muted " . $user["NAME"] . " until " . date("m/d/Y H:i:s", $muteExpiryToMili / 1000) . " because " . $params["muteReason"]);
+              $this->_Logger->Log(strtoupper($params["gmUserName"]), "muted " . $user["NAME"] . " until " . date("m/d/Y H:i:s", $muteExpiryToMili / 1000) . " because " . $params["muteReason"]);
               $result = array("success" => true, "MUTEEXPIRY" => date("m/d/Y H:i:s", $muteExpiryToMili / 1000));
             }
             else
@@ -301,6 +324,8 @@ class PLAYER
 
           if($output[0] == true)
           {
+            $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " changed " . $user["NAME"] . "'s power to " . $params["power"]);
+            $this->_Logger->Log(strtoupper($params["gmUserName"]), "changed " . $user["NAME"] . "'s power to " . $params["power"]);
             $result = array("success" => true);
           }
           else
@@ -349,6 +374,8 @@ class PLAYER
 
           if($output[0] == true)
           {
+            $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " added " . wurmConvertMoney($params["money"]) . " to " . $user["NAME"] . " back acount");
+            $this->_Logger->Log(strtoupper($params["gmUserName"]), "added " . wurmConvertMoney($params["money"]) . " to " . $user["NAME"] . " back acount");
             $result = array("success" => true, "money" => wurmConvertMoney($params["money"]), "totalMoney" => wurmConvertMoney($user["MONEY"] + $params["money"]));
           }
           else
@@ -397,6 +424,8 @@ class PLAYER
 
           if($output[0] == true)
           {
+            $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " changed " . $user["NAME"] . " email address");
+            $this->_Logger->Log(strtoupper($params["gmUserName"]), "changed " . $user["NAME"] . " email address");
             $result = array("success" => true);
           }
           else
@@ -445,6 +474,9 @@ class PLAYER
 
           if($output[0] == true)
           {
+            $kingdoms = ["No kingdom", "Jenn-Kellon", "Mol-Rehan", "Horde of the Summoned", "Freedom Isles"];
+            $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " changed " . $user["NAME"] . " kingdom to " . $kingdoms[$params["kingdom"]]);
+            $this->_Logger->Log(strtoupper($params["gmUserName"]), "changed " . $user["NAME"] . " kingdom to " . $kingdoms[$params["kingdom"]]);
             $result = array("success" => true);
           }
           else
@@ -969,6 +1001,8 @@ class PLAYER
 
           if($output[0] == true)
           {
+            $this->_Logger->Log("GM", strtoupper($params["gmUserName"]) . " added item " . $params["itemTemplateID"] . " to " . $user["NAME"] . " inventory ");
+            $this->_Logger->Log(strtoupper($params["gmUserName"]), "added item " . $params["itemTemplateID"] . " to " . $user["NAME"] . " inventory ");
             $result = array("success" => true);
           }
           else

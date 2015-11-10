@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.15-Alpha
+- Core/Core: Implemented `Logger` class to handle application / gm logging.
+- Core/Player: Added `Logger`.
+
 ## 0.0.14-Alpha
 - Core/Readme: Updated.
 - Core/Server: Added `Change Game Mode` function to change server to PVE or PVP.
