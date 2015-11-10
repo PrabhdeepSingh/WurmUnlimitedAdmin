@@ -19,7 +19,7 @@ $application = array(
 /**
  * Location of where your world directory for the wurm server is located
  */
-$serverRoot	= "/path/to/wurm-server/world-dir/sqlite";
+$serverRoot	= "/path/to/wurm-server/world-dir";
 
 /**
  * This array is used for connecting to different databases
@@ -36,15 +36,15 @@ $serverRoot	= "/path/to/wurm-server/world-dir/sqlite";
  */
 $dbConfig = array(
 	"appDB" => dirname(__FILE__) . "/sqlite/app.db",
-	"wurmCreaturesDB"	=> "{$serverRoot}/wurmcreatures.db",
-	"wurmDeitiesDB"		=> "{$serverRoot}/wurmdeities.db",
-	"wurmEconomyDB"		=> "{$serverRoot}/wurmeconomy.db",
-	"wurmItemsDB"		  => "{$serverRoot}/wurmitems.db",
-	"wurmLoginDB"		  => "{$serverRoot}/wurmlogin.db",
-	"wurmLogsDB"		  => "{$serverRoot}/wurmlogs.db",
-	"wurmPlayersDB"		=> "{$serverRoot}/wurmplayers.db",
-	"wurmTemplatesDB"	=> "{$serverRoot}/wurmtemplates.db",
-	"wurmZonesDB"		  => "{$serverRoot}/wurmzones.db"
+	"wurmCreaturesDB"	=> "{$serverRoot}/sqlite/wurmcreatures.db",
+	"wurmDeitiesDB"		=> "{$serverRoot}/sqlite/wurmdeities.db",
+	"wurmEconomyDB"		=> "{$serverRoot}/sqlite/wurmeconomy.db",
+	"wurmItemsDB"		  => "{$serverRoot}/sqlite/wurmitems.db",
+	"wurmLoginDB"		  => "{$serverRoot}/sqlite/wurmlogin.db",
+	"wurmLogsDB"		  => "{$serverRoot}/sqlite/wurmlogs.db",
+	"wurmPlayersDB"		=> "{$serverRoot}/sqlite/wurmplayers.db",
+	"wurmTemplatesDB"	=> "{$serverRoot}/sqlite/wurmtemplates.db",
+	"wurmZonesDB"		  => "{$serverRoot}/sqlite/wurmzones.db"
 );
 
 /**
