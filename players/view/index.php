@@ -2,6 +2,7 @@
 $page = "player";
 require("../../header.php");
 ?>
+  <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
   <div class="content-wrapper">
     <section class="content-header">
       <h1>Player Profile</h1>
@@ -259,8 +260,19 @@ require("../../header.php");
         <form role="form" id="formAddItem">
           <div class="modal-body">
             <div class="form-group">
-              <label>Item to give</label>
-              <input type="number" class="form-control" id="txtItemID" placeholder="Enter how many hours to mute player" />
+              <label>Item(s) to give (This is just a temp list, working on full item list)</label>
+              <select id="txtItemID" class="full-width" multiple="multiple">
+                <option value="44">Lump - Gold</option>
+                <option value="45">Lump - Silver</option>
+                <option value="46">Lump - Iron</option>
+                <option value="47">Lump - Copper</option>
+                <option value="48">Lump - Zinc</option>
+                <option value="49">Lump - lead</option>
+                <option value="205">Lump - Steel</option>
+                <option value="221">Lump - Brass</option>
+                <option value="223">Lump - Bronze</option>
+                <option value="220">Lump - Tin</option>
+              </select>
             </div>
             <div class="form-group">
               <label>Quality</label>
@@ -294,6 +306,8 @@ require("../../header.php");
   </div>
 
   <input type="hidden" id="txtWurmID" value="<?php echo $_GET['id']; ?>" />
+  
+  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -403,7 +417,7 @@ require("../../header.php");
 
               switch(response.KINGDOM) {
                 case '0':
-                  $('#playerKingdom').html('Freedom');
+                  $('#playerKingdom').html('No kingdom');
                   break;
                 case '1':
                   $('#playerKingdom').html('Jenn-Kellon');
@@ -440,7 +454,17 @@ require("../../header.php");
             $('#loader').hide();
           }
         });
+      
       }
+
+      $('#txtItemID').multiselect({
+        enableFiltering: true,
+        buttonContainer: '<div class="btn-group full-width" />',
+        numberDisplayed: 7,
+        templates: {
+          button: '<button type="button" class="multiselect dropdown-toggle full-width" data-toggle="dropdown"><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+        }
+      });
 
       $('#btnBanUnBan').on('click', function(e) {
         e.preventDefault();
@@ -842,7 +866,7 @@ require("../../header.php");
       $('#btnChangeKingdom').on('click', function(e) {
         swal({
           title: 'Change player kingdom',
-          text: '<select id="txtKingdom" class="form-control"><option value="0">Freedom</option><option value="1">Jenn-Kellon</option><option value="2">Mol-Rehan</option><option value="3">Horde of the Summoned</option></select>',
+          text: '<select id="txtKingdom" class="form-control"><option value="0">No kingdom</option><option value="1">Jenn-Kellon</option><option value="2">Mol-Rehan</option><option value="3">Horde of the Summoned</option><option value="4">Freedom Isles</option></select>',
           html: true,
           showCancelButton: true,
           showConfirmButton: true,
@@ -861,6 +885,7 @@ require("../../header.php");
               data: {doing: "changeKingdom", kingdom: tempKingdom, wurmID: wurmID},
               dataType: 'json',
               success: function(response) {
+                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -875,7 +900,7 @@ require("../../header.php");
                   var textKingdom = "";
                   switch(tempKingdom) {
                     case '0':
-                      textKingdom = 'Freedom';
+                      textKingdom = 'No kingdom';
                       break;
                     case '1':
                       textKingdom = 'Jenn-Kellon';
@@ -885,6 +910,9 @@ require("../../header.php");
                       break;
                     case '3':
                       textKingdom = 'Horde of the Summoned';
+                      break;
+                    case '4':
+                      textKingdom = 'Freedom Isles';
                       break;
                     default:
                       textKingdom = 'Unknown kingdom';
@@ -979,7 +1007,8 @@ require("../../header.php");
       $('#formAddItem').on('submit', function(e) {
         e.preventDefault();
 
-        var itemID = $('#txtItemID').val();
+        var itemIDs = [];
+        $('#txtItemID option:selected').map(function(a, item){itemIDs.push(item.value);});
         var itemQuality = $('#txtItemQuality').val();
         var itemRarity = $('#txtItemRarity').val();
         var itemAmount = $('#txtItemAmount').val();
@@ -988,7 +1017,7 @@ require("../../header.php");
         $.ajax({
           type: 'POST',
           url: 'process.php',
-          data: {doing: "addItem", wurmID: wurmID, itemTemplateID: itemID, itemQuality: itemQuality, itemRarity: itemRarity, creator: itemCreator, itemAmount: itemAmount},
+          data: {doing: "addItem", wurmID: wurmID, itemTemplateID: JSON.stringify(itemIDs), itemQuality: itemQuality, itemRarity: itemRarity, creator: itemCreator, itemAmount: itemAmount},
           dataType: 'json',
           beforeSend: function() {
             $('#modalAddItemLoader').show();

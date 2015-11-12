@@ -33,7 +33,7 @@ class RMI
 
     if(!empty($this->_rmiConfig["ip"]) && $this->_rmiConfig["ip"] != "server-ip" && !empty($this->_rmiConfig["ip"]))
     {
-      exec("java -jar " . $this->_rmiConfig["wuaClientLocation"] . " \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"isRunning\" \"\" 2>&1", $output);
+      exec("java -jar \"" . $this->_rmiConfig["wuaClientLocation"] . "\" \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"isRunning\" \"\" 2>&1", $output);
 
       if($output[0] == true && count($output) == 1)
       {
@@ -62,7 +62,7 @@ class RMI
 
     if($isOnline["success"] == true)
     {
-      exec("java -jar " . $this->_rmiConfig["wuaClientLocation"] . " \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"" . $method . "\" \"" . $stringParams . "\" 2>&1", $output);
+      exec("java -jar \"" . $this->_rmiConfig["wuaClientLocation"] . "\" \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"" . $method . "\" \"" . $stringParams . "\" 2>&1", $output);
 
       $result = $output;
 

@@ -13,11 +13,11 @@ $application = array(
 	"mode" => DEVELOPMENT,
 	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
-	"version" => "0.0.15-Alpha"
+	"version" => "0.0.16-Alpha"
 );
 
 /**
- * Location of where your world directory for the wurm server is located
+ * Location of where your world directory for the wurm server is located NOTE: This has to be the absolute path to your server I.E: D:\GameServers\WurmUnlimited\Server1\XplosiveGames
  */
 $serverRoot	= "/path/to/wurm-server/world-dir";
 
@@ -56,7 +56,7 @@ $dbConfig = array(
  */
 $rmiConfig = array(
 	"wuaClientLocation" => dirname(__FILE__) . "/WUAHelper.jar",
-	"ip" => "server-ip",
+	"ip" => "",
 	"port" => 7220,
-	"password" => "RMI-password"
+	"password" => ""
 );

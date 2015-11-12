@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.0.16-Alpha
+- Core/Core: Added `bootstrap-multiselect` asset.
+- Core/Core: Added `list.js` asset.
+- Core/Player: Fixed typo on log file.
+- Core/Player: Updated `AddItem` to support adding multiple items.
+- Core/Player: Fixed `Kingdom` so now player gets changed to correct kingdom.
+- Core/Player: Added `Search bar` when viewing all players.
+- Core/RMI: Fixed error that was being caused when the folder path had spaces. - Thanks Xpy for reporting :)
+- Core/Config: rootPath needs to be the absolute folder location - Thanks Xpy and Kron :)
+- Core/Core: Fixed errors that were being caused on the main `index.php` file.
+- WU/Webinterface: New update, includes bug fixes and sends more messages to the player.
+- WUAHelper/Core: Updated to with the updated Webinterface.
+
 ## 0.0.15-Alpha
 - Core/Core: Implemented `Logger` class to handle application / gm logging.
 - Core/Player: Added `Logger`.

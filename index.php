@@ -1,4 +1,5 @@
 <?php
+$page = "Dashboard";
 require("header.php");
 ?>
       <div class="content-wrapper">

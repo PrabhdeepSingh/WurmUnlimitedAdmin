@@ -150,6 +150,9 @@ body.hold-transition .main-header .logo {
   padding-left: 15px;
   padding-right: 15px;
 }
+.full-width {
+  width: 100%;
+}
 /* H1 - H6 font */
 h1,
 h2,

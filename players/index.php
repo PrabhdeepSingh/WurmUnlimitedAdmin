@@ -9,15 +9,18 @@ require("../header.php");
           <div class="row">
             <div class="col-md-12">
               <!-- USERS LIST -->
-              <div class="box box-primary">
+              <div class="box box-primary" id="divUserList">
                 <div class="box-header with-border">
                   <h3 class="box-title">Players</h3>
+                  <div class="box-tools pull-right">
+                    <input type="text" name="message" placeholder="Search ..." class="form-control search" />
+                  </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body no-padding">
                   <div class="loading" id="loader"></div>
-                  <ul class="users-list clearfix" id="userList" style="display: none;">
-                  </ul>
+                    <ul class="users-list clearfix list" id="userList" style="display: none;">
+                    </ul>
                   <!-- /.users-list -->
                 </div>
               </div>
@@ -26,6 +29,8 @@ require("../header.php");
           </div>
         </section>
       </div>
+      
+      <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
 
       <script>
         $(document).ready(function() {
@@ -54,6 +59,7 @@ require("../header.php");
                   }
 
                   $('#userList').html(html);
+
                 }
                 else {
 
@@ -61,6 +67,10 @@ require("../header.php");
 
                 $('#userList').show();
                 $('#loader').hide();
+
+                new List('divUserList', {
+                  valueNames: ['users-list-name', 'users-list-date']
+                });
               }
 
             },
@@ -70,6 +80,7 @@ require("../header.php");
               $('#loader').hide();
             }
           });
+
         });
       </script>
 <?php
