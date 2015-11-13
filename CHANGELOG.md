@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.0.17-Alpha
+- Core/Players: Added full list of in-game `Items` when adding to user.
+
 ## 0.0.16-Alpha
 - Core/Core: Added `bootstrap-multiselect` asset.
 - Core/Core: Added `list.js` asset.
