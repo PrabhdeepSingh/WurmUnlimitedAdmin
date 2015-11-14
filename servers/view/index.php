@@ -614,22 +614,22 @@ require("../../header.php");
                   var txtHomeServerKingdom = "";
                   switch(homeServerKingdom) {
                     case '0':
-                      $('#serverKingdom').html('No kingdom');
+                      txtHomeServerKingdom = 'No kingdom';
                       break;
                     case '1':
-                      $('#serverKingdom').html('Jenn-Kellon');
+                      txtHomeServerKingdom = 'Jenn-Kellon';
                       break;
                     case '2':
-                      $('#serverKingdom').html('Mol Rehan');
+                      txtHomeServerKingdom = 'Mol Rehan';
                       break;
                     case '3':
-                      $('#serverKingdom').html('Horde of the Summoned');
+                      txtHomeServerKingdom = 'Horde of the Summoned';
                       break;
                     case '4':
-                      $('#serverKingdom').html('Freedom Isles');
+                      txtHomeServerKingdom = 'Freedom Isles';
                       break;
                     default:
-                      $('#serverKingdom').html('Unknown kingdom');
+                      txtHomeServerKingdom = 'Unknown kingdom';
                       break;
                   }
                   swal('Home server kingdom changed!', 'The default kingdom for this server has been changed to [ ' + txtHomeServerKingdom + ' ]!', 'success');

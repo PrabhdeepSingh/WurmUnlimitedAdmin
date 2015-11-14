@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.18-Alpha
+- Core/Account: Added `Confirm Password` when changing your own password.
+- Core/Server: Fixed `Change server kingdom` to update dom when changed. - Thank Adambean for reporting :)
+
 ## 0.0.17-Alpha
 - Core/Players: Added full list of in-game `Items` when adding to user.
 
