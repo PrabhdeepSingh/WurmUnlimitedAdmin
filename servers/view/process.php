@@ -7,35 +7,108 @@ $response = array();
 if(!empty($_POST))
 {
   require_once("../../classes/class.Server.inc.php");
+  require_once("../../includes/config.php");
 
 	$server = new \WurmUnlimitedAdmin\SERVER();
 	switch($_POST["doing"])
 	{
 		case "changeGameMode":
-			$response = $server->ChangeGameMode($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangeGameMode($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changeGameCluster":
-			$response = $server->ChangeGameCluster($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangeGameCluster($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changeHomeServer":
-			$response = $server->ChangeHomeServer($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangeHomeServer($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changeHomeServerKingdom":
-			$response = $server->ChangeHomeServerKingdom($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangeHomeServerKingdom($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+
 			break;
+
 		case "changeWurmTime":
-			$response = $server->ChangeWurmTime($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangeWurmTime($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changePlayerLimit":
-			$response = $server->ChangePlayerLimit($_POST);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->ChangePlayerLimit($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "shutdown":
-			$params = array("user" => $_SESSION["userData"]["username"], "seconds" => $_POST["seconds"], "reason" => $_POST["reason"]);
-			$response = $server->Shutdown($params);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$params = array("user" => $_SESSION["userData"]["username"], "seconds" => $_POST["seconds"], "reason" => $_POST["reason"]);
+				$response = $server->Shutdown($params);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "broadcast":
-			$response = $server->SendBroadcastMessage($_POST["message"]);
+			if($_SESSION["userData"]["level"] >= $application["minAdminLevel"])
+			{
+				$response = $server->SendBroadcastMessage($_POST["message"]);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+			
 		default:
 			$response = array("success" => false);
 			break;

@@ -118,26 +118,17 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
               </a>
             </li>
             <?php } ?>
-            <li class="treeview <?php echo $page == 'player' ? 'active' : ''; ?>">
-              <a href="#">
-                <i class="fa fa-user"></i>
-                <span> Player</span>
-                <i class="fa fa-angle-left pull-right"></i>
+            <li class="<?php echo $page == 'player' ? 'active' : ''; ?>">
+              <a href="<?php echo $application["rootPath"]; ?>players/">
+                <i class="fa fa-users"></i>
+                <span> Players</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-power-off"></i> Players online</a></li>
-                <li><a href="<?php echo $application["rootPath"]; ?>players/"><i class="fa fa-users"></i> All players</a></li>
-              </ul>
             </li>
-            <li class="treeview <?php echo $page == 'village' ? 'active' : ''; ?>">
-              <a href="#">
+            <li class="<?php echo $page == 'village' ? 'active' : ''; ?>">
+              <a href="<?php echo $application["rootPath"]; ?>villages/">
                 <i class="fa fa-home"></i>
-                <span> Village</span>
-                <i class="fa fa-angle-left pull-right"></i>
+                <span> Villages</span>
               </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-list"></i> View all villages</a></li>
-              </ul>
             </li>
           </ul>
         </section>

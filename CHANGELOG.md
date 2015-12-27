@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.0.0-Alpha
+- WUAHelper/Core: Updated to work with the latest version of `WU`.
+- Core/village: Implemented villages.
+- Core/Server: Added loader to the server page.
+- Core/Server: Disabled buttons if the server is running.
+- Core/Server: Added wurm time changer dialog.
+- Core/Player: Added GM power restrictions.
+- Core/Server: Added GM power restrictions.
+
+## 0.0.19-Alpha
+- Core/Player: Fixed `Give Item` so it doesn't show item's that shouldn't be given.
+
 ## 0.0.18-Alpha
 - Core/Account: Added `Confirm Password` when changing your own password.
 - Core/Server: Fixed `Change server kingdom` to update dom when changed. - Thank Adambean for reporting :)

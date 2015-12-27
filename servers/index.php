@@ -13,6 +13,7 @@ require("../header.php");
         <section class="content">
           <div class="row" id="serverList">
           </div>
+          <div class="loading" id="loader"></div>
         </section>
       </div>
 

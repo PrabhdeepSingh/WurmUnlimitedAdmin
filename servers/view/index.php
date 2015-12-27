@@ -56,7 +56,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangeGameMode" class="btn btn-primary form-control">Change game mode</a>
+                    <button id="btnChangeGameMode" class="btn btn-primary form-control" disabled>Change game mode</button>
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangeCluster" class="btn btn-primary form-control">Change cluster</a>
+                    <button id="btnChangeCluster" class="btn btn-primary form-control" disabled>Change cluster</button>
                   </div>
                 </div>
               </div>
@@ -82,7 +82,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangeHomeServer" class="btn btn-primary form-control">Change home server</a>
+                    <button id="btnChangeHomeServer" class="btn btn-primary form-control" disabled>Change home server</button>
                   </div>
                 </div>
               </div>
@@ -95,7 +95,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangeServerKingdom" class="btn btn-primary form-control">Change server kingdom</a>
+                    <button id="btnChangeServerKingdom" class="btn btn-primary form-control" disabled>Change server kingdom</button>
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangeWurmTime" class="btn btn-primary form-control">Change wurm time</a>
+                    <button id="btnChangeWurmTime" class="btn btn-primary form-control" disabled>Change wurm time</button>
                   </div>
                 </div>
               </div>
@@ -121,7 +121,7 @@ require("../../header.php");
                 </div>
                 <div class="col-sm-3">
                   <div class="description-block">
-                    <a id="btnChangePlayerLimit" class="btn btn-primary form-control">Change player limit</a>
+                    <button id="btnChangePlayerLimit" class="btn btn-primary form-control" disabled>Change player limit</button>
                   </div>
                 </div>
               </div>
@@ -201,6 +201,12 @@ require("../../header.php");
               if(response.COUNT.success == false) {
                 $('#btnShutDown').prop('disabled', true);
                 $('#btnBroadcastMessage').prop('disabled', true);
+                $('#btnChangeGameMode').prop('disabled', false);
+                $('#btnChangeCluster').prop('disabled', false);
+                $('#btnChangeHomeServer').prop('disabled', false);
+                $('#btnChangeServerKingdom').prop('disabled', false);
+                $('#btnChangeWurmTime').prop('disabled', false);
+                $('#btnChangePlayerLimit').prop('disabled', false);
               }
 
               /**
@@ -652,7 +658,56 @@ require("../../header.php");
 
       $('#btnChangeWurmTime').on('click', function(e) {
         e.preventDefault();
-        swal('Not implemented!', 'This function hasn\'t been implemented yet', 'error');
+        swal({
+          title: 'Change wurm time',
+          text: 'Change the world time of this server',
+          type: 'input',
+          showCancelButton: true,
+          showConfirmButton: true,
+          confirmButtonText: 'Change',
+          cancelButtonText: 'Cancel',
+          showLoaderOnConfirm: true,
+          closeOnConfirm: false
+        },
+        function(inputValue) {
+          if(inputValue === false || inputValue === "" || inputValue == 0) {
+            swal.showInputError("You need to write a number and has to be greater than 0!");
+            return false;
+          }
+          else {
+            $.ajax({
+              type: 'POST',
+              url: 'process.php',
+              data: {doing: "changeWurmTIme", newWurmTime: inputValue, serverID: serverID},
+              dataType: 'json',
+              success: function(response) {
+                console.log(response);
+                if(response.error) {
+                  switch(response.error.message) {
+                    case 'Missing database':
+                      swal("Missing Databases", "Couldn't find the server database. Please double check your config file.", "error");
+                      break;
+                    default:
+                      swal("Error", response.error.message, "error");
+                      break;
+                  }
+                }
+                else if(response.success) {
+                  swal('Wurm time changed!', 'The new world time for this server has been changed to [ ' + inputValue + ' ]!', 'success');
+                  $('#serverWurmTime').html(inputValue);
+                }
+                else {
+                  swal('Failed to change!', 'We could not proccess this request at this time.', 'error');
+                }
+
+              },
+              error: function(error) {
+                console.log(error);
+                swal('Failed', 'It looks like we couldn\'t proccess your request at this time. Please try again later.', 'error');
+              }
+            });
+          }
+        });
       });
 
       $('#btnChangePlayerLimit').on('click', function(e) {

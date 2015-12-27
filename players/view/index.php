@@ -276,7 +276,6 @@ require("../../header.php");
                 <option value="23">SHAFT</option>
                 <option value="24">SAW</option>
                 <option value="25">SHOVEL</option>
-                <option value="26">DIRT PILE</option>
                 <option value="27">RAKE</option>
                 <option value="28">BARLEY</option>
                 <option value="29">WHEAT</option>
@@ -324,7 +323,6 @@ require("../../header.php");
                 <option value="71">ANIMAL HIDE</option>
                 <option value="72">LEATHER</option>
                 <option value="73">LYE</option>
-                <option value="74">CHARCOAL PILE</option>
                 <option value="75">FRYING PAN</option>
                 <option value="76">JAR POTTERY</option>
                 <option value="77">BOWL POTTERY</option>
@@ -426,10 +424,8 @@ require("../../header.php");
                 <option value="173">PIG FOOD</option>
                 <option value="174">WAND TELEPORT</option>
                 <option value="175">PRESENT</option>
-                <option value="176">WAND DEITY</option>
-                <option value="177">ITEM PILE</option>
+                <option value="176">EBONY WAND</option>
                 <option value="178">STONE OVEN</option>
-                <option value="179">UNFINISHED ITEM</option>
                 <option value="180">FORGE</option>
                 <option value="181">JARCLAY</option>
                 <option value="182">BOWLCLAY</option>
@@ -559,7 +555,7 @@ require("../../header.php");
                 <option value="312">HORNLONG</option>
                 <option value="313">PELT</option>
                 <option value="314">CLUB HUGE</option>
-                <option value="315">WANDGM</option>
+                <option value="315">Ivory Wand</option>
                 <option value="316">WEMP</option>
                 <option value="317">WEMPSEED</option>
                 <option value="318">WEMPFIBRE</option>
@@ -630,8 +626,6 @@ require("../../header.php");
                 <option value="383">SAPPHIRESTAR</option>
                 <option value="384">GUARD TOWER</option>
                 <option value="385">LOG HUGE</option>
-                <option value="386">UNFINISHEDSIMPLEITEM</option>
-                <option value="387">ILLUSIONARYITEM</option>
                 <option value="388">FILE</option>
                 <option value="389">FILE BLADE</option>
                 <option value="390">AWL</option>
@@ -911,10 +905,8 @@ require("../../header.php");
                 <option value="666">SLEEP POWDER</option>
                 <option value="667">TUNING FORK</option>
                 <option value="668">ROD TRANSMUTATION</option>
-                <option value="669">BULKITEM</option>
                 <option value="670">TRASHBIN</option>
                 <option value="671">SETTLEMENTMARKER</option>
-                <option value="672">QUICKDECAYITEM</option>
                 <option value="673">PERIMETERMARKER</option>
                 <option value="674">LAMPHEADHANGING</option>
                 <option value="675">LAMPHEADIMPERIAL</option>
@@ -925,7 +917,6 @@ require("../../header.php");
                 <option value="680">STONELIB</option>
                 <option value="681">FENCE LUMPS</option>
                 <option value="682">DECLARATION INDEPENDENCE</option>
-                <option value="683">VALREIITEM</option>
                 <option value="684">LOWQL IRON</option>
                 <option value="685">CRUDEKNIFE</option>
                 <option value="686">PICK BLADESTONE</option>
@@ -979,7 +970,6 @@ require("../../header.php");
                 <option value="734">CLAPPERSMALL</option>
                 <option value="735">CLAPPER LARGE</option>
                 <option value="736">PILLARDECORATION</option>
-                <option value="737">VALREIQUESTITEM</option>
                 <option value="738">GARDENGNOME</option>
                 <option value="739">PILLARHOTA</option>
                 <option value="740">MEDALLIONHOTA</option>
@@ -1066,18 +1056,18 @@ require("../../header.php");
                 <option value="822">GRAVESTONEBURIED</option>
                 <option value="823">EQUIPMENTSLOT</option>
                 <option value="824">INVENTORYGROUP</option>
-                <option value="825">STAFFSAPPHIRE</option>
-                <option value="826">STAFFRUBY</option>
-                <option value="827">STAFFDIAMOND</option>
-                <option value="828">STAFFOPAL</option>
-                <option value="829">STAFFEMERALD</option>
-                <option value="830">TEMPARROW</option>
+                <option value="825">STAFF SAPPHIRE</option>
+                <option value="826">STAFF RUBY</option>
+                <option value="827">STAFF DIAMOND</option>
+                <option value="828">STAFF OPAL</option>
+                <option value="829">STAFF EMERALD</option>
+                <option value="830">TEMP ARROW</option>
                 <option value="831">TA LUMPD</option>
                 <option value="832">WALNUT</option>
                 <option value="833">CHESTNUT</option>
-                <option value="834">POTIONILLUSION</option>
+                <option value="834">POTION ILLUSION</option>
                 <option value="835">VILLAGEBOARD</option>
-                <option value="836">POTIONAFFINITY</option>
+                <option value="836">POTION AFFINITY</option>
                 <option value="837">SERYLL LUMP</option>
                 <option value="838">COPPERBRAZIERSTAND</option>
                 <option value="839">COPPERBRAZIERBOWL</option>
@@ -1175,15 +1165,11 @@ require("../../header.php");
                 <option value="931">SIEGE SHIELD</option>
                 <option value="932">ARROW BALLISTA</option>
                 <option value="933">BALLIST AMOUNT</option>
-                <option value="934">PEWPEWDIE</option>
                 <option value="935">ARROW HEAD BALLISTA</option>
                 <option value="936">BALLISTA</option>
                 <option value="937">TREBUCHET</option>
                 <option value="938">BARRIER</option>
                 <option value="939">ARCHERY TOWER</option>
-                <option value="940">PEWPEWDIEACID</option>
-                <option value="941">PEWPEWDIEFIRE</option>
-                <option value="942">PEWPEWDIELIGHTNING</option>
                 <option value="943">WOOL CAP</option>
                 <option value="944">WOOL CAP YELLOW</option>
                 <option value="945">WOOL CAP GREEN</option>
@@ -1208,12 +1194,12 @@ require("../../header.php");
                 <option value="964">SQUIRE WOOL CAPBLACK</option>
                 <option value="965">SQUIRE WOOL CAPRED</option>
                 <option value="966">SQUIRE WOOL CAPYELLOW</option>
-                <option value="967">GARDENGNOMEGREEN</option>
+                <option value="967">GARDEN GNOME GREEN</option>
                 <option value="968">PEWPEWDIEICE</option>
                 <option value="969">SUPPLY DEPOT 1</option>
                 <option value="970">SUPPLY DEPOT 2</option>
                 <option value="971">SUPPLY DEPOT 3</option>
-                <option value="972">YULEGOAT</option>
+                <option value="972">YULE GOAT</option>
                 <option value="973">MASK ENLIGHTENDED</option>
                 <option value="974">MASK RAVAGER</option>
                 <option value="975">MASK PALE</option>
@@ -1241,7 +1227,6 @@ require("../../header.php");
                 <option value="997">VALEN TINES</option>
                 <option value="998">HELMET CAVALIER</option>
                 <option value="999">TALLKING DOM BANNER</option>
-                <option value="1000">OWNER SHIP PAPERS</option>
                 <option value="1001">MARBLE PLANTER</option>
                 <option value="1002">MARBLE PLANTERYELLOW</option>
                 <option value="1003">MARBLE PLANTERBLUE</option>
@@ -2030,6 +2015,12 @@ require("../../header.php");
             }
             else if(response.success) {
               if($('#modalAddItem').modal('hide')) {
+                $('#txtItemID').multiselect('deselectAll', false);
+                $('#txtItemID').multiselect('updateButtonText');
+
+                $('#txtItemQuality').val('');
+                $('#txtItemAmount').val('1');
+
                 swal("Added!", "The item has been added to the players inventory!", "success");
               }
 

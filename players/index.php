@@ -19,8 +19,8 @@ require("../header.php");
                 <!-- /.box-header -->
                 <div class="box-body no-padding">
                   <div class="loading" id="loader"></div>
-                    <ul class="users-list clearfix list" id="userList" style="display: none;">
-                    </ul>
+                  <ul class="users-list clearfix list" id="userList" style="display: none;">
+                  </ul>
                   <!-- /.users-list -->
                 </div>
               </div>

@@ -13,29 +13,92 @@ if(!empty($_POST))
 	switch($_POST["doing"])
 	{
 		case "banFunction":
-			$response = $player->BanUnban($_POST);
+			if($_SESSION["userData"]["level"] > 1)
+			{
+				$response = $player->BanUnban($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+
 			break;
+
 		case "muteFunction":
-			$response = $player->MuteUnmute($_POST);
+			if($_SESSION["userData"]["level"] > 1)
+			{
+				$response = $player->MuteUnmute($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changePower":
-			$response = $player->ChangePower($_POST);
+			if($_SESSION["userData"]["level"] > 3)
+			{
+				$response = $player->ChangePower($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "addMoney":
-			$response = $player->AddMoney($_POST);
+			if($_SESSION["userData"]["level"] > 2)
+			{
+				$response = $player->AddMoney($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changeEmail":
-			$response = $player->ChangeEmail($_POST);
+			if($_SESSION["userData"]["level"] > 3)
+			{
+				$response = $player->ChangeEmail($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "changeKingdom":
-			$response = $player->ChangeKingdom($_POST);
+			if($_SESSION["userData"]["level"] > 1)
+			{
+				$response = $player->ChangeKingdom($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+
 		case "getInventory":
 			$response = $player->GetInventory($_POST["playerID"]);
 			break;
 		case "addItem":
-			$response = $player->AddItem($_POST);
+			if($_SESSION["userData"]["level"] > 2)
+			{
+				$response = $player->AddItem($_POST);
+			}
+			else
+			{
+				$response = array("error" => array("message" => "You do not have enough power to do this action."));
+			}
+			
 			break;
+			
 		case "getSkills":
 			$response = $player->GetSkills($_POST["playerID"]);
 			break;
