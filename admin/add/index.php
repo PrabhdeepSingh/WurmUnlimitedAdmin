@@ -35,6 +35,7 @@ require("../../header.php");
                     <div class="form-group">
                       <label>Level</label>
                       <select id="txtLevel" class="form-control">
+                        <option value="0">Read Only</option>
                         <option value="1">HERO</option>
                         <option value="2">GM</option>
                         <option value="3">High God</option>

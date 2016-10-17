@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.0.1-Alpha
+- Core/Player: Updated methods.
+- Core/Player: Fixed `Ban`, `Unban`, `Mute`, and `Unmute` functions when viewing a player.
+- Core/CSS: Fixed loader on blank pages.
+- Core: Removed debugging logs.
+- Core: Made user power and level user friendly / easy to read.
+- Core: Added read only user level.
+
 ## 1.0.0-Alpha
 - WUAHelper/Core: Updated to work with the latest version of `WU`.
 - Core/village: Implemented villages.

@@ -1527,6 +1527,9 @@ a:focus {
   width: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
+.box.min-height {
+  min-height: 13em;
+}
 .box.box-primary {
   border-top-color: #3c8dbc;
 }
@@ -4941,20 +4944,26 @@ table.text-center th {
 
 .loading,
 .loading:before,
-.loading:after {
+.loading:after,
+.loading.no-background,
+.loading.no-background:before,
+.loading.no-background:after {
   border-radius: 50%;
 }
 
 .loading:before,
-.loading:after {
+.loading:after,
+.loading.no-background,
+.loading.no-background:before,
+.loading.no-background:after {
   position: absolute;
   content: '';
 }
 
-.loading:before {
+.loading:before,
+.loading.no-background:before {
   width: 5.2em;
   height: 10.2em;
-  background: #FFFFFF;
   border-radius: 10.2em 0 0 10.2em;
   top: -0.1em;
   left: -0.1em;
@@ -4964,7 +4973,15 @@ table.text-center th {
   animation: load2 2s infinite ease 1.5s;
 }
 
-.loading {
+.loading:before {
+  background: #FFFFFF;
+}
+.loading.no-background:before {
+  background: #ECF0F5;
+}
+
+.loading,
+.loading.no-background {
   font-size: 7px;
   text-indent: -99999em;
   margin: 55px auto;
@@ -4977,10 +4994,10 @@ table.text-center th {
   transform: translateZ(0);
 }
 
-.loading:after {
+.loading:after,
+.loading.no-background:after {
   width: 5.2em;
   height: 10.2em;
-  background: #FFFFFF;
   border-radius: 0 10.2em 10.2em 0;
   top: -0.1em;
   left: 5.1em;
@@ -4988,6 +5005,13 @@ table.text-center th {
   transform-origin: 0px 5.1em;
   -webkit-animation: load2 2s infinite ease;
   animation: load2 2s infinite ease;
+}
+
+.loading:after {
+  background: #FFFFFF;
+}
+.loading.no-background:after {
+  background: #ECF0F5;
 }
 
 @-webkit-keyframes load2 {

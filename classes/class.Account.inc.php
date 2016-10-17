@@ -65,7 +65,7 @@ class ACCOUNT
 
     			if($hashedPassword)
     			{
-    				$result = array("success" => true, "ID" => $getData["ID"], "level" => $getData["LEVEL"]);
+    				$result = array("success" => true, "ID" => $getData["ID"], "level" => $getData["LEVEL"], "user_friendly_level" => $this->ParseLevel($getData["LEVEL"]));
     			}
     			else
     			{
@@ -183,6 +183,32 @@ class ACCOUNT
       exit();
     }
 
+  }
+
+  function ParseLevel($level = 0) {
+    switch ($level) {
+      case 0:
+        return "Read Only";
+      break;
+      case 1:
+        return "HERO";
+      break;
+      case 2:
+        return "GM";
+      break;
+      case 3:
+        return "High God";
+      break;
+      case 4:
+        return "Arch GM";
+      break;
+      case 5:
+        return "Implementor";
+      break;
+      default:
+        return "Unknown Power Level";
+      break;
+    }
   }
 
   function __destruct()

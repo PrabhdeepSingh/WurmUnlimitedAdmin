@@ -16,7 +16,7 @@ if(!empty($_POST))
 	{
 		$response["success"] = true;
 
-    $_SESSION["userData"] = array("username" => $_POST["username"], "ID" => $loginCheck["ID"], "level" => $loginCheck["level"]);
+    $_SESSION["userData"] = array("username" => $_POST["username"], "ID" => $loginCheck["ID"], "level" => $loginCheck["level"], "user_friendly_level" => $loginCheck["user_friendly_level"]);
     $_SESSION['accountLoggedinTime'] = time();
 
 	}

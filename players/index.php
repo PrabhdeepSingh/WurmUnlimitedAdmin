@@ -55,7 +55,7 @@ require("../header.php");
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">Power: ' + response[i].POWER + '</span></li>';
+                    html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">' + parsePower(response[i].POWER) + '</span></li>';
                   }
 
                   $('#userList').html(html);
@@ -82,6 +82,37 @@ require("../header.php");
           });
 
         });
+
+        /**
+         * Converts int based power to string.
+         * @param  {int} power Power of the player
+         * @return {string}    User friendly power
+         */
+        function parsePower(power) {
+          switch (power) {
+            case '0':
+              return 'Player';
+            break;
+            case '1':
+              return 'HERO';
+            break;
+            case '2':
+              return 'GM';
+            break;
+            case '3':
+              return 'High God';
+            break;
+            case '4':
+              return 'Arch GM';
+            break;  
+            case '5':
+              return 'Implementor';
+            break;
+            default:
+              return 'Unknown power';
+            break;
+          }
+        }
       </script>
 <?php
 require("../footer.php");

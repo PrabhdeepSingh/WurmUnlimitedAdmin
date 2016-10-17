@@ -76,7 +76,7 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
             </div>
             <div class="pull-left info">
               <p><?php echo $userData["username"]; ?></p>
-              Admin level: <?php echo $userData["level"]; ?>
+              <?php echo $userData["user_friendly_level"]; ?>
             </div>
           </div>
 

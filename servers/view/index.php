@@ -12,7 +12,7 @@ require("../../header.php");
       <div class="row">
         <div class="col-md-3">
 
-          <div class="box box-danger">
+          <div class="box min-height box-danger">
             <div class="box-body box-profile" id="div-1" style="display: none;">
               <div class="profile-user-img" style="border: 0;"><i class="fa fa-server fa-5x"></i></div>
 
@@ -30,7 +30,7 @@ require("../../header.php");
 
           </div>
 
-          <div class="box box-danger">
+          <div class="box min-height box-danger">
             <div class="box-header with-border">
               <h3 class="box-title">Broadcast message</h3>
             </div>
@@ -45,7 +45,7 @@ require("../../header.php");
         </div>
 
         <div class="col-md-9">
-          <div class="box box-danger">
+          <div class="box min-height box-danger">
             <div class="box-body" id="div-3" style="display: none;">
               <div class="row">
                 <div class="col-sm-9 border-right">

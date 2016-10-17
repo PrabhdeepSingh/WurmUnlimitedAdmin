@@ -147,9 +147,9 @@ class PLAYER
       if(!empty($params))
       {
         /**
-         * $params["action"] can only be 0 or 1, 0 means unban, 1 means ban
+         * $params["action"] can only be ban or unban
          */
-        if($params["action"] == 0)
+        if($params["action"] == "Ban")
         {
           $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
           $user = $sql->fetch(PDO::FETCH_ASSOC);
@@ -180,7 +180,7 @@ class PLAYER
           }
 
         }
-        else if($params["action"] == 1)
+        else if($params["action"] == "Unban")
         {
           $sql = $this->_playerDB->QueryWithBinds("SELECT NAME, IPADDRESS FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
           $user = $sql->fetch(PDO::FETCH_ASSOC);
@@ -262,9 +262,9 @@ class PLAYER
       if(!empty($params))
       {
         /**
-         * $params["action"] can only be 0 or 1, 0 means unmute, 1 means muted
+         * $params["action"] can only be mute or unmute
          */
-        if($params["action"] == 0)
+        if($params["action"] == "Unmute")
         {
           $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
           $user = $sql->fetch(PDO::FETCH_ASSOC);
@@ -295,7 +295,7 @@ class PLAYER
           }
 
         }
-        else if($params["action"] == 1)
+        else if($params["action"] == "Mute")
         {
           $sql = $this->_playerDB->QueryWithBinds("SELECT NAME FROM PLAYERS WHERE WURMID = ?;", array($params["wurmID"]));
           $user = $sql->fetch(PDO::FETCH_ASSOC);

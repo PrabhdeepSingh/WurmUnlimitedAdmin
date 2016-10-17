@@ -312,7 +312,7 @@ require("../../header.php");
                 <option value="60">COIN SILVER TWENTY</option>
                 <option value="61">COIN GOLD TWENTY</option>
                 <option value="62">HAMMER METAL</option>
-                <option value="63">HAMMER WOOD</option>
+                <option value="63">MALLET WOOD</option>
                 <option value="64">ANVIL SMALL</option>
                 <option value="65">CHEESE DRILL</option>
                 <option value="66">CHEESE COW</option>
@@ -898,7 +898,7 @@ require("../../header.php");
                 <option value="659">STREET LAMPIMPERIAL</option>
                 <option value="660">TORCHMETAL</option>
                 <option value="661">HOPPER</option>
-                <option value="662">BULKCONTAINER</option>
+                <option value="662">BULK STORAGE BIN</option>
                 <option value="663">SETTLEMENT DEED</option>
                 <option value="664">CHEST NODECAY LARGE</option>
                 <option value="665">CHEST NODECAY SMALL</option>
@@ -1254,7 +1254,7 @@ require("../../header.php");
             </div>
             <div class="form-group">
               <label>Quality</label>
-              <input type="text" class="form-control" id="txtItemQuality" placeholder="Item quality" />
+              <input type="text" class="form-control" id="txtItemQuality" value="1" placeholder="Item quality" />
             </div>
             <div class="form-group">
               <label>Rarity</label>
@@ -1318,25 +1318,25 @@ require("../../header.php");
 
               switch(response.POWER) {
                 case '0':
-                  $('#playerPower').html('Power: Player');
+                  $('#playerPower').html('Player');
                   break;
                 case '1':
-                  $('#playerPower').html('Power: HERO');
+                  $('#playerPower').html('HERO');
                   break;
                 case '2':
-                  $('#playerPower').html('Power: GM');
+                  $('#playerPower').html('GM');
                   break;
                 case '3':
-                  $('#playerPower').html('Power: High God');
+                  $('#playerPower').html('High God');
                   break;
                 case '4':
-                  $('#playerPower').html('Power: Arch GM');
+                  $('#playerPower').html('Arch GM');
                   break;
                 case '5':
-                  $('#playerPower').html('Power: Implementor');
+                  $('#playerPower').html('Implementor');
                   break;
                 default:
-                  $('#playerPower').html('Power: Unknown kingdom');
+                  $('#playerPower').html('Unknown power');
                   break;
               }
 
@@ -1448,16 +1448,14 @@ require("../../header.php");
       $('#btnBanUnBan').on('click', function(e) {
         e.preventDefault();
 
-        var action = $('#btnBanUnBan').data('do');
-
-        if(action == 1) {
+        if($(this).text() === "Ban") {
           $('#modalBan').modal('show');
         }
         else {
           $.ajax({
             type: 'POST',
             url: 'process.php',
-            data: {doing: "banFunction", action: action, wurmID: wurmID},
+            data: {doing: "banFunction", action: 'Unban', wurmID: wurmID},
             dataType: 'json',
             beforeSend: function() {
               $('#btnBanUnBan').prop('disabled', true);
@@ -1479,7 +1477,6 @@ require("../../header.php");
                 $('#playerIsBanned').html('False');
                 $('#btnBanUnBan').addClass('btn-danger');
                 $('#btnBanUnBan').html('Ban');
-                $('#btnBanUnBan').attr('data-do', "1");
                 $('#liPlayerBanTime').hide();
                 $('#liPlayerBanReason').hide();
               }
@@ -1537,13 +1534,18 @@ require("../../header.php");
                 $('#btnBanUnBan').removeClass('btn-danger');
                 $('#btnBanUnBan').addClass('btn-success');
                 $('#btnBanUnBan').html('Unban');
-                $('#btnBanUnBan').attr('data-do', "0");
+
+                $('#txtBanDays').val('');
+                $('#txtBanReason').val('');
               }
 
             }
             else {
               swal("Failed to ban!", "We could not proccess this request at this time.", "error");
             }
+
+            $('#modalBanLoader').hide();
+            $('#formBanPlayer').show();
 
           },
           error: function(error) {
@@ -1558,16 +1560,14 @@ require("../../header.php");
       $('#btnMuteUnmute').on('click', function(e) {
         e.preventDefault();
 
-        var action = $('#btnMuteUnmute').data('do');
-
-        if(action == 1) {
+        if($(this).text() === "Mute") {
           $('#modalMute').modal('show');
         }
         else {
           $.ajax({
             type: 'POST',
             url: 'process.php',
-            data: {doing: "muteFunction", action: action, wurmID: wurmID},
+            data: {doing: "muteFunction", action: 'Unmute', wurmID: wurmID},
             dataType: 'json',
             beforeSend: function() {
               $('#btnMuteUnmute').prop('disabled', true);
@@ -1589,8 +1589,7 @@ require("../../header.php");
                 swal("Unmuted!", "This player has been unmuted!", "success");
                 $('#playerMuted').html('False');
                 $('#btnMuteUnmute').addClass('btn-danger');
-                $('#btnMuteUnmute').html('Mute');
-                $('#btnMuteUnmute').attr('data-do', '1');
+                $('#btnMuteUnmute').text('Mute');
                 $('#liPlayerMuteTime').hide();
                 $('#liPlayerMuteReason').hide();
               }
@@ -1619,7 +1618,7 @@ require("../../header.php");
         $.ajax({
           type: 'POST',
           url: 'process.php',
-          data: {doing: "muteFunction", action: $('#btnMuteUnmute').data('do'), wurmID: wurmID, muteHours: muteHours, muteReason: muteReason},
+          data: {doing: "muteFunction", action: 'Mute', wurmID: wurmID, muteHours: muteHours, muteReason: muteReason},
           dataType: 'json',
           beforeSend: function() {
             $('#modalMuteLoader').show();
@@ -1648,8 +1647,10 @@ require("../../header.php");
 
                 $('#btnMuteUnmute').removeClass('btn-danger');
                 $('#btnMuteUnmute').addClass('btn-success');
-                $('#btnMuteUnmute').html('Unmute');
-                $('#btnMuteUnmute').attr('data-do', "0");
+                $('#btnMuteUnmute').text('Unmute');
+
+                $('#txtMuteHours').val('');
+                $('#txtMuteReason').val('');
               }
 
             }
@@ -1657,6 +1658,8 @@ require("../../header.php");
               swal("Failed to mute!", "We could not proccess this request at this time.", "error");
             }
 
+            $('#modalMuteLoader').hide();
+            $('#formMutePlayer').show();
           },
           error: function(error) {
             console.log(error);
@@ -1864,7 +1867,6 @@ require("../../header.php");
               data: {doing: "changeKingdom", kingdom: tempKingdom, wurmID: wurmID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -1938,7 +1940,6 @@ require("../../header.php");
               }
             }
             else {
-              console.log(response);
               var html = '';
               for(var i = 0; i < response.length; i++)
               {
@@ -2016,9 +2017,10 @@ require("../../header.php");
             else if(response.success) {
               if($('#modalAddItem').modal('hide')) {
                 $('#txtItemID').multiselect('deselectAll', false);
+                $('#txtItemID').multiselect('refresh');
                 $('#txtItemID').multiselect('updateButtonText');
 
-                $('#txtItemQuality').val('');
+                $('#txtItemQuality').val('1');
                 $('#txtItemAmount').val('1');
 
                 swal("Added!", "The item has been added to the players inventory!", "success");
