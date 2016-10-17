@@ -2,7 +2,7 @@
 **Wurm Unlimited Admin** - is a web-based admin interface for Wurm Unlimited servers.
 
 # Demo
-To see this software in action visit our [Demo](http://wuademo.xplosivegames.com/)
+To see this software in action visit our [Demo](http://wua.xplosivegames.com/) and login with U: demo P: demo
 
 # Requirements / Dependencies
 The following programs and modules are required to run Wurm Unlimited Admin
@@ -11,11 +11,13 @@ The following programs and modules are required to run Wurm Unlimited Admin
 - Ability to change php.ini to allow the extension: php_pdo_sqlite.dll
 - Wurm Unlimited Server
 - [WUAHelper](https://github.com/PrabhdeepSingh/WUAHelper) - Used for RMI
-- WinRAR or 7zip to place files into the `server.jar`
+- [WuaMod](https://github.com/PrabhdeepSingh/WuaMod) - Used for adding custom methods to RMI
 
 # Installation
 #### Download
-- Download or clone from GitHub
+- Download the latest [release](https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/releases)
+- Extract mods.zip into your mods folder.
+- Extract website into your website directory where this tool will be hosted at.
 
 #### PHP configuration
 For this software to work you need to enable the php_pdo_sqlite extension as it will be needed to talk to Wurm Unlimited server database files. To enable the extension do the following
@@ -24,8 +26,7 @@ For this software to work you need to enable the php_pdo_sqlite extension as it 
 
 #### Application configuration
 This is a basic configuration / setup guide on getting this software up and running on your host.
-- Place files from this repo into your `www` folder
-- Navigate to the `includes` folder and open `config.php`
+- Navigate to the `includes` folder and open `config.php` with your favorite text editor
 - Change the `rootPath` to your website address
 
 #### Wurm Unlimited configuration
@@ -34,10 +35,6 @@ To interact with your WU server you need to enable RMI on it, and to do that you
   - Add the following line at the end of the file: `USE_INCOMING_RMI=true`
   - Save the file and start the server
 If everything goes smoothly you should see `RMI Registry listening on ........`
-
-- Go to your WUA folder
-  - Then `/includes/WUARequirements/server.jar/com/wurmonline/server/webinterface`
-  - Drag the `3` files into your into your `server.jar` in `com/wurmonline/server/webinterface/` folder
 
 # Usage
 
