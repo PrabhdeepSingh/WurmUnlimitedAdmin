@@ -16,8 +16,8 @@ The following programs and modules are required to run Wurm Unlimited Admin
 # Installation
 #### Download
 - Download the latest [release](https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/releases)
-- Extract mods.zip into your mods folder.
-- Extract website into your website directory where this tool will be hosted at.
+- Extract contents in the mods folder into your wurm server mods folder.
+- Extract contents in the website folder into your website directory where this tool will be hosted at.
 
 #### PHP configuration
 For this software to work you need to enable the php_pdo_sqlite extension as it will be needed to talk to Wurm Unlimited server database files. To enable the extension do the following
