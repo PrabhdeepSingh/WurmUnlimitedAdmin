@@ -1,9 +1,7 @@
 <?php
-namespace WurmUnlimitedAdmin;
-
-use PDO;
-use PDOException;
-use Exception;
+spl_autoload_register(function ($class_name) {
+    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+});
 
 class VILLAGE
 {
@@ -16,17 +14,14 @@ class VILLAGE
   {
   	try
   	{
-      require(dirname(__FILE__) . "/../includes/config.php");
-      require(dirname(__FILE__) . "/../includes/functions.php");
-      require(dirname(__FILE__) . "/class.Database.inc.php");
-      require(dirname(__FILE__) . "/class.RMI.inc.php");
-      require(dirname(__FILE__) . "/class.Logger.inc.php");
+      include(dirname(__FILE__) . "/../includes/config.php");
+      include(dirname(__FILE__) . "/../includes/functions.php");
 
-      $this->_Logger = new \WurmUnlimitedAdmin\LOGGER();
+      $this->_Logger = new LOGGER();
 
       if(!empty($dbConfig["wurmZonesDB"]))
       {
-  	  	$this->_zonesDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmZonesDB"]);
+  	  	$this->_zonesDB = new DATABASE($dbConfig["wurmZonesDB"]);
       }
       else
       {
@@ -35,7 +30,7 @@ class VILLAGE
 
       if(!empty($rmiConfig["ip"]) && !empty($rmiConfig["port"]) && !empty($rmiConfig["password"]))
       {
-        $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
+        $this->_serverRMI = new RMI();
       }
       else
       {
@@ -67,25 +62,28 @@ class VILLAGE
   }
 
   /**
-   * Gets all the players in the server
-   * @param string $playerID If supplied should get everything for only one player
+   * Gets all the villages in the server
+   * @param string $villageId If supplied should get everything for only one player
    */
-  function GetVillages($villageID = "")
+  function GetVillages($villageId = "")
   {
     try
     {
       $result = array();
 
-      $villageNames = array("No kingdom", "Jenn-Kellon", "Mol Rehan", "Horde of the Summoned", "freedom Isles");
+      $kingdomNames = array("No kingdom", "Jenn-Kellon", "Mol Rehan", "Horde of the Summoned", "Freedom Isles");
 
-      if(!empty($villageID))
+      if(!empty($villageId))
       {
-        $sql = $this->_zonesDB->QueryWithBinds("SELECT * FROM VILLAGES WHERE ID = ?", array($villageID));
+        $sql = $this->_zonesDB->QueryWithBinds("SELECT * FROM VILLAGES WHERE ID = ?", array($villageId));
         $village = $sql->fetch(PDO::FETCH_ASSOC);
         $village["CREATIONDATE"] = date("m/d/Y H:i:s", $village["CREATIONDATE"] / 1000);
-        $village["KINGDOMNAME"] = $villageNames[$village["KINGDOM"]];
+        $village["KINGDOMNAME"] = $kingdomNames[$village["KINGDOM"]];
         $village["UPKEEP"] = wurmConvertMoney($village["UPKEEP"]);
+        $village["image"] = "../../assets/images/avatars/avatar_".strtolower($village['NAME'][0])."_120.png";
         $village["success"] = true;
+        $village["history"] = $this->GetHistory($villageId);
+        $village["citizens"] = $this->GetCitizens($villageId);
 
         $result = $village;
 
@@ -96,7 +94,7 @@ class VILLAGE
         while($village = $sql->fetch(PDO::FETCH_ASSOC))
         {
           $village["CREATIONDATE"] = date("m/d/Y H:i:s", $village["CREATIONDATE"] / 1000);
-          $village["KINGDOMNAME"] = $villageNames[$village["KINGDOM"]];
+          $village["KINGDOMNAME"] = $kingdomNames[$village["KINGDOM"]];
           $village["UPKEEP"] = wurmConvertMoney($village["UPKEEP"]);
           array_push($result, $village);
         }
@@ -129,6 +127,83 @@ class VILLAGE
       
     }
 
+  }
+
+  /**
+   * Get history for a village
+   * @param integer $villageId Id for the village
+   */
+  function GetHistory($villageId = 0)
+  {
+    $result = array();
+
+    $sql = $this->_zonesDB->QueryWithBinds("SELECT * FROM HISTORY WHERE VILLAGEID = ? ORDER BY ID DESC", array($villageId));
+    while($history = $sql->fetch(PDO::FETCH_ASSOC))
+    {
+      $history["EVENTDATE"] = date("m/d/Y H:i:s", $history["EVENTDATE"] / 1000);
+      array_push($result, $history);
+    }
+
+    return $result;
+
+  }
+
+  /**
+   * Get all citizens for a village
+   * @param integer $villageId Id for the village
+   */
+  function GetCitizens($villageId = 0)
+  {
+    try
+    {
+      $result = array();
+
+      $citizenIds = array();
+
+      $sql = $this->_zonesDB->QueryWithBinds("SELECT WURMID FROM CITIZENS WHERE VILLAGEID = ?", array($villageId));
+
+      while($citizen = $sql->fetch(PDO::FETCH_ASSOC))
+      {
+        array_push($citizenIds, $citizen["WURMID"]);
+      }
+
+      $player = new PLAYER();
+
+      foreach ($citizenIds as $wurmId) {
+        $wurmPlayer = $player->GetPlayers($wurmId);
+
+        if (array_key_exists("WURMID", $wurmPlayer))
+        {
+          array_push($result, $wurmPlayer);
+        }
+        
+      }
+
+      return $result;
+    }
+    catch(PDOException $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      $this->_Logger->Log("Error", $ex->getMessage());
+      exit();
+
+    }
+    catch(Exception $ex)
+    {
+      echo json_encode(array(
+        "error" => array(
+          "message" => $ex->getMessage()
+        )
+      ));
+      $this->_Logger->Log("Error", $ex->getMessage());
+      exit();
+      
+    }
+    
   }
 
   function __destruct()

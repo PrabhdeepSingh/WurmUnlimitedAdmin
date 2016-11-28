@@ -8,7 +8,7 @@ if(!empty($_POST))
 {
 	require(dirname(__FILE__) . "/../../classes/class.Admin.inc.php");
 
-	$admin = new \WurmUnlimitedAdmin\ADMIN();
+	$admin = new ADMIN();
 
 	$create = $admin->Create($_POST);
 

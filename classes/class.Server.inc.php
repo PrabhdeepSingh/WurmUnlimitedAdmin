@@ -1,9 +1,7 @@
 <?php
-namespace WurmUnlimitedAdmin;
-
-use PDO;
-use PDOException;
-use Exception;
+spl_autoload_register(function ($class_name) {
+    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+});
 
 class SERVER
 {
@@ -17,13 +15,11 @@ class SERVER
   	{
       require(dirname(__FILE__) . "/../includes/config.php");
       require(dirname(__FILE__) . "/../includes/functions.php");
-      require(dirname(__FILE__) . "/class.Database.inc.php");
-      require(dirname(__FILE__) . "/class.RMI.inc.php");
 
       if(!empty($dbConfig["wurmLoginDB"]))
       {
-  	  	$this->_serverDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmLoginDB"]);
-        $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
+  	  	$this->_serverDB = new DATABASE($dbConfig["wurmLoginDB"]);
+        $this->_serverRMI = new RMI();
       }
       else
       {

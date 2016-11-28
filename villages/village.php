@@ -3,7 +3,7 @@ $response = array();
 
 require(dirname(__FILE__) . "/../classes/class.Village.inc.php");
 
-$village = new \WurmUnlimitedAdmin\VILLAGE();
+$village = new VILLAGE();
 
 $villageList = $village->GetVillages($_POST);
 

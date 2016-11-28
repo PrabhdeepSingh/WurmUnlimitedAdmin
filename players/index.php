@@ -55,7 +55,7 @@ require("../header.php");
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">' + parsePower(response[i].POWER) + '</span></li>';
+                    html += '<li><img src="' + response[i].image + '" alt="User Image" onclick="location.href = \'./view/?id=' + response[i].WURMID + '\'" style="cursor: pointer;"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">' + parsePower(response[i].POWER) + '</span></li>';
                   }
 
                   $('#userList').html(html);

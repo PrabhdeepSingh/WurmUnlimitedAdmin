@@ -1,9 +1,7 @@
 <?php
-namespace WurmUnlimitedAdmin;
-
-use PDO;
-use PDOException;
-use Exception;
+spl_autoload_register(function ($class_name) {
+    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+});
 
 class PLAYER
 {
@@ -17,18 +15,15 @@ class PLAYER
   {
   	try
   	{
-      require(dirname(__FILE__) . "/../includes/config.php");
-      require(dirname(__FILE__) . "/../includes/functions.php");
-      require(dirname(__FILE__) . "/class.Database.inc.php");
-      require(dirname(__FILE__) . "/class.RMI.inc.php");
-      require(dirname(__FILE__) . "/class.Logger.inc.php");
+      include(dirname(__FILE__) . "/../includes/config.php");
+      include(dirname(__FILE__) . "/../includes/functions.php");
 
-      $this->_Logger = new \WurmUnlimitedAdmin\LOGGER();
+      $this->_Logger = new LOGGER();
 
       if(!empty($dbConfig["wurmPlayersDB"]) && !empty($dbConfig["wurmItemsDB"]))
       {
-  	  	$this->_playerDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmPlayersDB"]);
-        $this->_itemDB = new \WurmUnlimitedAdmin\DATABASE($dbConfig["wurmItemsDB"]);
+  	  	$this->_playerDB = new DATABASE($dbConfig["wurmPlayersDB"]);
+        $this->_itemDB = new DATABASE($dbConfig["wurmItemsDB"]);
       }
       else
       {
@@ -37,7 +32,7 @@ class PLAYER
 
       if(!empty($rmiConfig["ip"]) && !empty($rmiConfig["port"]) && !empty($rmiConfig["password"]))
       {
-        $this->_serverRMI = new \WurmUnlimitedAdmin\RMI();
+        $this->_serverRMI = new RMI();
       }
       else
       {
@@ -82,12 +77,42 @@ class PLAYER
       {
         $sql = $this->_playerDB->QueryWithBinds("SELECT BANEXPIRY, BANNED, BANREASON, CREATIONDATE, CHEATED, CHEATREASON, EMAIL, INVENTORYID, IPADDRESS, KINGDOM, LASTLOGOUT, MONEY, MUTED, MUTETIMES, MUTEEXPIRY, MUTEREASON, NAME, PLAYINGTIME, POWER, WURMID FROM PLAYERS WHERE WURMID = ?", array($playerID));
         $user = $sql->fetch(PDO::FETCH_ASSOC);
-        $user["BANEXPIRY"] = ($user["BANEXPIRY"] != "" || $user["BANEXPIRY"] != "0") ? date("m/d/Y H:i:s", $user["BANEXPIRY"] / 1000) : $user["BANEXPIRY"];
-        $user["CREATIONDATE"] = date("m/d/Y H:i:s", $user["CREATIONDATE"] / 1000);
-        $user["LASTLOGOUT"] = date("m/d/Y H:i:s", $user["LASTLOGOUT"] / 1000);
-        $user["MUTEEXPIRY"] = ($user["MUTEEXPIRY"] != "" || $user["MUTEEXPIRY"] != "0") ? date("m/d/Y H:i:s", $user["MUTEEXPIRY"] / 1000) : $user["MUTEEXPIRY"];
-        $user["PLAYINGTIME"] = wurmSecondsToTime($user["PLAYINGTIME"]);
-        $user["MONEY"] = wurmConvertMoney($user["MONEY"]);
+
+        if ($user["BANEXPIRY"] != null)
+        {
+          $user["BANEXPIRY"] = ($user["BANEXPIRY"] != "" || $user["BANEXPIRY"] != "0") ? date("m/d/Y H:i:s", $user["BANEXPIRY"] / 1000) : $user["BANEXPIRY"];
+        }
+
+        if ($user["CREATIONDATE"] != null)
+        {
+          $user["CREATIONDATE"] = date("m/d/Y H:i:s", $user["CREATIONDATE"] / 1000);
+        }
+
+        if ($user["LASTLOGOUT"] != null)
+        {
+          $user["LASTLOGOUT"] = date("m/d/Y H:i:s", $user["LASTLOGOUT"] / 1000);
+        }
+
+        if ($user["MUTEEXPIRY"] != null)
+        {
+          $user["MUTEEXPIRY"] = ($user["MUTEEXPIRY"] != "" || $user["MUTEEXPIRY"] != "0") ? date("m/d/Y H:i:s", $user["MUTEEXPIRY"] / 1000) : $user["MUTEEXPIRY"];
+        }
+
+        if ($user["LASTLOGOUT"] != null)
+        {
+          $user["LASTLOGOUT"] = date("m/d/Y H:i:s", $user["LASTLOGOUT"] / 1000);
+        }
+
+        if ($user["PLAYINGTIME"] != null)
+        {
+          $user["PLAYINGTIME"] = wurmSecondsToTime($user["PLAYINGTIME"]);
+        }
+
+        if ($user["MONEY"] != null)
+        {
+          $user["MONEY"] = wurmConvertMoney($user["MONEY"]);
+        }
+
         $user["image"] = "../../assets/images/avatars/avatar_".strtolower($user['NAME'][0])."_120.png";
         $user["success"] = true;
 

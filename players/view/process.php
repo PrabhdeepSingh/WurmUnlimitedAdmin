@@ -8,7 +8,7 @@ if(!empty($_POST))
 {
   require_once("../../classes/class.Player.inc.php");
 
-	$player = new \WurmUnlimitedAdmin\PLAYER();
+	$player = new PLAYER();
 	$_POST["gmUserName"] = $_SESSION["userData"]["username"];
 	switch($_POST["doing"])
 	{

@@ -8,9 +8,12 @@ require("../header.php");
         <section class="content">
           <div class="row">
             <div class="col-xs-12">
-              <div class="box">
+              <div class="box" id="divVillageList">
                 <div class="box-header">
                   <h3 class="box-title">List of villages</h3>
+                  <div class="box-tools pull-right">
+                    <input placeholder="Search ..." class="form-control search" />
+                  </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -25,7 +28,7 @@ require("../header.php");
                         <th>Founded on</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="list">
                     </tbody>
                   </table>
                 </div>
@@ -57,22 +60,22 @@ require("../header.php");
               }
               else
               {
-                console.log(response);
+
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    html += '<tr><td>' + response[i].NAME + '</td><td>' + response[i].DEVISE + '</td><td>' + response[i].FOUNDER + '</td><td>' + response[i].MAYOR + '</td><td>' + response[i].CREATIONDATE + '</td></tr>';
+                    html += '<tr onclick="location.href = \'./view/?id=' + response[i].ID + '\'" style="cursor: pointer;"><td class="village-list-name">' + response[i].NAME + '</td><td>' + response[i].DEVISE + '</td><td clas="village-list-founder">' + response[i].FOUNDER + '</td><td class="village-list-mayor">' + response[i].MAYOR + '</td><td>' + response[i].CREATIONDATE + '</td></tr>';
                   }
 
                   $('#tblVillageList tbody').html(html);
-
-                }
-                else {
-
                 }
 
                 $('#tblVillageList').show();
                 $('#loader').hide();
+
+                new List('divVillageList', {
+                  valueNames: ['village-list-name', 'village-list-founder', 'village-list-mayor']
+                });
               }
 
             },

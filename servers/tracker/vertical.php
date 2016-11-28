@@ -1,7 +1,7 @@
 <?php
 require_once("../../classes/class.Server.inc.php");
 
-$server = new \WurmUnlimitedAdmin\SERVER();
+$server = new SERVER();
 $servers = $server->GetServers();
 $serverInfo = $server->GetTracker($servers[0]["SERVER"]);
 $gameStyle = ($serverInfo["PVP"] == 1) ? 'PVP' : 'PVE';

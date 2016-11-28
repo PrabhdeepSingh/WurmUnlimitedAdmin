@@ -8,7 +8,7 @@ if(!empty($_POST))
 {
   require_once("../../../classes/class.Admin.inc.php");
 
-	$admin = new \WurmUnlimitedAdmin\ADMIN();
+	$admin = new ADMIN();
 	switch($_POST["doing"])
 	{
 		case "loadUser":

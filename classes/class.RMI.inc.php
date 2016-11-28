@@ -1,7 +1,4 @@
 <?php
-namespace WurmUnlimitedAdmin;
-
-use Exception;
 
 class RMI
 {

@@ -9,7 +9,7 @@ if(!empty($_POST))
   require_once("../../classes/class.Server.inc.php");
   require_once("../../includes/config.php");
 
-	$server = new \WurmUnlimitedAdmin\SERVER();
+	$server = new SERVER();
 	switch($_POST["doing"])
 	{
 		case "changeGameMode":

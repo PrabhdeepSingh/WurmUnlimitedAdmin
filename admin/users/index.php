@@ -49,7 +49,7 @@ require("../../header.php");
               if(response.length > 0) {
                 var html = '';
                 for(var i = 0; i < response.length; i++) {
-                  html += '<li><img src="' + response[i].image + '" alt="User Image"><a class="users-list-name" href="./edit/?id=' + response[i].ID + '">' + response[i].USERNAME + '</a><span class="users-list-date">Level: ' + response[i].LEVEL + '</span></li>';
+                  html += '<li><img src="' + response[i].image + '" alt="User Image" onclick="location.href = \'./edit/?id=' + response[i].ID + '\'" style="cursor: pointer;"><a class="users-list-name" href="./edit/?id=' + response[i].ID + '">' + response[i].USERNAME + '</a><span class="users-list-date">Level: ' + response[i].LEVEL + '</span></li>';
                 }
 
                 $('#userList').html(html);

@@ -8,7 +8,7 @@ if(!empty($_POST))
 {
 	require(dirname(__FILE__) . "/../../classes/class.Account.inc.php");
 
-	$account = new \WurmUnlimitedAdmin\ACCOUNT();
+	$account = new ACCOUNT();
 
 	$loginCheck = $account->Login($_POST);
 

@@ -1,9 +1,7 @@
 <?php
-namespace WurmUnlimitedAdmin;
-
-use PDO;
-use PDOException;
-use Exception;
+spl_autoload_register(function ($class_name) {
+    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+});
 
 class ACCOUNT
 {
@@ -15,9 +13,8 @@ class ACCOUNT
   	try
   	{
 	  	require(dirname(__FILE__) . "/../includes/config.php");
-	  	require(dirname(__FILE__) . "/class.Database.inc.php");
 
-	  	$this->_database = new \WurmUnlimitedAdmin\DATABASE($dbConfig["appDB"]);
+	  	$this->_database = new DATABASE($dbConfig["appDB"]);
 	  }
 	  catch(PDOException $ex)
     {

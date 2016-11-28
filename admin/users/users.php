@@ -3,7 +3,7 @@ $response = array();
 
 require(dirname(__FILE__) . "/../../classes/class.Admin.inc.php");
 
-$admin = new \WurmUnlimitedAdmin\ADMIN();
+$admin = new ADMIN();
 
 $userList = $admin->GetUsers($_POST);
 

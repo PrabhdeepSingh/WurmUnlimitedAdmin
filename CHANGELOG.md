@@ -1,4 +1,11 @@
 # CHANGELOG
+## 2.0.0-Alpha
+- Fixed: Confirm password field not clearing (https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/issues/4).
+- Added: Clickable images for players (https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/issues/3).
+- Added: Added the ability to view villages like viewing players (https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/issues/5).
+- Removed: Namespace on classes.
+- Added: Auto load on each class.
+- Removed: All javascript console.log(response).
 
 ## 1.0.1-Alpha
 - Core/Player: Updated methods.

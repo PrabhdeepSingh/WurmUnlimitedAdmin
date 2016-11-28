@@ -1,8 +1,7 @@
 <?php
-namespace WurmUnlimitedAdmin;
-use PDO;
-use PDOException;
-use Exception;
+spl_autoload_register(function ($class_name) {
+    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+});
 
 class DATABASE
 {

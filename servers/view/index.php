@@ -410,7 +410,6 @@ require("../../header.php");
               data: {doing: "changeGameMode", newGameMode: newGameMode, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -475,7 +474,6 @@ require("../../header.php");
               data: {doing: "changeGameCluster", newGameCluster: newGameCluster, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -540,7 +538,6 @@ require("../../header.php");
               data: {doing: "changeHomeServer", homeServer: homeServer, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -605,7 +602,6 @@ require("../../header.php");
               data: {doing: "changeHomeServerKingdom", homeServerKingdom: homeServerKingdom, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -681,7 +677,6 @@ require("../../header.php");
               data: {doing: "changeWurmTIme", newWurmTime: inputValue, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':
@@ -735,7 +730,6 @@ require("../../header.php");
               data: {doing: "changePlayerLimit", newPlayerLimit: inputValue, serverID: serverID},
               dataType: 'json',
               success: function(response) {
-                console.log(response);
                 if(response.error) {
                   switch(response.error.message) {
                     case 'Missing database':

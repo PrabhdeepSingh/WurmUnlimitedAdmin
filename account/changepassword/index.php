@@ -79,6 +79,7 @@ require("../../header.php");
                     swal("Changed!", "Your password was successfully changed!", "success");
                     $('#txtCurrentPassowrd').val('');
                     $('#txtPassword').val('');
+                    $('#txtConfirmPassword').val('');
                   }
                   else {
                     switch(response.message) {

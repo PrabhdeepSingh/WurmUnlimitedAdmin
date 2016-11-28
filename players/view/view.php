@@ -3,7 +3,7 @@ $response = array();
 
 require(dirname(__FILE__) . "/../../classes/class.Player.inc.php");
 
-$player = new \WurmUnlimitedAdmin\PLAYER();
+$player = new PLAYER();
 
 $playerList = $player->GetPlayers($_POST["wurmID"]);
 
