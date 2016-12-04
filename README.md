@@ -2,7 +2,7 @@
 **Wurm Unlimited Admin** - is a web-based admin interface for Wurm Unlimited servers.
 
 # Screenshots
-[Screenshot](http://imgur.com/a/yTbLe)
+[App Screenshots](http://imgur.com/a/yTbLe)
 
 # Requirements / Dependencies
 The following programs and modules are required to run Wurm Unlimited Admin
