@@ -124,6 +124,12 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
                 <span> Players</span>
               </a>
             </li>
+            <li class="<?php echo $page == 'ticket' ? 'active' : ''; ?>">
+              <a href="<?php echo $application["rootPath"]; ?>tickets/">
+                <i class="fa fa-ticket"></i>
+                <span> Tickets</span>
+              </a>
+            </li>
             <li class="<?php echo $page == 'village' ? 'active' : ''; ?>">
               <a href="<?php echo $application["rootPath"]; ?>villages/">
                 <i class="fa fa-home"></i>

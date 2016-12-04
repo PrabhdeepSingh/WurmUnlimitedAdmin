@@ -8,6 +8,10 @@ class SERVER
 
 	private $_serverDB;
   private $_serverRMI;
+  private $_ticketCategoryCode = array("Unknown", "Account security problems", "Boat stuck", "Bug reports", "Forum access", "Griefing / harassment", "Lost horse", "Password resets", "Payment issues", "Stuck", "Other");
+  private $_ticketStateCode = array("New", "On Hold", "Resolved", "Responded", "Cancelled", "Watching", "Taken", "Forwarded", "Reopened");
+  private $_ticketLevelCode = array("", "CM", "GM", "ARCH", "DEV");
+
 
   function __construct()
   {
@@ -101,6 +105,13 @@ class SERVER
       exit();
     }
 
+  }
+
+  function GetServerName($serverId = 0)
+  {
+    $sql = $this->_serverDB->QueryWithBinds("SELECT NAME FROM SERVERS WHERE SERVER = ?", array($serverId));
+    return $sql->fetch(PDO::FETCH_ASSOC);
+  
   }
 
   function GetPlayerCount()
@@ -450,6 +461,73 @@ class SERVER
     else
     {
       $result = array("success" => false);
+    }
+
+    return $result;
+
+  }
+
+  function GetTickets($ticketId = 0)
+  {
+    $result = array();
+
+    if(!empty($ticketId))
+    {
+      $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM TICKETS WHERE TICKETID = ?", array($ticketId));
+      $ticket = $sql->fetch(PDO::FETCH_ASSOC);
+
+      $ticket["SERVERNAME"] = $this->GetServerName($ticket["SERVERID"])["NAME"];
+      $ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
+      $ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
+      $ticket["LEVELNAME"] = $this->_ticketLevelCode[$ticket["LEVELCODE"]];
+
+      $player = new PLAYER();
+
+      $ticket["PLAYER"] = $player->GetPlayers($ticket["PLAYERWURMID"]);
+
+      $ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
+
+      if ($ticket["CLOSEDDATE"] > 0)
+      {
+        $ticket["CLOSEDDATE"] = date("m/d/Y H:i:s", $ticket["CLOSEDDATE"] / 1000);
+      }
+      else
+      {
+        $ticket["CLOSEDDATE"] = "Never";
+      }
+
+      $ticket["ACTIVITY"] = $this->GetTicketAction($ticketId);
+
+      $ticket["success"] = true;
+
+      $result = $ticket;
+
+    }
+    else
+    {
+      $sql = $this->_serverDB->QueryWithOutBinds("SELECT PLAYERNAME, CATEGORYCODE, STATECODE, TICKETDATE, TICKETID FROM TICKETS ORDER BY TICKETDATE DESC");
+      while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
+      {
+        $ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
+        $ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
+        $ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
+        array_push($result, $ticket);
+      }
+
+    }
+
+    return $result;
+  }
+
+  function GetTicketAction($ticketId = 0)
+  {
+    $result = array();
+
+    $sql = $this->_serverDB->QueryWithBinds("SELECT BYWHOM, NOTE, ACTIONDATE, ACTIONTYPE FROM TICKETACTIONS WHERE TICKETID = ? ORDER BY ACTIONDATE DESC", array($ticketId));
+    while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
+    {
+      $ticket["ACTIONDATE"] = date("m/d/Y H:i:s", $ticket["ACTIONDATE"] / 1000);
+      array_push($result, $ticket);
     }
 
     return $result;
