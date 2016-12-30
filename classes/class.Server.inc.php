@@ -151,17 +151,7 @@ class SERVER
 
   function GetUpTime()
   {
-    $result = array();
-    $output = $this->_serverRMI->Execute("uptime");
-
-    if($output["success"] == false)
-    {
-      $result = $output;
-    }
-    else
-    {
-      $result = $output[0];
-    }
+    $result = $this->_serverRMI->Execute("uptime");
 
     return $result;
 
@@ -169,17 +159,7 @@ class SERVER
 
   function GetWurmTime()
   {
-    $result = array();
-    $output = $this->_serverRMI->Execute("wurmTime");
-
-    if($output["success"] == false)
-    {
-      $result = $output;
-    }
-    else
-    {
-      $result = $output[0];
-    }
+    $result = $this->_serverRMI->Execute("wurmTime");
 
     return $result;
 
