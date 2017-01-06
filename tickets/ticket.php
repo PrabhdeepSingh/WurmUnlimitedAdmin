@@ -5,7 +5,7 @@ require(dirname(__FILE__) . "/../classes/class.Server.inc.php");
 
 $server = new SERVER();
 
-$response = $server->GetTickets($_POST);
+$response = $server->GetTicketsByServerId($_POST["serverId"]);
 
 echo json_encode($response);
 ?>

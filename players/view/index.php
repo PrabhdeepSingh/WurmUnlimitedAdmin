@@ -2097,6 +2097,7 @@ require("../../header.php");
                   swal("Missing Databases", "Couldn't find the player and item database. Please double check your config file.", "error");
                   break;
                 default:
+                  console.log(response);
                   swal("Error", response.error.message, "error");
                   break;
               }

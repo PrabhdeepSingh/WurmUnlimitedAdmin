@@ -32,12 +32,13 @@ require("../header.php");
       
       <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
 
+      <input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
       <script>
         $(document).ready(function() {
           $.ajax({
             type: 'POST',
             url: 'player.php',
-            data: {},
+            data: {serverId: $('#serverId').val()},
             dataType: 'json',
             success: function(response) {
               if(response.error) {

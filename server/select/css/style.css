@@ -1,0 +1,75 @@
+/*!
+ * OneApp 1.0.0 (https://github.com/PrabhdeepSingh/OneApp)
+ * Copyright 2016 Prabhdeep Singh.
+ * Licensed under the MIT license
+ */
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+	text-decoration: none;
+}
+
+#appList {
+	margin-top: 5%;
+}
+
+/*
+ * Component: Box
+ * --------------
+ */
+.box {
+	position: relative;
+	border-radius: 3px;
+	margin-bottom: 20px;
+	width: 100%;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	height: 8em;
+	font-size: 1.5em;
+}
+
+.box.box-center {
+	text-align: center;
+	vertical-align: middle;
+	line-height: 7em;
+}
+
+.box-body:before,
+.box-body:after {
+	content: " ";
+	display: table;
+}
+
+.box-body:after{
+	clear: both;
+}
+
+.box-body {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	padding: 10px;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	#appList {
+		margin-top: 10%;
+	}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	#appList {
+		margin-top: 15%;
+	}
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	#appList {
+		margin-top: 20%;
+	}
+}

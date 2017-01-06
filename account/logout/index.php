@@ -1,7 +1,7 @@
 <?php
 session_start();
 unset($_SESSION['userData']);
-unset($_SESSION['accountLoggedinTime']);
+unset($_SESSION['serverList']);
 
 header( 'Location: ../login/' );
 ?>

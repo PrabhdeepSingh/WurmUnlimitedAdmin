@@ -24,6 +24,8 @@ if(isLoggedin())
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/style.min.css">
     <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/skinstyle.min.css">
 
+    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.css" />
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -61,6 +63,7 @@ if(isLoggedin())
 
     <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
     <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#formLogin').on('submit', function(e) {
@@ -89,12 +92,18 @@ if(isLoggedin())
                   }
                 }
                 else if(response.success) {
-                  if($('#serverRef').val() != "") {
-                    window.location.href = $('#serverRef').val();
+                  if(response.message != null) {
+                    window.location.href = '../../server/select/';
                   }
                   else {
-                    window.location.href = '../../';
+                    if($('#serverRef').val() != "") {
+                      window.location.href = $('#serverRef').val();
+                    }
+                    else {
+                      window.location.href = '../../';
+                    }
                   }
+                  
                 }
                 else {
                   switch(response.message) {
@@ -105,6 +114,7 @@ if(isLoggedin())
                       $('#response').html('<div class="alert alert-danger" role="alert"> The username or password is incorrect. </div>');
                       break;
                     default:
+                      console.log(response);
                       $('#response').html('<div class="alert alert-danger" role="alert"> Something went wrong </div>');
                       break;
                   }

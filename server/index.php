@@ -1,6 +1,6 @@
 <?php
 $page = "server";
-require("../../header.php");
+require("../header.php");
 ?>
   <div class="content-wrapper">
     <section class="content-header">
@@ -12,41 +12,47 @@ require("../../header.php");
       <div class="row">
         <div class="col-md-3">
 
-          <div class="box min-height box-danger">
-            <div class="box-body box-profile" id="div-1" style="display: none;">
+          <div class="box min-height box-danger" id="boxServer">
+            <div class="box-body box-profile">
               <div class="profile-user-img" style="border: 0;"><i class="fa fa-server fa-5x"></i></div>
 
-              <h3 class="profile-username text-center" id="serverName"></h3>
-              <p class="text-muted text-center" id="playerCount"></p>
+              <h3 class="profile-username text-center" id="serverName"><?php echo $_SESSION["userData"]["server"]["name"]; ?></h3>
 
               <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>Online players</b> <a class="pull-right" id="playerCount"></a>
+                </li>
                 <li class="list-group-item">
                   <b>Uptime</b> <a class="pull-right" id="serverUptime"></a>
                 </li>
               </ul>
               <button class="btn btn-danger btn-block" id="btnShutDown">Shutdown Server</button>
             </div>
-            <div class="loading" id="loader-0"></div>
+            <div class="overlay">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
 
           </div>
 
-          <div class="box min-height box-danger">
+          <div class="box min-height box-danger" id="boxBroadcastMessage">
             <div class="box-header with-border">
               <h3 class="box-title">Broadcast message</h3>
             </div>
-            <div class="box-body" id="div-2" style="display: none;">
+            <div class="box-body">
               <textarea id="txtBroadcastMessage" class="form-control"></textarea><br />
               <button id="btnBroadcastMessage" class="btn btn-primary form-control">Send broadcast</button>
             </div>
-            <div class="loading" id="loader-1"></div>
+            <div class="overlay">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
 
           </div>
 
         </div>
 
         <div class="col-md-9">
-          <div class="box min-height box-danger">
-            <div class="box-body" id="div-3" style="display: none;">
+          <div class="box min-height box-danger" id="boxServerInfo">
+            <div class="box-body">
               <div class="row">
                 <div class="col-sm-9 border-right">
                   <div class="description-block">
@@ -127,8 +133,8 @@ require("../../header.php");
               </div>
 
             </div>
-            <div class="box-body" id="loader-2">
-              <div class="loading"></div>
+            <div class="overlay">
+              <i class="fa fa-refresh fa-spin"></i>
             </div>
           </div>
 
@@ -166,19 +172,52 @@ require("../../header.php");
     </div>
   </div>
 
-  <input type="hidden" id="txtServerID" value="<?php echo $_GET['id']; ?>" />
-
+  <input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
   <script>
     $(document).ready(function() {
-      var serverID = $('#txtServerID').val();
       populate();
 
       function populate() {
         $.ajax({
           type: 'POST',
           url: 'view.php',
-          data: {serverID: serverID},
+          data: {'getDataFor': 'playerCount', serverId: $('#serverId').val()},
           dataType: 'json',
+          async: true,
+          success: function(response) {
+            /**
+             * Left col
+             */
+            $('#playerCount').html((response.playerCount.success == false) ? 'Offline' : response.playerCount);
+            $('#serverUptime').html((response.uptime.success == false) ? 'Offline' : response.uptime);
+
+            if(response.uptime.success == false) {
+              $('#btnShutDown').prop('disabled', true);
+              $('#btnBroadcastMessage').prop('disabled', true);
+              $('#btnChangeGameMode').prop('disabled', false);
+              $('#btnChangeCluster').prop('disabled', false);
+              $('#btnChangeHomeServer').prop('disabled', false);
+              $('#btnChangeServerKingdom').prop('disabled', false);
+              $('#btnChangeWurmTime').prop('disabled', false);
+              $('#btnChangePlayerLimit').prop('disabled', false);
+            }
+
+            $('#boxServer .overlay').remove();
+            $('#boxBroadcastMessage .overlay').remove();
+
+          },
+          error: function(error) {
+            console.log(error);
+            swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
+          }
+        });
+
+        $.ajax({
+          type: 'POST',
+          url: 'view.php',
+          data: {'getDataFor': 'serverInfo', serverId: $('#serverId').val()},
+          dataType: 'json',
+          async: true,
           success: function(response) {
             if(response.error) {
               switch(response.error.message) {
@@ -191,24 +230,6 @@ require("../../header.php");
               }
             }
             else if(response.success) {
-              /**
-               * Left col
-               */
-              $('#serverName').html(response.NAME);
-              $('#playerCount').html((response.COUNT.success == false) ? 'Offline' : response.COUNT + '/' + response.MAXPLAYERS);
-              $('#serverUptime').html((response.UPTIME.success == false) ? 'Offline' : response.UPTIME);
-
-              if(response.COUNT.success == false) {
-                $('#btnShutDown').prop('disabled', true);
-                $('#btnBroadcastMessage').prop('disabled', true);
-                $('#btnChangeGameMode').prop('disabled', false);
-                $('#btnChangeCluster').prop('disabled', false);
-                $('#btnChangeHomeServer').prop('disabled', false);
-                $('#btnChangeServerKingdom').prop('disabled', false);
-                $('#btnChangeWurmTime').prop('disabled', false);
-                $('#btnChangePlayerLimit').prop('disabled', false);
-              }
-
               /**
                * Right col
                */
@@ -263,23 +284,12 @@ require("../../header.php");
               swal("Error!", "Could not load this server", "error");
             }
 
-            $('#div-1').show();
-            $('#div-2').show();
-            $('#div-3').show();
-            $('#loader-0').hide();
-            $('#loader-1').hide();
-            $('#loader-2').hide();
+            $('#boxServerInfo .overlay').remove();
 
           },
           error: function(error) {
             console.log(error);
             swal("Failed", "It looks like we couldn't proccess your request at this time. Please try again later.", "error");
-            $('#div-1').show();
-            $('#div-2').show();
-            $('#div-3').show();
-            $('#loader-0').hide();
-            $('#loader-1').hide();
-            $('#loader-2').hide();
           }
         });
 
@@ -763,5 +773,5 @@ require("../../header.php");
   </script>
 
 <?php
-require("../../footer.php");
+require("../footer.php");
 ?>

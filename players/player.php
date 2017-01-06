@@ -5,10 +5,8 @@ include(dirname(__FILE__) . "/../classes/class.Player.inc.php");
 
 $player = new PLAYER();
 
-$playerList = $player->GetPlayers($_POST);
+$playerList = $player->GetPlayers($_POST["serverId"]);
 
 $response = $playerList;
 
-
 echo json_encode($response);
-?>

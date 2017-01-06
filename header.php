@@ -20,10 +20,14 @@ else
   die();
 }
 
-if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
-  unset($_SESSION['userData']);
-  unset($_SESSION['accountLoggedinTime']);
-  header("Location: ".$application["rootPath"]."account/login/?ref=//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."");
+if(isset($_GET["server"]))
+{
+  $_SESSION["userData"]["server"] = $_SESSION["serverList"][$_GET["server"]];
+}
+
+if(!isset($_SESSION["userData"]["server"]))
+{
+  header("Location: ".$application["rootPath"]."server/select/");
   die();
 }
 ?>
@@ -66,6 +70,11 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
           </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li style="font-size: 1.5em;padding: 10px 10px 0 0;"><?php echo $_SESSION["userData"]["server"]["name"]; ?></li>
+            </ul>
+          </div>
         </nav>
       </header>
       <aside class="main-sidebar">
@@ -112,9 +121,9 @@ if(time() - $_SESSION['accountLoggedinTime'] > 3600) {
               </ul>
             </li>
             <li class="<?php echo $page == 'server' ? 'active' : ''; ?>">
-              <a href="<?php echo $application["rootPath"]; ?>servers/">
+              <a href="<?php echo $application["rootPath"]; ?>server/">
                 <i class="fa fa-server"></i>
-                <span> Servers</span>
+                <span> Server</span>
               </a>
             </li>
             <?php } ?>

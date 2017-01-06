@@ -1,16 +1,21 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
 class RMI
 {
-
-	private $_rmiConfig;
+  private $_wuaClientLocation;
+	private $_server;
 
   function __construct()
   {
   	try
   	{
       require(dirname(__FILE__) . "/../includes/config.php");
-  	  $this->_rmiConfig = $rmiConfig;
+      $this->_wuaClientLocation = $application["wuaClientLocation"];
+      $this->_server = $servers[$_SESSION["userData"]["server"]["indexInArray"]];
+      
 	  }
     catch(Exception $ex)
     {
@@ -28,9 +33,9 @@ class RMI
   {
     $result = array();
 
-    if(!empty($this->_rmiConfig["ip"]) && $this->_rmiConfig["ip"] != "server-ip" && !empty($this->_rmiConfig["ip"]))
+    if(!empty($this->_server["ip"]) && !empty($this->_server["port"]) && !empty($this->_server["password"]))
     {
-      exec("java -jar \"" . $this->_rmiConfig["wuaClientLocation"] . "\" \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"isRunning\" \"\" 2>&1", $output);
+      exec("java -jar \"" . $this->_wuaClientLocation . "\" \"" . $this->_server["ip"] . "\" \"" . $this->_server["port"] . "\" \"" . $this->_server["password"] . "\" \"isRunning\" \"\" 2>&1", $output);
 
       if($output[0] == true && count($output) == 1)
       {
@@ -59,7 +64,7 @@ class RMI
 
     if($isOnline["success"] == true)
     {
-      exec("java -jar \"" . $this->_rmiConfig["wuaClientLocation"] . "\" \"" . $this->_rmiConfig["ip"] . "\" \"" . $this->_rmiConfig["port"] . "\" \"" . $this->_rmiConfig["password"] . "\" \"" . $method . "\" \"" . $stringParams . "\" 2>&1", $output);
+      exec("java -jar \"" . $this->_wuaClientLocation . "\" \"" . $this->_server["ip"] . "\" \"" . $this->_server["port"] . "\" \"" . $this->_server["password"] . "\" \"" . $method . "\" \"" . $stringParams . "\" 2>&1", $output);
 
       $result = $output;
 
@@ -75,8 +80,7 @@ class RMI
 
   function __destruct()
   {
-  	$this->_rmiConfig = null;
+  	$this->_server = null;
   }
 
 }
-?>

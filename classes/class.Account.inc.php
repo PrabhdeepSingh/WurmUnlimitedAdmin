@@ -14,7 +14,7 @@ class ACCOUNT
   	{
 	  	require(dirname(__FILE__) . "/../includes/config.php");
 
-	  	$this->_database = new DATABASE($dbConfig["appDB"]);
+	  	$this->_database = new DATABASE($application["appDB"]);
 	  }
 	  catch(PDOException $ex)
     {
@@ -45,63 +45,41 @@ class ACCOUNT
    */
   function Login($params = array())
   {
-    try
-    {
-    	$result = array();
+  	$result = array();
 
-    	if(!empty($params))
-    	{
-        $username = strtolower($params["username"]);
+  	if(!empty($params))
+  	{
+      $username = strtolower($params["username"]);
 
-    		$sql = $this->_database->QueryWithBinds("SELECT * FROM accounts WHERE USERNAME = ?", array($username));
-        $getData = $sql->fetch(PDO::FETCH_ASSOC);
+  		$sql = $this->_database->QueryWithBinds("SELECT * FROM accounts WHERE USERNAME = ?", array($username));
+      $getData = $sql->fetch(PDO::FETCH_ASSOC);
 
-    		if($getData != false)
-    		{
-    			$hashedPassword = password_verify($params["password"], $getData["PASSWORD"]);
+  		if($getData != false)
+  		{
+  			$hashedPassword = password_verify($params["password"], $getData["PASSWORD"]);
 
-    			if($hashedPassword)
-    			{
-    				$result = array("success" => true, "ID" => $getData["ID"], "level" => $getData["LEVEL"], "user_friendly_level" => $this->ParseLevel($getData["LEVEL"]));
-    			}
-    			else
-    			{
-    				$result = array("success" => false, "message" => "Incorrect");
-    			}
+  			if($hashedPassword)
+  			{
+  				$result = array("success" => true, "ID" => $getData["ID"], "level" => $getData["LEVEL"], "user_friendly_level" => $this->ParseLevel($getData["LEVEL"]));
+  			}
+  			else
+  			{
+  				$result = array("success" => false, "message" => "Incorrect");
+  			}
 
-    		}
-    		else
-    		{
-    			$result = array("success" => false, "message" => "Invalid");
-    		}
+  		}
+  		else
+  		{
+  			$result = array("success" => false, "message" => "Invalid");
+  		}
 
-    	}
-    	else
-    	{
-    		$result = array("success" => false, "message" => "Empty");
-    	}
+  	}
+  	else
+  	{
+  		$result = array("success" => false, "message" => "Empty");
+  	}
 
-    	return $result;
-
-    }
-    catch(PDOException $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
-    catch(Exception $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
+  	return $result;
 
   }
 
@@ -113,72 +91,50 @@ class ACCOUNT
    */
   function ChangePassword($params = array())
   {
-    try
+    $result = array();
+
+    if(!empty($params))
     {
-      $result = array();
+      $sql = $this->_database->QueryWithBinds("SELECT PASSWORD FROM accounts WHERE ID = ?", array($params["accountID"]));
+      $getData = $sql->fetch(PDO::FETCH_ASSOC);
 
-      if(!empty($params))
+      if($getData != false)
       {
-        $sql = $this->_database->QueryWithBinds("SELECT PASSWORD FROM accounts WHERE ID = ?", array($params["accountID"]));
-        $getData = $sql->fetch(PDO::FETCH_ASSOC);
+        $hashedPassword = password_verify($params["currentPassword"], $getData["PASSWORD"]);
 
-        if($getData != false)
+        if($hashedPassword)
         {
-          $hashedPassword = password_verify($params["currentPassword"], $getData["PASSWORD"]);
-
-          if($hashedPassword)
+          $options = ['cost' => 12];
+          $newHashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
+          $sql = $this->_database->QueryWithBinds("UPDATE accounts SET PASSWORD = ? WHERE ID = ?", array($newHashedPassword, $params["accountID"]));
+          if($sql->rowCount() > 0)
           {
-            $options = ['cost' => 12];
-            $newHashedPassword = password_hash($params["password"], PASSWORD_BCRYPT, $options);
-            $sql = $this->_database->QueryWithBinds("UPDATE accounts SET PASSWORD = ? WHERE ID = ?", array($newHashedPassword, $params["accountID"]));
-            if($sql->rowCount() > 0)
-            {
-              $result = array("success" => true);
-            }
-            else
-            {
-              $result = array("success" => false);
-            }
-
+            $result = array("success" => true);
           }
           else
           {
-            $result = array("success" => false, "message" => "Incorrect");
+            $result = array("success" => false);
           }
 
         }
         else
         {
-          $result = array("success" => false, "message" => "Invalid");
+          $result = array("success" => false, "message" => "Incorrect");
         }
 
       }
       else
       {
-        $result = array("success" => false, "message" => "Empty");
+        $result = array("success" => false, "message" => "Invalid");
       }
 
-      return $result;
+    }
+    else
+    {
+      $result = array("success" => false, "message" => "Empty");
+    }
 
-    }
-    catch(PDOException $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
-    catch(Exception $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
+    return $result;
 
   }
 
@@ -206,6 +162,7 @@ class ACCOUNT
         return "Unknown Power Level";
       break;
     }
+
   }
 
   function __destruct()
@@ -214,4 +171,3 @@ class ACCOUNT
   }
 
 }
-?>

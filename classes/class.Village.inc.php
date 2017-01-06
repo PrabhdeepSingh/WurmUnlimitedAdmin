@@ -3,6 +3,10 @@ spl_autoload_register(function ($class_name) {
     include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
 });
 
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
 class VILLAGE
 {
 
@@ -19,22 +23,13 @@ class VILLAGE
 
       $this->_Logger = new LOGGER();
 
-      if(!empty($dbConfig["wurmZonesDB"]))
+      if(!empty($servers[$_SESSION["userData"]["server"]["indexInArray"]]["absolutePath"]))
       {
-  	  	$this->_zonesDB = new DATABASE($dbConfig["wurmZonesDB"]);
+  	  	$this->_zonesDB = new DATABASE($servers[$_SESSION["userData"]["server"]["indexInArray"]]["absolutePath"] . "/sqlite/wurmzones.db");
       }
       else
       {
         throw new PDOException("Missing database configuration");
-      }
-
-      if(!empty($rmiConfig["ip"]) && !empty($rmiConfig["port"]) && !empty($rmiConfig["password"]))
-      {
-        $this->_serverRMI = new RMI();
-      }
-      else
-      {
-        throw new Exception("Missing RMI configuration");
       }
 
 	  }
@@ -67,65 +62,39 @@ class VILLAGE
    */
   function GetVillages($villageId = "")
   {
-    try
+    $result = array();
+
+    $kingdomNames = array("No kingdom", "Jenn-Kellon", "Mol Rehan", "Horde of the Summoned", "Freedom Isles");
+
+    if(!empty($villageId))
     {
-      $result = array();
+      $sql = $this->_zonesDB->QueryWithBinds("SELECT * FROM VILLAGES WHERE ID = ?", array($villageId));
+      $village = $sql->fetch(PDO::FETCH_ASSOC);
+      $village["CREATIONDATE"] = date("m/d/Y H:i:s", $village["CREATIONDATE"] / 1000);
+      $village["KINGDOMNAME"] = $kingdomNames[$village["KINGDOM"]];
+      $village["UPKEEP"] = wurmConvertMoney($village["UPKEEP"]);
+      $village["image"] = "../../assets/images/avatars/avatar_".strtolower($village['NAME'][0])."_120.png";
+      $village["success"] = true;
+      $village["history"] = $this->GetHistory($villageId);
+      $village["citizens"] = $this->GetCitizens($villageId);
 
-      $kingdomNames = array("No kingdom", "Jenn-Kellon", "Mol Rehan", "Horde of the Summoned", "Freedom Isles");
+      $result = $village;
 
-      if(!empty($villageId))
+    }
+    else
+    {
+      $sql = $this->_zonesDB->QueryWithOutBinds("SELECT * FROM VILLAGES ORDER BY NAME");
+      while($village = $sql->fetch(PDO::FETCH_ASSOC))
       {
-        $sql = $this->_zonesDB->QueryWithBinds("SELECT * FROM VILLAGES WHERE ID = ?", array($villageId));
-        $village = $sql->fetch(PDO::FETCH_ASSOC);
         $village["CREATIONDATE"] = date("m/d/Y H:i:s", $village["CREATIONDATE"] / 1000);
         $village["KINGDOMNAME"] = $kingdomNames[$village["KINGDOM"]];
         $village["UPKEEP"] = wurmConvertMoney($village["UPKEEP"]);
-        $village["image"] = "../../assets/images/avatars/avatar_".strtolower($village['NAME'][0])."_120.png";
-        $village["success"] = true;
-        $village["history"] = $this->GetHistory($villageId);
-        $village["citizens"] = $this->GetCitizens($villageId);
-
-        $result = $village;
-
-      }
-      else
-      {
-        $sql = $this->_zonesDB->QueryWithOutBinds("SELECT * FROM VILLAGES ORDER BY NAME");
-        while($village = $sql->fetch(PDO::FETCH_ASSOC))
-        {
-          $village["CREATIONDATE"] = date("m/d/Y H:i:s", $village["CREATIONDATE"] / 1000);
-          $village["KINGDOMNAME"] = $kingdomNames[$village["KINGDOM"]];
-          $village["UPKEEP"] = wurmConvertMoney($village["UPKEEP"]);
-          array_push($result, $village);
-        }
-
+        array_push($result, $village);
       }
 
-      return $result;
+    }
 
-    }
-    catch(PDOException $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      $this->_Logger->Log("Error", $ex->getMessage());
-      exit();
-
-    }
-    catch(Exception $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      $this->_Logger->Log("Error", $ex->getMessage());
-      exit();
-      
-    }
+    return $result;
 
   }
 
@@ -154,55 +123,30 @@ class VILLAGE
    */
   function GetCitizens($villageId = 0)
   {
-    try
+    $result = array();
+
+    $citizenIds = array();
+
+    $sql = $this->_zonesDB->QueryWithBinds("SELECT WURMID FROM CITIZENS WHERE VILLAGEID = ?", array($villageId));
+
+    while($citizen = $sql->fetch(PDO::FETCH_ASSOC))
     {
-      $result = array();
+      array_push($citizenIds, $citizen["WURMID"]);
+    }
 
-      $citizenIds = array();
+    $player = new PLAYER();
 
-      $sql = $this->_zonesDB->QueryWithBinds("SELECT WURMID FROM CITIZENS WHERE VILLAGEID = ?", array($villageId));
+    foreach ($citizenIds as $wurmId) {
+      $wurmPlayer = $player->GetPlayers($wurmId);
 
-      while($citizen = $sql->fetch(PDO::FETCH_ASSOC))
+      if (array_key_exists("WURMID", $wurmPlayer))
       {
-        array_push($citizenIds, $citizen["WURMID"]);
+        array_push($result, $wurmPlayer);
       }
-
-      $player = new PLAYER();
-
-      foreach ($citizenIds as $wurmId) {
-        $wurmPlayer = $player->GetPlayers($wurmId);
-
-        if (array_key_exists("WURMID", $wurmPlayer))
-        {
-          array_push($result, $wurmPlayer);
-        }
-        
-      }
-
-      return $result;
-    }
-    catch(PDOException $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      $this->_Logger->Log("Error", $ex->getMessage());
-      exit();
-
-    }
-    catch(Exception $ex)
-    {
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      $this->_Logger->Log("Error", $ex->getMessage());
-      exit();
       
     }
+
+    return $result;
     
   }
 

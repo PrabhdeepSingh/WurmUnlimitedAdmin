@@ -1,4 +1,11 @@
 # CHANGELOG
+## 1.0.0
+- Added: Ability to view support tickets (357c418a0200a79c2fb57b7bc63f8c23ce517668).
+- Added: Missing in-game items.
+- Added: Mulitple server support.
+- Fixed: Added functionality to the dashboard.
+- Cleanup: Code cleanup.
+
 ## 2.0.0-Alpha
 - Fixed: Confirm password field not clearing (https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/issues/4).
 - Added: Clickable images for players (https://github.com/PrabhdeepSingh/WurmUnlimitedAdmin/issues/3).

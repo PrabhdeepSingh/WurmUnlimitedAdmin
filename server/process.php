@@ -6,8 +6,8 @@ $response = array();
 // Server side check to make sure nothing is blank / empty
 if(!empty($_POST))
 {
-  require_once("../../classes/class.Server.inc.php");
-  require_once("../../includes/config.php");
+  require_once("../classes/class.Server.inc.php");
+  require_once("../includes/config.php");
 
 	$server = new SERVER();
 	switch($_POST["doing"])

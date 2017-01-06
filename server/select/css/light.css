@@ -1,0 +1,25 @@
+/*!
+ * OneApp 1.0.0 (https://github.com/PrabhdeepSingh/OneApp)
+ * Copyright 2016 Prabhdeep Singh.
+ * Licensed under the MIT license
+ */
+
+html,
+body {
+	background-color: #d2d6de;
+}
+
+/*
+ * Component: Box
+ * --------------
+ */
+.box {
+	background: #ffffff;
+	color: #000000;
+}
+
+a .box:hover,
+a .box:active,
+a .box:focus {
+	background: #f1f1f1;
+}
