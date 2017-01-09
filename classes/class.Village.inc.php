@@ -137,7 +137,7 @@ class VILLAGE
     $player = new PLAYER();
 
     foreach ($citizenIds as $wurmId) {
-      $wurmPlayer = $player->GetPlayers($wurmId);
+      $wurmPlayer = $player->GetPlayer($wurmId);
 
       if (array_key_exists("WURMID", $wurmPlayer))
       {
