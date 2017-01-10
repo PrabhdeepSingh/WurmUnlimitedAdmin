@@ -27,6 +27,7 @@ $(function() {
 	var grid = 2;
 	
 	// List of apps to show on page
+	var apps = listOfServers;
 	
 	/**
 	 *
