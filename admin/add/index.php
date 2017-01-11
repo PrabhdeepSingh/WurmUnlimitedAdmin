@@ -1,5 +1,6 @@
 <?php
 $page = "admin";
+$rootPath = "../..";
 require("../../header.php");
 ?>
       <div class="content-wrapper">

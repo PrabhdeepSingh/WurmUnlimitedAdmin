@@ -11,7 +11,7 @@ switch($_POST["getDataFor"])
 		$response = array("playerCount" => $server->GetPlayerCount(), "uptime" => $server->GetUpTime());
 		break;
 	case "serverInfo":
-		$response = $server->GetServers($_POST["serverId"]);
+		$response = $server->GetServer();
 		break;
 }
 

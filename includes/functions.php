@@ -1,5 +1,14 @@
 <?php
 
+if(!function_exists("get_url"))
+{
+  function get_url()
+  {
+    return (!empty($_SERVER["HTTPS"]) ? "https" : "http") . "://" . $_SERVER["HTTP_HOST"];
+  }
+
+}
+
 // Check if logged in
 if(!function_exists("isLoggedin"))
 {

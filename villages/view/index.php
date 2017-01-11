@@ -1,8 +1,9 @@
 <?php
 $page = "village";
+$rootPath = "../..";
 require("../../header.php");
 ?>
-  <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+  <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
   <div class="content-wrapper">
     <section class="content-header">
       <h1>Village Profile</h1>
@@ -89,8 +90,8 @@ require("../../header.php");
 
   <input type="hidden" id="txtVillageId" value="<?php echo $_GET['id']; ?>" />
   
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/listjs/list.min.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -116,7 +117,7 @@ require("../../header.php");
             }
             else if(response.success) {
 
-              $('#villageImage').prop('src', response.image);
+              $('#villageImage').prop('src', '../../assets/images/avatars/' + response.image);
               $('#villageName').html(response.NAME);
               $('#villageMayor').html('Mayor: ' + response.MAYOR);
               $('#villageFounder').html(response.FOUNDER);
@@ -137,7 +138,7 @@ require("../../header.php");
 
               var citizenHtml = '';
               for(var i = 0; i < response.citizens.length; i++) {
-                citizenHtml += '<li><img src="' + response.citizens[i].image + '" alt="User Image" onclick="location.href = \'../../players/view/?id=' + response.citizens[i].WURMID + '\'" style="cursor: pointer;"><a class="users-list-name" href="../../players/view/?id=' + response.citizens[i].WURMID + '">' + response.citizens[i].NAME + '</a></li>';
+                citizenHtml += '<li><img src="../../assets/images/avatars/' + response.citizens[i].image + '" alt="User Image" onclick="location.href = \'../../players/view/?id=' + response.citizens[i].wurmId + '\'" style="cursor: pointer;"><a class="users-list-name" href="../../players/view/?id=' + response.citizens[i].wurmId + '">' + response.citizens[i].name + '</a></li>';
               }
 
               $('#userList').html(citizenHtml);

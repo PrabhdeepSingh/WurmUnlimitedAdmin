@@ -27,7 +27,12 @@ For this software to work you need to enable the php_pdo_sqlite extension as it 
 #### Application configuration
 This is a basic configuration / setup guide on getting this software up and running on your host.
 - Navigate to the `includes` folder and open `config.php` with your favorite text editor
-- Change the `rootPath` to your website address
+- Add your server info into the `$server` array
+  - `absolutePath` - Absolute path to your world directory
+  - `serverId` - Id of the server which can be found on the `Wurm Unlimited Server launcher` under the `Local Server` tab
+  - `ip` - Server internal IP address
+  - `port` - RMI port
+  - `password` - Intra server password / RMI password
 
 #### Wurm Unlimited configuration
 To interact with your WU server you need to enable RMI on it, and to do that you need to edit `wurm.ini` file

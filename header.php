@@ -16,7 +16,7 @@ if(isLoggedin())
 }
 else
 {
-  header("Location: ".$application["rootPath"]."account/login/?ref=//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."");
+  header("Location: " . get_url() . "/account/login/?ref=" . get_url() . "" . $_SERVER["REQUEST_URI"]);
   die();
 }
 
@@ -40,16 +40,15 @@ if(!isset($_SESSION["userData"]["server"]))
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/jquery/jquery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/fontawesome/css/font-awesome.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/style.min.css">
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/skinstyle.min.css">
-
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.css" />
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/css/style.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/css/skinstyle.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/sweetalert/sweetalert.min.css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,7 +61,7 @@ if(!isset($_SESSION["userData"]["server"]))
     <div class="wrapper">
 
       <header class="main-header">
-        <a href="<?php echo $application["rootPath"]; ?>" class="logo">
+        <a href="<?php echo $rootPath; ?>/" class="logo">
           <span class="logo-mini">WU<b>A</b></span>
           <span class="logo-lg">WU<b>Admin</b></span>
         </a>
@@ -81,7 +80,7 @@ if(!isset($_SESSION["userData"]["server"]))
         <section class="sidebar">
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="<?php echo $application["rootPath"]; ?>assets/images/avatars/avatar_<?php echo strtolower($userData['username'][0]); ?>_120.png" class="img-circle" alt="User Image">
+              <img src="<?php echo $rootPath; ?>/assets/images/avatars/avatar_<?php echo strtolower($userData['username'][0]); ?>_120.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p><?php echo $userData["username"]; ?></p>
@@ -101,8 +100,8 @@ if(!isset($_SESSION["userData"]["server"]))
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo $application["rootPath"]; ?>account/changepassword/"><i class="fa fa-lock"></i> Change password</a></li>
-                <li><a href="<?php echo $application["rootPath"]; ?>account/logout/"><i class="fa fa-sign-out"></i> Logout</a></li>
+                <li><a href="<?php echo $rootPath; ?>/account/changepassword/"><i class="fa fa-lock"></i> Change password</a></li>
+                <li><a href="<?php echo $rootPath; ?>/account/logout/"><i class="fa fa-sign-out"></i> Logout</a></li>
               </ul>
             </li>
             <?php
@@ -116,31 +115,31 @@ if(!isset($_SESSION["userData"]["server"]))
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?php echo $application["rootPath"]; ?>admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
-                <li><a href="<?php echo $application["rootPath"]; ?>admin/users/"><i class="fa fa-users"></i> Users</a></li>
+                <li><a href="<?php echo $rootPath; ?>/admin/add/"><i class="fa fa-user-plus"></i> Add user</a></li>
+                <li><a href="<?php echo $rootPath; ?>/admin/users/"><i class="fa fa-users"></i> Users</a></li>
               </ul>
             </li>
             <li class="<?php echo $page == 'server' ? 'active' : ''; ?>">
-              <a href="<?php echo $application["rootPath"]; ?>server/">
+              <a href="<?php echo $rootPath; ?>/server/">
                 <i class="fa fa-server"></i>
                 <span> Server</span>
               </a>
             </li>
             <?php } ?>
             <li class="<?php echo $page == 'player' ? 'active' : ''; ?>">
-              <a href="<?php echo $application["rootPath"]; ?>players/">
+              <a href="<?php echo $rootPath; ?>/players/">
                 <i class="fa fa-users"></i>
                 <span> Players</span>
               </a>
             </li>
             <li class="<?php echo $page == 'ticket' ? 'active' : ''; ?>">
-              <a href="<?php echo $application["rootPath"]; ?>tickets/">
+              <a href="<?php echo $rootPath; ?>/tickets/">
                 <i class="fa fa-ticket"></i>
                 <span> Tickets</span>
               </a>
             </li>
             <li class="<?php echo $page == 'village' ? 'active' : ''; ?>">
-              <a href="<?php echo $application["rootPath"]; ?>villages/">
+              <a href="<?php echo $rootPath; ?>/villages/">
                 <i class="fa fa-home"></i>
                 <span> Villages</span>
               </a>

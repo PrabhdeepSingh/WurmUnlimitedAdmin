@@ -1,5 +1,6 @@
 <?php
 $page = "village";
+$rootPath = "..";
 require("../header.php");
 ?>
       <div class="content-wrapper">
@@ -21,7 +22,8 @@ require("../header.php");
                   <table class="table table-hover" id="tblVillageList" style="display: none;">
                     <thead>
                       <tr>
-                        <th>Name</th>
+                        <th class="sort" data-sort="status">Status</th>
+                        <th class="sort" data-sort="village-list-name">Name</th>
                         <th>Motto</th>
                         <th>Founder</th>
                         <th>Mayor</th>
@@ -38,7 +40,7 @@ require("../header.php");
         </section>
       </div>
       
-      <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
+      <script src="<?php echo $rootPath; ?>/assets/vendors/listjs/list.min.js"></script>
 
       <script>
         $(document).ready(function() {
@@ -60,11 +62,17 @@ require("../header.php");
               }
               else
               {
-
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    html += '<tr onclick="location.href = \'./view/?id=' + response[i].ID + '\'" style="cursor: pointer;"><td class="village-list-name">' + response[i].NAME + '</td><td>' + response[i].DEVISE + '</td><td clas="village-list-founder">' + response[i].FOUNDER + '</td><td class="village-list-mayor">' + response[i].MAYOR + '</td><td>' + response[i].CREATIONDATE + '</td></tr>';
+
+                    if (response[i].DISBANDED == 0) {
+                      statusLabel = '<span class="status label label-success">Active</span>';
+                    } else {
+                      statusLabel = '<span class="status label label-default">Disbanded</span>';
+                    }
+
+                    html += '<tr onclick="location.href = \'./view/?id=' + response[i].ID + '\'" style="cursor: pointer;"><td>' + statusLabel + '</td><td class="village-list-name">' + response[i].NAME + '</td><td>' + response[i].DEVISE + '</td><td clas="village-list-founder">' + response[i].FOUNDER + '</td><td class="village-list-mayor">' + response[i].MAYOR + '</td><td>' + response[i].CREATIONDATE + '</td></tr>';
                   }
 
                   $('#tblVillageList tbody').html(html);
@@ -74,7 +82,7 @@ require("../header.php");
                 $('#loader').hide();
 
                 new List('divVillageList', {
-                  valueNames: ['village-list-name', 'village-list-founder', 'village-list-mayor']
+                  valueNames: ['status', 'village-list-name', 'village-list-founder', 'village-list-mayor']
                 });
               }
 

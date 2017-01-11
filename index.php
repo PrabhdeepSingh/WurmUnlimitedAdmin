@@ -1,5 +1,6 @@
 <?php
 $page = "Dashboard";
+$rootPath = ".";
 require("header.php");
 ?>
 <div class="content-wrapper">
@@ -63,25 +64,20 @@ require("header.php");
   </section>
 </div>
 
-<input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
 <script>
   $(document).ready(function() {
-    var request1 = $.ajax({
+    $.ajax({
       type: 'POST',
-      url: './server/view.php',
-      data: {'getDataFor': 'playerCount', serverId: $('#serverId').val()},
+      url: 'dashboard.php',
+      data: {},
       dataType: 'json',
-      async: true,
       success: function(response) {
 
         $('#playerCount').html((response.playerCount.success == false) ? 'Offline' : response.playerCount);
         $('#serverUptime').html((response.uptime.success == false) ? 'Offline' : response.uptime);
+        $('#ticketCount').html(response.activeTickets);
 
       }
-    });
-
-    $('a').click(function(e){
-    	request1.abort();
     });
   });
 </script>

@@ -1,8 +1,9 @@
 <?php
 $page = "ticket";
+$rootPath = "../..";
 require("../../header.php");
 ?>
-  <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+  <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
   <div class="content-wrapper">
     <section class="content-header">
       <h1>Ticket <?php echo $_GET["id"]; ?></h1>
@@ -80,8 +81,8 @@ require("../../header.php");
 
   <input type="hidden" id="txtTicketID" value="<?php echo $_GET['id']; ?>" />
   
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/listjs/list.min.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -119,7 +120,7 @@ require("../../header.php");
                 $('#ticketStatus').html('<span class="label label-default">Unknown</span>');
               }
 
-              $('#ticketOwner').html(response.PLAYER.NAME);
+              $('#ticketOwner').html(response.PLAYER);
               $('#ticketCreateDate').html(response.TICKETDATE);
               $('#ticketAssignedTo').html(response.RESPONDERNAME);
               $('#ticketClosedDate').html(response.CLOSEDDATE);

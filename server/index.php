@@ -1,5 +1,6 @@
 <?php
 $page = "server";
+$rootPath = "..";
 require("../header.php");
 ?>
   <div class="content-wrapper">
@@ -171,8 +172,7 @@ require("../header.php");
       </div>
     </div>
   </div>
-
-  <input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
+  
   <script>
     $(document).ready(function() {
       populate();
@@ -181,7 +181,7 @@ require("../header.php");
         $.ajax({
           type: 'POST',
           url: 'view.php',
-          data: {'getDataFor': 'playerCount', serverId: $('#serverId').val()},
+          data: {'getDataFor': 'playerCount'},
           dataType: 'json',
           async: true,
           success: function(response) {
@@ -215,7 +215,7 @@ require("../header.php");
         $.ajax({
           type: 'POST',
           url: 'view.php',
-          data: {'getDataFor': 'serverInfo', serverId: $('#serverId').val()},
+          data: {'getDataFor': 'serverInfo'},
           dataType: 'json',
           async: true,
           success: function(response) {

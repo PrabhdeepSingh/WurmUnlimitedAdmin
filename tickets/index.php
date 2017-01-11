@@ -1,5 +1,6 @@
 <?php
 $page = "ticket";
+$rootPath = "..";
 require("../header.php");
 ?>
   <div class="content-wrapper">
@@ -36,16 +37,15 @@ require("../header.php");
       </div>
     </section>
   </div>
-  <input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
 
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/listjs/list.min.js"></script>
 
   <script>
     $(document).ready(function() {
       $.ajax({
         type: 'POST',
         url: 'ticket.php',
-        data: {serverId: $('#serverId').val()},
+        data: {},
         dataType: 'json',
         success: function(response) {
 

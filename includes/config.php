@@ -11,23 +11,23 @@ if(!defined("PRODUCTION")) define("PRODUCTION", 1);
  */
 $application = array(
 	"mode" => DEVELOPMENT,
-	"rootPath" => "//localhost/wurmunlimitedadmin/", // CHANGE ME
 	"minAdminLevel" => 5,
 	"version" => "1.0.0",
 	"appDB" => dirname(__FILE__) . "/sqlite/app.db",
 	"wuaClientLocation" => dirname(__FILE__) . "/WUAHelper.jar",
 );
 
-
 $servers = array(
 	array(
 		"absolutePath" => "/path/to/wurm-server/world-dir",
+		"serverId" => 0,
 		"ip" => "",
 		"port" => 7220,
 		"password" => ""
 	),
 	// array(
 	// 	"absolutePath" => "/path/to/wurm-server/world-dir",
+	//	"serverId" => 0,
 	// 	"ip" => "",
 	// 	"port" => 7220,
 	// 	"password" => ""

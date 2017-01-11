@@ -1,5 +1,6 @@
 <?php
 $page = "player";
+$rootPath = "..";
 require("../header.php");
 ?>
       <div class="content-wrapper">
@@ -30,7 +31,7 @@ require("../header.php");
         </section>
       </div>
       
-      <script src="<?php echo $application["rootPath"]; ?>assets/vendors/listjs/list.min.js"></script>
+      <script src="<?php echo $rootPath; ?>/assets/vendors/listjs/list.min.js"></script>
 
       <input type="hidden" id="serverId" value="<?php echo $_SESSION["userData"]["server"]["id"]; ?>" />
       <script>
@@ -56,7 +57,7 @@ require("../header.php");
                 if(response.length > 0) {
                   var html = '';
                   for(var i = 0; i < response.length; i++) {
-                    html += '<li><img src="' + response[i].image + '" alt="User Image" onclick="location.href = \'./view/?id=' + response[i].WURMID + '\'" style="cursor: pointer;"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">' + parsePower(response[i].POWER) + '</span></li>';
+                    html += '<li><img src="../assets/images/avatars/' + response[i].image + '" alt="User Image" onclick="location.href = \'./view/?id=' + response[i].WURMID + '\'" style="cursor: pointer;"><a class="users-list-name" href="./view/?id=' + response[i].WURMID + '">' + response[i].NAME + '</a><span class="users-list-date">' + parsePower(response[i].POWER) + '</span></li>';
                   }
 
                   $('#userList').html(html);

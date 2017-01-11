@@ -1,5 +1,6 @@
 <?php
 $page = "admin";
+$rootPath = "../../..";
 require("../../../header.php");
 ?>
       <div class="content-wrapper">
@@ -91,7 +92,7 @@ require("../../../header.php");
               }
             }
             else if(response.success) {
-              $('#userPicture').prop('src', response.userPicutre);
+              $('#userPicture').prop('src', '../../../assets/images/avatars/' + response.userPicutre);
               $('#username').html(response.USERNAME);
               $('#userLevel').html('Level: ' + response.LEVEL);
               $('#txtLevel').val(response.LEVEL);

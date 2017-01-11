@@ -1,8 +1,9 @@
 <?php
 $page = "player";
+$rootPath = "../..";
 require("../../header.php");
 ?>
-  <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+  <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/css/bootstrap-multiselect.css" />
   <div class="content-wrapper">
     <section class="content-header">
       <h1>Player Profile</h1>
@@ -144,7 +145,6 @@ require("../../header.php");
                     </div>
                     <table class="table table-hover" id="tableInventory" style="display: none;">
                       <thead>
-                        <th></th>
                         <th>Item</th>
                         <th>Rarity</th>
                         <th>Orginal Quality</th>
@@ -1372,7 +1372,7 @@ require("../../header.php");
 
   <input type="hidden" id="txtWurmID" value="<?php echo $_GET['id']; ?>" />
   
-  <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+  <script src="<?php echo $rootPath; ?>/assets/vendors/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
 
   <script>
     $(document).ready(function() {
@@ -1400,7 +1400,7 @@ require("../../header.php");
               /**
                * Left col
                */
-              $('#playerImage').prop('src', response.image);
+              $('#playerImage').prop('src', '../../assets/images/avatars/' + response.image);
               $('#playerName').html(response.NAME);
 
               switch(response.POWER) {
@@ -2048,7 +2048,7 @@ require("../../header.php");
                     rarity = 'Unknown';
                     break;
                 }
-                html += '<tr><td><input type="checkbox" /></td><td>' + response[i].NAME + '</td><td>' + rarity + '</td><td>' + response[i].ORIGINALQUALITYLEVEL + '</td><td>' + response[i].QUALITYLEVEL + '</td></tr>';
+                html += '<tr><td>' + response[i].NAME + '</td><td>' + rarity + '</td><td>' + response[i].ORIGINALQUALITYLEVEL + '</td><td>' + response[i].QUALITYLEVEL + '</td></tr>';
               }
               $('#tableInventory tbody').html(html);
 

@@ -7,8 +7,9 @@
 
     </div><!-- ./wrapper -->
 
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo $application["rootPath"]; ?>assets/js/app.min.js"></script>
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/js/app.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/js/wua.js"></script>
   </body>
 </html>

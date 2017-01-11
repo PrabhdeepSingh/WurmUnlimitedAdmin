@@ -7,6 +7,8 @@ if(isLoggedin())
   header( 'Location: ../../' );
   die();
 }
+
+$rootPath = "../..";
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,14 +19,14 @@ if(isLoggedin())
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/fontawesome/css/font-awesome.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/style.min.css">
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/css/skinstyle.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/css/style.min.css">
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/css/skinstyle.min.css">
 
-    <link rel="stylesheet" href="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.css" />
+    <link rel="stylesheet" href="<?php echo $rootPath; ?>/assets/vendors/sweetalert/sweetalert.min.css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +38,7 @@ if(isLoggedin())
   <body class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <a href="<?php echo $application["rootPath"]; ?>">WurmUnlimited<b>Admin</b></a>
+        <a href="">WurmUnlimited<b>Admin</b></a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Use your user and password to login</p>
@@ -61,9 +63,10 @@ if(isLoggedin())
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
 
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/jquery/jquery-2.1.4.min.js"></script>
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo $application["rootPath"]; ?>assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/jquery/jquery-2.1.4.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="<?php echo $rootPath; ?>/assets/js/wua.js"></script>
     <script>
       $(document).ready(function() {
         $('#formLogin').on('submit', function(e) {

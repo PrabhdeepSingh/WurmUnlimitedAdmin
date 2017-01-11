@@ -1,381 +1,361 @@
 <?php
 spl_autoload_register(function ($class_name) {
-    include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
+	include(dirname(__FILE__) . "/class." . ucfirst(strtolower($class_name)) . ".inc.php");
 });
 
 if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+	session_start();
 }
 
 class SERVER
 {
 
 	private $_serverDB;
-  private $_serverRMI;
-  private $_ticketCategoryCode = array("Unknown", "Account security problems", "Boat stuck", "Bug reports", "Forum access", "Griefing / harassment", "Lost horse", "Password resets", "Payment issues", "Stuck", "Other");
-  private $_ticketStateCode = array("New", "On Hold", "Resolved", "Responded", "Cancelled", "Watching", "Taken", "Forwarded", "Reopened");
-  private $_ticketLevelCode = array("", "CM", "GM", "ARCH", "DEV");
-  private $_logger;
-
-  function __construct($serverIndexInArray = null)
-  {
-  	try
-  	{
-      require(dirname(__FILE__) . "/../includes/config.php");
-      require(dirname(__FILE__) . "/../includes/functions.php");
-
-      $_logger = new LOGGER();
-
-      if(isset($_SESSION["userData"]["server"]) && !empty($servers[$_SESSION["userData"]["server"]["indexInArray"]]))
-      {
-        $this->_serverDB = new DATABASE($servers[$_SESSION["userData"]["server"]["indexInArray"]]["absolutePath"] . "/sqlite/wurmlogin.db");
-      }
-      else if(!isset($_SESSION["userData"]["server"]))
-      {
-        $this->_serverDB = new DATABASE($servers[$serverIndexInArray]["absolutePath"] . "/sqlite/wurmlogin.db");
-      }
-      else
-      {
-        throw new PDOException("Missing database configuration");
-      }
-
-	  }
-    catch(PDOException $ex)
-    {
-      $_logger->Log("Error", $ex->getMessage());
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
-    catch(Exception $ex)
-    {
-      $_logger->Log("Error", $ex->getMessage());
-      echo json_encode(array(
-        "error" => array(
-          "message" => $ex->getMessage()
-        )
-      ));
-      exit();
-    }
-
-  }
-
-  function GetServers($serverID = "")
-  {
-    $result = array();
-
-    if(!empty($serverID))
-    {
-      $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM SERVERS WHERE SERVER = ?", array($serverID));
-      $server = $sql->fetch(PDO::FETCH_ASSOC);
-
-      $server["COUNT"] = $this->GetPlayerCount();
-      $server["UPTIME"] = $this->GetUpTime();
-      $server["WURMTIME"] = $this->GetWurmTime();
-
-      $server["success"] = true;
-
-      $result = $server;
-
-    }
-    else
-    {
-      $sql = $this->_serverDB->QueryWithOutBinds("SELECT SERVER, NAME, MAXPLAYERS FROM SERVERS");
-      while($servers = $sql->fetch(PDO::FETCH_ASSOC))
-      {
-        array_push($result, $servers);
-      }
-
-    }
-
-    return $result;
-
-  }
-
-  function GetServerName($serverId = 0)
-  {
-    $sql = $this->_serverDB->QueryWithBinds("SELECT NAME FROM SERVERS WHERE SERVER = ?", array($serverId));
-    return $sql->fetch(PDO::FETCH_ASSOC);
-  }
-
-  function GetServerNameAndIdByInternalPassword($password = "")
-  {
-    $result = array();
-
-    $sql = $this->_serverDB->QueryWithBinds("SELECT SERVER FROM SERVERS WHERE INTRASERVERPASSWORD = ?", array($password));
-    $server = $sql->fetch(PDO::FETCH_ASSOC);
-
-    $result = array("name" => $this->GetServerName($server["SERVER"])["NAME"], "id" => $server["SERVER"]);
-
-    return $result;
-    
-  }
+	private $_serverRMI;
+	private $_ticketCategoryCode = array("Unknown", "Account security problems", "Boat stuck", "Bug reports", "Forum access", "Griefing / harassment", "Lost horse", "Password resets", "Payment issues", "Stuck", "Other");
+	private $_ticketStateCode = array("New", "On Hold", "Resolved", "Responded", "Canceled", "Watching", "Taken", "Forwarded", "Reopened");
+	private $_ticketLevelCode = array("", "CM", "GM", "ARCH", "DEV");
+	private $_logger;
+
+	function __construct($serverIndexInArray = null)
+	{
+		try
+		{
+			require(dirname(__FILE__) . "/../includes/config.php");
+			require(dirname(__FILE__) . "/../includes/functions.php");
+
+			$_logger = new LOGGER();
+
+			if(isset($_SESSION["userData"]["server"]) && !empty($servers[$_SESSION["userData"]["server"]["indexInArray"]]))
+			{
+				$this->_serverDB = new DATABASE($servers[$_SESSION["userData"]["server"]["indexInArray"]]["absolutePath"] . "/sqlite/wurmlogin.db");
+			}
+			else if(!isset($_SESSION["userData"]["server"]))
+			{
+				$this->_serverDB = new DATABASE($servers[$serverIndexInArray]["absolutePath"] . "/sqlite/wurmlogin.db");
+			}
+			else
+			{
+				throw new PDOException("Missing database configuration");
+			}
+
+		}
+		catch(PDOException $ex)
+		{
+			$_logger->Log("Error", $ex->getMessage());
+			echo json_encode(array(
+				"error" => array(
+					"message" => $ex->getMessage()
+				)
+			));
+			exit();
+		}
+		catch(Exception $ex)
+		{
+			$_logger->Log("Error", $ex->getMessage());
+			echo json_encode(array(
+				"error" => array(
+					"message" => $ex->getMessage()
+				)
+			));
+			exit();
+		}
+
+	}
+
+	function GetServer()
+	{
+		$result = array();
+
+		$sql = $this->_serverDB->QueryWithBinds("SELECT * FROM SERVERS WHERE SERVER = ?", array($_SESSION["userData"]["server"]["id"]));
+		$result = $sql->fetch(PDO::FETCH_ASSOC);
+
+		$result["COUNT"] = $this->GetPlayerCount();
+		$result["UPTIME"] = $this->GetUpTime();
+		$result["WURMTIME"] = $this->GetWurmTime();
+
+		$result["success"] = true;
+
+		return $result;
+
+	}
+
+	function GetServerName($serverId = 0)
+	{
+		$sql = $this->_serverDB->QueryWithBinds("SELECT NAME FROM SERVERS WHERE SERVER = ?", array($serverId));
+		$name = $sql->fetch(PDO::FETCH_ASSOC);
+		return $name["NAME"];
+	}
+
+	function GetPlayerCount()
+	{
+		$result = 0;
+		$this->_serverRMI = new RMI();
+		$output = $this->_serverRMI->Execute("playerCount");
+
+		if(is_numeric($output[0]))
+		{
+			$result = $output[0];
+		}
+		else
+		{
+			$result = $output;
+		}
+
+		return $result;
+
+	}
+
+	function GetUpTime()
+	{
+		$this->_serverRMI = new RMI();
+		$result = $this->_serverRMI->Execute("uptime");
+
+		return $result;
 
-  function GetPlayerCount()
-  {
-    $result = 0;
-    $this->_serverRMI = new RMI();
-    $output = $this->_serverRMI->Execute("playerCount");
+	}
 
-    if(is_numeric($output[0]))
-    {
-      $result = $output[0];
-    }
-    else
-    {
-      $result = $output;
-    }
+	function GetWurmTime()
+	{
+		$this->_serverRMI = new RMI();
+		$result = $this->_serverRMI->Execute("wurmTime");
 
-    return $result;
+		return $result;
 
-  }
+	}
 
-  function GetUpTime()
-  {
-    $this->_serverRMI = new RMI();
-    $result = $this->_serverRMI->Execute("uptime");
+	function ChangeGameMode($params = array())
+	{
+		$result = array();
 
-    return $result;
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET PVP = ? WHERE SERVER = ?", array($params["newGameMode"], $params["serverID"]));
 
-  }
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-  function GetWurmTime()
-  {
-    $this->_serverRMI = new RMI();
-    $result = $this->_serverRMI->Execute("wurmTime");
+		return $result;
 
-    return $result;
+	}
 
-  }
+	function ChangeGameCluster($params = array())
+	{
+		$result = array();
 
-  function ChangeGameMode($params = array())
-  {
-    $result = array();
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET EPIC = ? WHERE SERVER = ?", array($newGameCluster, $params["serverID"]));
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET PVP = ? WHERE SERVER = ?", array($params["newGameMode"], $params["serverID"]));
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+		return $result;
 
-    return $result;
+	}
 
-  }
+	function ChangeHomeServer($params = array())
+	{
+		$result = array();
 
-  function ChangeGameCluster($params = array())
-  {
-    $result = array();
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET HOMESERVER = ? WHERE SERVER = ?", array($params["homeServer"], $params["serverID"]));
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET EPIC = ? WHERE SERVER = ?", array($newGameCluster, $params["serverID"]));
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+		return $result;
 
-    return $result;
+	}
 
-  }
+	function ChangeHomeServerKingdom($params = array())
+	{
+		$result = array();
 
-  function ChangeHomeServer($params = array())
-  {
-    $result = array();
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET KINGDOM = ? WHERE SERVER = ?", array($params["homeServerKingdom"], $params["serverID"]));
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET HOMESERVER = ? WHERE SERVER = ?", array($params["homeServer"], $params["serverID"]));
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
+
+		return $result;
+
+	}
 
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	function ChangeWurmTime($params = array())
+	{
+		$result = array();
 
-    return $result;
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET WORLDTIME = ? WHERE SERVER = ?", array($params["newWurmTime"], $params["serverID"]));
 
-  }
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-  function ChangeHomeServerKingdom($params = array())
-  {
-    $result = array();
+		return $result;
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET KINGDOM = ? WHERE SERVER = ?", array($params["homeServerKingdom"], $params["serverID"]));
-
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	}
 
-    return $result;
+	function ChangePlayerLimit($params = array())
+	{
+		$result = array();
 
-  }
+		$sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET MAXPLAYERS = ? WHERE SERVER = ?", array($params["newPlayerLimit"], $params["serverID"]));
 
-  function ChangeWurmTime($params = array())
-  {
-    $result = array();
+		if($sql->rowCount() > 0)
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET WORLDTIME = ? WHERE SERVER = ?", array($params["newWurmTime"], $params["serverID"]));
+		return $result;
 
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	}
 
-    return $result;
+	function SendBroadcastMessage($message = "")
+	{
+		$result = array();
+		$this->_serverRMI = new RMI();
+		$output = $this->_serverRMI->Execute("broadcast", array($message));
 
-  }
+		if($output[0])
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-  function ChangePlayerLimit($params = array())
-  {
-    $result = array();
+		return $result;
 
-    $sql = $this->_serverDB->QueryWithBinds("UPDATE SERVERS SET MAXPLAYERS = ? WHERE SERVER = ?", array($params["newPlayerLimit"], $params["serverID"]));
+	}
 
-    if($sql->rowCount() > 0)
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	function Shutdown($params = array())
+	{
+		$result = array();
+		$this->_serverRMI = new RMI();
+		$output = $this->_serverRMI->Execute("shutDown", array($params["user"], $params["seconds"], $params["reason"]));
 
-    return $result;
+		if($output[0])
+		{
+			$result = array("success" => true);
+		}
+		else
+		{
+			$result = array("success" => false);
+		}
 
-  }
+		return $result;
 
-  function SendBroadcastMessage($message = "")
-  {
-    $result = array();
-    $this->_serverRMI = new RMI();
-    $output = $this->_serverRMI->Execute("broadcast", array($message));
+	}
 
-    if($output[0])
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	function GetActiveTicketCount()
+	{
+		$sql = $this->_serverDB->QueryWithBinds("SELECT Count(*) as count FROM TICKETS WHERE SERVERID = ? AND STATECODE != 2 AND STATECODE != 4", array($_SESSION["userData"]["server"]["id"]));
+		$count = $sql->fetch(PDO::FETCH_ASSOC);
+		return $count["count"];
+	}
 
-    return $result;
+	function GetTickets()
+	{
+		$result = array();
 
-  }
+		$sql = $this->_serverDB->QueryWithBinds("SELECT PLAYERNAME, CATEGORYCODE, STATECODE, TICKETDATE, TICKETID FROM TICKETS WHERE SERVERID = ? ORDER BY TICKETDATE DESC", array($_SESSION["userData"]["server"]["id"]));
+		while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
+		{
+			$ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
+			$ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
+			$ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
+			array_push($result, $ticket);
+		}
 
-  function Shutdown($params = array())
-  {
-    $result = array();
-    $this->_serverRMI = new RMI();
-    $output = $this->_serverRMI->Execute("shutDown", array($params["user"], $params["seconds"], $params["reason"]));
+		return $result;
 
-    if($output[0])
-    {
-      $result = array("success" => true);
-    }
-    else
-    {
-      $result = array("success" => false);
-    }
+	}
 
-    return $result;
+	function GetTicket($ticketId = 0)
+	{
+		$result = array();
 
-  }
+		$sql = $this->_serverDB->QueryWithBinds("SELECT * FROM TICKETS WHERE TICKETID = ?", array($ticketId));
+		$ticket = $sql->fetch(PDO::FETCH_ASSOC);
 
-  function GetTicketsByServerId($serverId = 0)
-  {
-    $result = array();
+		$ticket["SERVERNAME"] = $this->GetServerName($ticket["SERVERID"]);
+		$ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
+		$ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
+		$ticket["LEVELNAME"] = $this->_ticketLevelCode[$ticket["LEVELCODE"]];
 
-    $sql = $this->_serverDB->QueryWithBinds("SELECT PLAYERNAME, CATEGORYCODE, STATECODE, TICKETDATE, TICKETID FROM TICKETS WHERE SERVERID = ? ORDER BY TICKETDATE DESC", array($serverId));
-    while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
-    {
-      $ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
-      $ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
-      $ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
-      array_push($result, $ticket);
-    }
+		$player = new PLAYER();
 
-    return $result;
+		$ticket["PLAYER"] = $player->GetPlayerName($ticket["PLAYERWURMID"]);
 
-  }
+		$ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
 
-  function GetTicket($ticketId = 0)
-  {
-    $result = array();
+		if ($ticket["CLOSEDDATE"] > 0)
+		{
+			$ticket["CLOSEDDATE"] = date("m/d/Y H:i:s", $ticket["CLOSEDDATE"] / 1000);
+		}
+		else
+		{
+			$ticket["CLOSEDDATE"] = "Never";
+		}
 
-    $sql = $this->_serverDB->QueryWithBinds("SELECT * FROM TICKETS WHERE TICKETID = ?", array($ticketId));
-    $ticket = $sql->fetch(PDO::FETCH_ASSOC);
+		$ticket["ACTIVITY"] = $this->GetTicketAction($ticketId);
 
-    $ticket["SERVERNAME"] = $this->GetServerName($ticket["SERVERID"])["NAME"];
-    $ticket["CATEGORYNAME"] = $this->_ticketCategoryCode[$ticket["CATEGORYCODE"]];
-    $ticket["STATENAME"] = $this->_ticketStateCode[$ticket["STATECODE"]];
-    $ticket["LEVELNAME"] = $this->_ticketLevelCode[$ticket["LEVELCODE"]];
+		$ticket["success"] = true;
 
-    $player = new PLAYER();
+		$result = $ticket;
 
-    $ticket["PLAYER"] = $player->GetPlayers($ticket["PLAYERWURMID"]);
+		return $result;
+		
+	}
 
-    $ticket["TICKETDATE"] = date("m/d/Y H:i:s", $ticket["TICKETDATE"] / 1000);
+	function GetTicketAction($ticketId = 0)
+	{
+		$result = array();
 
-    if ($ticket["CLOSEDDATE"] > 0)
-    {
-      $ticket["CLOSEDDATE"] = date("m/d/Y H:i:s", $ticket["CLOSEDDATE"] / 1000);
-    }
-    else
-    {
-      $ticket["CLOSEDDATE"] = "Never";
-    }
+		$sql = $this->_serverDB->QueryWithBinds("SELECT BYWHOM, NOTE, ACTIONDATE, ACTIONTYPE FROM TICKETACTIONS WHERE TICKETID = ? ORDER BY ACTIONDATE DESC", array($ticketId));
+		while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
+		{
+			$ticket["ACTIONDATE"] = date("m/d/Y H:i:s", $ticket["ACTIONDATE"] / 1000);
+			array_push($result, $ticket);
+		}
 
-    $ticket["ACTIVITY"] = $this->GetTicketAction($ticketId);
+		return $result;
 
-    $ticket["success"] = true;
+	}
 
-    $result = $ticket;
-
-    return $result;
-    
-  }
-
-  function GetTicketAction($ticketId = 0)
-  {
-    $result = array();
-
-    $sql = $this->_serverDB->QueryWithBinds("SELECT BYWHOM, NOTE, ACTIONDATE, ACTIONTYPE FROM TICKETACTIONS WHERE TICKETID = ? ORDER BY ACTIONDATE DESC", array($ticketId));
-    while($ticket = $sql->fetch(PDO::FETCH_ASSOC))
-    {
-      $ticket["ACTIONDATE"] = date("m/d/Y H:i:s", $ticket["ACTIONDATE"] / 1000);
-      array_push($result, $ticket);
-    }
-
-    return $result;
-
-  }
-
-  function __destruct()
-  {
-  	$this->_serverDB = null;
-  }
+	function __destruct()
+	{
+		$this->_serverDB = null;
+	}
 
 }
 ?>
