@@ -16,6 +16,7 @@ if(isLoggedin())
 }
 else
 {
+  header("Location: " . $rootPath . "/account/login/?ref=" . $rootPath . "/" . $_SERVER["REQUEST_URI"]);
   die();
 }
 
