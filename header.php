@@ -16,7 +16,6 @@ if(isLoggedin())
 }
 else
 {
-  header("Location: " . get_url() . "/account/login/?ref=" . get_url() . "" . $_SERVER["REQUEST_URI"]);
   die();
 }
 
@@ -27,7 +26,7 @@ if(isset($_GET["server"]))
 
 if(!isset($_SESSION["userData"]["server"]))
 {
-  header("Location: ".$application["rootPath"]."server/select/");
+  header("Location: " . $rootPath . "/server/select/");
   die();
 }
 ?>
