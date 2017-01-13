@@ -10,8 +10,8 @@ The following programs and modules are required to run Wurm Unlimited Admin
 - LAMP/WAMP, Nginx, or UniServer Zero XI running PHP 5.5.0 or higher
 - Ability to change php.ini to allow the extension: php_pdo_sqlite.dll
 - Wurm Unlimited Server
-- [WUAHelper](https://github.com/PrabhdeepSingh/WUAHelper) - Used for RMI
-- [WuaMod](https://github.com/PrabhdeepSingh/WuaMod) - Used for adding custom methods to RMI
+- [WUAHelper](https://github.com/PrabhdeepSingh/WUAHelper) - Used for RMI (INCLUDED in the release zip)
+- [WuaMod](https://github.com/PrabhdeepSingh/WuaMod) - Used for adding custom methods to RMI (INCLUDED in the release zip)
 
 # Installation
 #### Download
